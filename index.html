@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>briandi.to</title>
+<meta name="description" content="Comics and drawings. A shelf of old TVs, games and books to look through.">
+<meta name="theme-color" content="#131211">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="styles.css">
+<script type="module" src="vendor/retro-3d.js"></script>
+</head>
+<body>
+
+<header class="site-head">
+  <a class="wordmark" href="/">briandi.to</a>
+  <span class="tagline">Comics &amp; drawings</span>
+</header>
+
+<!--
+  THE SHELF
+  stack="pyramid" or stack="pile" changes how the TVs are stacked.
+  brand="..." replaces the SONY badge on every TV (brand="" removes it).
+-->
+<retro-shelf id="shelf" stack="pyramid">
+
+  <!-- ============ TV SCREENS ============
+       One block per TV. Each is a normal piece of the page (640 x 480). -->
+
+  <!-- 20-inch studio monitor: the main screen -->
+  <div class="tv tv-home" slot="pvm-20m4e">
+    <h1>Hello, I'm Brian.</h1>
+    <p>I draw comic strips. Pick a game or a book from the shelf below, or tap another TV.</p>
+    <p class="note">Placeholder text. Edit it in index.html.</p>
+  </div>
+
+  <!-- 9-inch studio monitor -->
+  <div class="tv tv-latest" slot="pvm-9042qm">
+    <h2>Latest strip</h2>
+    <div class="panels"><i></i><i></i><i></i><i></i></div>
+    <p class="note">Put your newest strip here.</p>
+  </div>
+
+  <!-- 9-inch orange TV -->
+  <div class="tv tv-about" slot="kv-9pr1">
+    <h2>About</h2>
+    <p>A few lines about you.</p>
+  </div>
+
+  <!-- 5-inch portable TV -->
+  <div class="tv tv-contact" slot="kv-5200">
+    <h2>Say hi</h2>
+    <p>your@email.example</p>
+  </div>
+
+  <!-- ============ SHELF CONTENTS ============
+       One line per item. Change title / subtitle / color freely.
+       cover="image.jpg" puts artwork on the front.
+       href="..." adds an Open button. Text inside shows on the card. -->
+
+  <!-- PS1 CD cases -->
+  <retro-item type="ps1" title="Comic Title 01" subtitle="2024" color="#e4572e" href="#">Short description of this comic.</retro-item>
+  <retro-item type="ps1" title="Comic Title 02" subtitle="2023" color="#2f4858">Short description of this comic.</retro-item>
+  <retro-item type="ps1" title="Comic Title 03" subtitle="2023" color="#ffd23f">Short description of this comic.</retro-item>
+  <retro-item type="ps1" title="Comic Title 04" subtitle="2022" color="#7fd1c7">Short description of this comic.</retro-item>
+  <retro-item type="ps1" title="Comic Title 05" subtitle="2022" color="#c9b6ff">Short description of this comic.</retro-item>
+  <retro-item type="ps1" title="Comic Title 06" subtitle="2021" color="#d9534f">Short description of this comic.</retro-item>
+
+  <!-- Game Boy Advance boxes -->
+  <retro-item type="gba" title="Short Series 01" color="#9fe07c">Short description.</retro-item>
+  <retro-item type="gba" title="Short Series 02" color="#ff7a59">Short description.</retro-item>
+  <retro-item type="gba" title="Short Series 03" color="#5d8fd6">Short description.</retro-item>
+
+  <!-- PS Vita cases -->
+  <retro-item type="vita" title="Illustration 01" color="#ffd23f">Short description.</retro-item>
+  <retro-item type="vita" title="Illustration 02" color="#d9534f">Short description.</retro-item>
+  <retro-item type="vita" title="Illustration 03" color="#2f4858">Short description.</retro-item>
+  <retro-item type="vita" title="Illustration 04" color="#7fd1c7">Short description.</retro-item>
+
+  <!-- PSP cases -->
+  <retro-item type="psp" title="Side Project 01" color="#2f4858">Short description.</retro-item>
+  <retro-item type="psp" title="Side Project 02" color="#ffb3c7">Short description.</retro-item>
+  <retro-item type="psp" title="Side Project 03" color="#e8e2d2">Short description.</retro-item>
+
+  <!-- Books -->
+  <retro-item type="book" title="About Me" color="#5d8fd6">Who you are and how you work.</retro-item>
+  <retro-item type="book" title="Process Notes" color="#2f4858">How a strip gets made.</retro-item>
+  <retro-item type="book" title="Sketchbook" subtitle="2024" color="#e8e2d2">Loose drawings.</retro-item>
+  <retro-item type="book" title="How I Draw" color="#d9534f">Tools and habits.</retro-item>
+  <retro-item type="book" title="Press" color="#7fd1c7">Interviews and features.</retro-item>
+  <retro-item type="book" title="Contact" color="#ffd23f">How to reach you.</retro-item>
+
+  <!-- shown instead of the 3D shelf on browsers that cannot run it -->
+  <div slot="fallback" class="fallback">
+    <h1>briandi.to</h1>
+    <p>This site is a 3D shelf and needs a browser with WebGL.</p>
+  </div>
+</retro-shelf>
+
+</body>
+</html>

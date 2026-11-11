@@ -1,0 +1,52 @@
+/* briandi.to: one dark room, one shelf. */
+:root {
+  color-scheme: dark;
+  --room-0: #0b0a0a;
+  --room-1: #151312;
+  --room-2: #2b2621;
+  --ink: #ebe7df;
+  --dim: #a39e93;
+  --paper: #f3efe6;
+  --paper-ink: #1c1a17;
+  --legend: "Barlow Semi Condensed", "Arial Narrow", Arial, sans-serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+html, body { margin: 0; height: 100%; }
+body {
+  background: radial-gradient(120% 80% at 50% 100%, var(--room-2) 0%, var(--room-1) 55%, var(--room-0) 100%) fixed;
+  color: var(--ink);
+  font: 400 16px/1.5 var(--body);
+  overflow: hidden;
+}
+retro-shelf { height: 100vh; height: 100dvh; }
+
+.site-head {
+  position: fixed; z-index: 5; top: 0; right: 0;
+  padding: max(14px, env(safe-area-inset-top, 0px)) max(18px, env(safe-area-inset-right, 0px)) 0 0;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 2px; pointer-events: none;
+}
+.wordmark { pointer-events: auto; color: var(--ink); text-decoration: none; font: 700 20px/1 var(--legend); letter-spacing: 0.06em; text-transform: uppercase; }
+.wordmark:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.tagline { color: var(--dim); font: 500 11px/1.2 var(--mono); letter-spacing: 0.06em; }
+
+/* ---- pages shown on the TVs (each is 640 x 480) ---- */
+.tv { box-sizing: border-box; min-height: 100%; padding: 34px 38px; background: var(--paper); color: var(--paper-ink); font: 400 24px/1.4 var(--body); }
+.tv h1, .tv h2 { margin: 0 0 14px; font-family: var(--legend); font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; line-height: 1.02; text-wrap: balance; }
+.tv h1 { font-size: 68px; }
+.tv h2 { font-size: 56px; }
+.tv p { margin: 0 0 12px; }
+.tv .note { font: 400 16px/1.4 var(--mono); color: #6a655b; }
+.tv a { color: inherit; }
+.tv-latest { background: #1c3a5e; color: #f3efe6; }
+.tv-latest .note { color: #b9c6d6; }
+.tv-about { background: #ffd23f; }
+.tv-contact { background: #ff7a59; font-size: 34px; }
+.tv-contact h2 { font-size: 84px; }
+.panels { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 6px 0 16px; }
+.panels i { aspect-ratio: 3 / 4; border: 4px solid #f3efe6; background: rgba(243, 239, 230, 0.14); }
+
+.fallback { max-width: 40ch; margin: 20vh auto; padding: 0 16px; }
+
+/* the card that opens when a game or book is picked can be restyled:
+   retro-shelf::part(card) { ... }   retro-shelf::part(back) { ... } */
