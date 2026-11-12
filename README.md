@@ -40,9 +40,11 @@ Each block is ordinary HTML laid out at 640 × 480 pixels. Its styles are in `st
 | `cover` | Optional image for the front cover |
 | `href`, `link-text` | Optional button on the card |
 
-Each type has its own compartment. If a compartment is full, extra items are skipped and a warning appears in the browser console.
+The shelf has two long levels. If it is full, extra items are skipped and a warning appears in the browser console. Thick books are drawn as hardbacks and thin ones as paperbacks; add `binding="hard"` or `binding="paper"` to choose.
 
 **Stack.** On `<retro-shelf>`, `stack="pyramid"` or `stack="pile"`.
+
+**Arrangement.** On `<retro-shelf>`, `arrange="browsed"` (things half pulled out and leaning), `"piled"` (stacks with consoles on top), `"display"` (one cover of each kind facing out) or `"tidy"`.
 
 **Badge.** `brand="YOUR NAME"` on `<retro-shelf>` replaces the SONY badge on every TV; `brand=""` removes it.
 
