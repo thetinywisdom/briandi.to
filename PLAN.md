@@ -48,6 +48,7 @@ Do not reopen these without the owner asking.
 | Smoke | Static haze for the smoky vibe; no drifting animation (2026-11-12) |
 | Consoles on the floor | Not wanted (the `consoles` attribute exists but is off) |
 | Orange TV | Frame and screen centred vertically, equal margins top and bottom |
+| Site name in the top corner | Removed (owner's request, 2026-11-12); the name stays in the page title and on the pager's screen |
 | Navigation | One bottom dock, the 3D pager (design A of five); always on screen, also over the full-screen page |
 | Pager look | Corners as round as the LCD bezel, wide margin round the LCD, DotGothic16 on the LCD, continuous scrolling text |
 | Channel content | In the public `briandi.to-channels` repository, read live from GitHub (no copy in this repository) |

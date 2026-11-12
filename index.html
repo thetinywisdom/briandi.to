@@ -13,10 +13,6 @@
 </head>
 <body>
 
-<header class="site-head">
-  <a class="wordmark" href="./">briandi.to</a>
-  <span class="tagline">Comics &amp; drawings</span>
-</header>
 
 <!--
   THE ROOM
@@ -379,7 +375,7 @@
     }
   })();
 
-  // hide the site name while a page is open full screen
+  // body.reading is set while a page is open full screen (for styling)
   document.getElementById('shelf').addEventListener('shelf-read', (e) => document.body.classList.toggle('reading', e.detail.open));
 </script>
 
