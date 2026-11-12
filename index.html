@@ -118,6 +118,29 @@
   </div>
 </retro-shelf>
 
+<!--
+  THE DOCK
+  A 3D pager fixed to the bottom of the window: all navigation lives here.
+  One <button> per key. They are real buttons (keyboard and screen readers use
+  them); the pager draws a key for each.
+
+  data-tv="..."      a TV key: first press moves in to that TV, second press opens its page full screen.
+  data-label         the word printed on the key.
+  data-info          what the pager's screen says when the key is pointed at.
+  data-action="back" | "sound" | "info"   the three round keys.
+
+  When nothing is pointed at, the screen shows what to do next ("Tap a TV to look closer").
+-->
+<retro-pager for="shelf" name="briandi.to" aria-label="Site">
+  <button type="button" data-tv="pvm-20m4e" data-label="Home" data-info="Hello, I'm Brian. The front page">Home</button>
+  <button type="button" data-tv="pvm-9042qm" data-label="Latest" data-info="The newest strip">Latest strip</button>
+  <button type="button" data-tv="kv-9pr1" data-label="About" data-info="About the artist">About</button>
+  <button type="button" data-tv="kv-5200" data-label="Say hi" data-info="How to get in touch">Say hi</button>
+  <button type="button" data-action="back">Back</button>
+  <button type="button" data-action="sound">Sound</button>
+  <button type="button" data-action="info" data-info="Four old Sony TVs in a dark room, built in code">About this site</button>
+</retro-pager>
+
 <script>
   // hide the site name while a page is open full screen
   document.getElementById('shelf').addEventListener('shelf-read', (e) => document.body.classList.toggle('reading', e.detail.open));

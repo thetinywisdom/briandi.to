@@ -13,7 +13,9 @@ The site works end to end with placeholder content. It is not deployed.
 
 **Current look (decided by the owner):** a near-black room. Four Sony CRTs stand on a moss green carpet, lit only by their own screens, with a dim green light behind them, still haze (static smoke), still film grain and a faint front lamp so the buttons can be seen. On wide screens the sets are in two stacks ("scatter"): the 20-inch with the 9-inch monitor on top, and the orange TV with the small portable on top. On phones they form one tower.
 
-**Current interaction (decided by the owner):** tap a TV to move in to it; tap its screen to open that TV's page full screen as a normal scrolling page; "Back to the TV" or `Esc` returns. The goal is that content is easy to read.
+**Current interaction (decided by the owner):** tap a TV to move in to it; tap its screen to open that TV's page full screen as a normal scrolling page; `Esc` returns. The goal is that content is easy to read.
+
+**Navigation (decided by the owner, 2026-11-12):** all navigation is one bottom dock, a 3D pager (`<retro-pager>`, design "A" of five 2D mockups). Its LCD always shows something: what the pointed-at key or TV is, or else the scene's hint ("Tap a TV to look closer"). Keys: one per TV (press once to move in, again to read full screen; while reading, switches page), Back, Sound, Info. The scene's own hint, Back and Read buttons are hidden by the site's CSS.
 
 ## Done
 
@@ -23,6 +25,7 @@ The site works end to end with placeholder content. It is not deployed.
 - Dark room: screen-coloured glow, backlight, carpet or concrete floor, smoke, grain, front lamp.
 - TV layouts: pyramid, pile, tower, row, scatter; separate layout for wide and tall screens.
 - Full-screen reader for TV pages, with reading styles in `styles.css`.
+- Bottom dock: `<retro-pager>`, a 3D pager with LCD, TV keys and Back / Sound / Info, on desktop (one row) and phone (two rows).
 - Shelf version: two-level shelf, realistic PS1 / GBA / Vita / PSP cases and books with editable titles, four arrangements, console props (PS one, DualShock, Game Boy Advance, PS Vita, PSP Go).
 
 ## Decisions already made
@@ -41,11 +44,11 @@ Do not reopen these without the owner asking.
 | Smoke | Static haze for the smoky vibe; no drifting animation (2026-11-12) |
 | Consoles on the floor | Not wanted (the `consoles` attribute exists but is off) |
 | Orange TV | Frame and screen centred vertically, equal margins top and bottom |
+| Navigation | One bottom dock, the 3D pager; always on screen, also over the full-screen page |
 | Two repositories | Assets and site are kept separate so the assets stay reusable |
 
 ## Next up
 
-0. **Bottom dock navigation (in progress).** The owner wants all navigation in one always-visible bottom dock: main navigation, additional information, and an info screen that changes to describe whatever is hovered. The "Tap a TV to look closer" line stays on at all times. 2D mockups of several designs (including a 3D pager idea) were offered for the owner to choose from.
 1. **Embed the owner's content in the full-screen view.** The owner plans to send a separate GitHub repository to show inside the reader. Open questions put to the owner, not yet answered:
    - Where is that project deployed, or should deployment be set up?
    - Is it one project for one TV, or one repository per TV?
@@ -55,6 +58,9 @@ Do not reopen these without the owner asking.
 3. **Deploy.** Nothing is hosted yet. The folder is ready for GitHub Pages (`.nojekyll` is present) or any static host. The domain is presumably briandi.to; confirm with the owner.
 
 ## Known gaps
+
+- **Pager on phones covers the bottom of the tower** (the big TV's lower edge). The dock text on the Info key and the TV keys' descriptions are placeholders.
+- **The pager is a generic shape**, not modelled on a real pager.
 
 - **Not tested on a real phone or with real touch.** Everything was checked in headless desktop Chromium at desktop and phone viewport sizes.
 - **Performance is unmeasured.** The scene now only redraws on interaction (the smoke is static). Low-end phone behaviour is unknown.

@@ -39,6 +39,7 @@ Any static server works. Opening `index.html` from the file system does not, bec
 - **Every page is shown at two sizes.** On the tube it is laid out at 640 × 480 CSS pixels. When a visitor taps a TV and then its screen, the same element is moved into a full-screen reader and gets `slot="reader"`. Style both: `.tv { … }` for the tube and `.tv[slot="reader"] { … }` for reading.
 - The background colour of each page is also the colour of light that TV throws into the room.
 - The attributes on `<retro-shelf>` are documented in the comment above it and in the `retro-3d-assets` README.
+- Navigation is the `<retro-pager>` after the shelf: one `<button>` per key (`data-tv`, `data-label`, `data-info`, or `data-action="back|sound|info"`). `styles.css` fixes it to the bottom and hides the shelf's own hint and Back / Read buttons.
 - `body.reading` is set while the reader is open (see the small script at the end of `index.html`).
 
 ## Changing the 3D

@@ -65,3 +65,10 @@ retro-shelf { height: 100vh; height: 100dvh; }
 .tv-contact[slot="reader"] { font-size: clamp(22px, 3vw, 30px); }
 
 body.reading .site-head { display: none; }
+
+/* ---- the dock: a 3D pager at the bottom, always on screen ----
+   It replaces the scene's own hint and Back / Read buttons. */
+retro-pager { position: fixed; z-index: 20; left: 0; right: 0; bottom: env(safe-area-inset-bottom, 0px); }
+retro-shelf::part(hint), retro-shelf::part(back), retro-shelf::part(fill), retro-shelf::part(reader-close) { display: none; }
+/* leave room under the full-screen page so its end clears the dock */
+.tv[slot="reader"] { padding-bottom: calc(clamp(48px, 10vh, 96px) + 150px); }
