@@ -563,14 +563,14 @@
     if (shelf._ready) go(); else shelf.addEventListener('shelf-ready', go, { once: true });
   })();
 
-  // when the Program Guide is on screen (camera in on the channel TV, channel 1), the set's channel keys
-  // and their number cells glow softly in a wave, as a hint that they can be pressed
+  // while the Program Guide is on screen (camera in on the channel TV, channel 1), the set's channel keys
+  // are lit like a backlit keyboard, as a hint that they can be pressed; it fades out otherwise
   (() => {
     const shelf = document.getElementById('shelf');
     let channel = 'ch-1';
-    const hint = () => { if (shelf._focusKey === 'kv-5200' && channel === 'ch-1') shelf.tv('kv-5200')?.shimmerLamps('channel'); };
-    shelf.addEventListener('shelf-focus', (e) => { if (e.detail.tv === 'kv-5200') hint(); });
-    shelf.addEventListener('pvm-input', (e) => { if (e.detail.tv === 'kv-5200') { channel = e.detail.input; hint(); } });
+    const update = () => shelf.tv('kv-5200')?.setBacklight(shelf._focusKey === 'kv-5200' && channel === 'ch-1');
+    shelf.addEventListener('shelf-focus', update);
+    shelf.addEventListener('pvm-input', (e) => { if (e.detail.tv === 'kv-5200') { channel = e.detail.input; update(); } });
   })();
 
   // body.reading is set while a page is open full screen (for styling)
