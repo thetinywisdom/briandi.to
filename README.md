@@ -44,7 +44,7 @@ Each block is ordinary HTML laid out at 640 × 480 pixels. Its styles are in `st
 
 The shelf has two long levels. If it is full, extra items are skipped and a warning appears in the browser console. Thick books are drawn as hardbacks and thin ones as paperbacks; add `binding="hard"` or `binding="paper"` to choose.
 
-**Room.** On `<retro-shelf>`: `stack="scatter tower"` sets the layout for wide screens and then phones (choices: `pyramid`, `pile`, `tower`, `row`, `scatter`); `backlight` is the green glow (`backlight="#aa2233"` for another colour); `floor="carpet"` is the matt carpet (`floor-color` changes its colour; remove `floor` for dark concrete); `smoke` adds slow drifting haze (`smoke="2"` is thicker); `grain` adds film grain (`grain="2"` is heavier); `lighting="dim"` leaves a little room light on.
+**Room.** On `<retro-shelf>`: `stack="scatter tower"` sets the layout for wide screens and then phones (choices: `pyramid`, `pile`, `tower`, `row`, `scatter`); `backlight` is the green glow (`backlight="#aa2233"` for another colour); `floor="carpet"` is the matt carpet (`floor-color` changes its colour; remove `floor` for dark concrete); `smoke` adds slow drifting haze (`smoke="2"` is thicker); `grain` adds still film grain (`grain="2"` is heavier); `lighting="dim"` leaves a little room light on.
 
 **Arrangement (shelf version only).** On `<retro-shelf>`, `arrange="browsed"` (things half pulled out and leaning), `"piled"` (stacks with consoles on top), `"display"` (one cover of each kind facing out) or `"tidy"`.
 
