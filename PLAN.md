@@ -9,15 +9,15 @@ Last updated: 2026-11-12.
 
 ## Where things stand
 
-The site works end to end with placeholder content. It is not deployed.
+The site works end to end with placeholder content. It is not deployed. The owner follows progress through a preview link (see Working notes).
 
 **Current look (decided by the owner):** a near-black room. Four Sony CRTs stand on a moss green carpet, lit only by their own screens, with a dim green light behind them, still haze (static smoke), still film grain and a faint front lamp so the buttons can be seen. On wide screens the sets are in two stacks ("scatter"): the 20-inch with the 9-inch monitor on top, and the orange TV with the small portable on top. On phones they form one tower.
 
-**Current interaction (decided by the owner):** tap a TV to move in to it; tap its screen to open that TV's page full screen as a normal scrolling page; `Esc` returns. The goal is that content is easy to read.
+**Current interaction (decided by the owner):** tap a TV to move in to it; tap its screen to open that TV's page full screen as a normal scrolling page; `Esc` returns. The goal is that content is easy to read. This holds for TVs 1–3 (20-inch home, 9-inch latest strip, orange about); TV 4 is the channel TV below.
 
 **Channel TV (decided by the owner, 2026-11-12):** TV 4, the KV-5200 portable on top of the orange set, is a channel TV, not a page. It never opens full screen and stays at TV zoom (`no-reader="kv-5200"`). It has 14 channels (2–13, U1, U2) switched by its own keys; each channel plays one piece of media: a YouTube link, a Spotify link, or an uploaded GIF / WebP (`media/`). Channel 2 is a green-phosphor channel guide (styled after two references the owner supplied: a radar "BUNKER" screen and a "NUE 2020" menu) that lists the channels from what is in `index.html`. Empty channels show static. Its pager key is "TV".
 
-**Navigation (decided by the owner, 2026-11-12):** all navigation is one bottom dock, a 3D pager (`<retro-pager>`, design "A" of five 2D mockups). Its LCD always shows something: what the pointed-at key or TV is, or else the scene's hint ("Tap a TV to look closer"). Keys: one per TV (press once to move in, again to read full screen; while reading, switches page), Back, Sound, Info. The scene's own hint, Back and Read buttons are hidden by the site's CSS.
+**Navigation (decided by the owner, 2026-11-12):** all navigation is one bottom dock, a 3D pager (`<retro-pager>`, design "A" of five 2D mockups). Its LCD always shows something: what the pointed-at key or TV is, or else the scene's hint ("Tap a TV to look closer"). Keys: one per TV (press once to move in, again to read full screen; while reading, switches page; the channel TV's key only moves in), Back, Sound, Info. The scene's own hint, Back and Read buttons are hidden by the site's CSS. Look, as revised by the owner: plenty of space round the LCD, body corners about as round as the LCD bezel (not a pill), LCD lettered in DotGothic16, long LCD text scrolling round continuously from the start. The pager's own key numbers read "TV 01–04"; the channel TV's channel shows as "CH 03" etc.
 
 ## Done
 
@@ -28,6 +28,7 @@ The site works end to end with placeholder content. It is not deployed.
 - TV layouts: pyramid, pile, tower, row, scatter; separate layout for wide and tall screens.
 - Full-screen reader for TV pages, with reading styles in `styles.css`.
 - Bottom dock: `<retro-pager>`, a 3D pager with LCD, TV keys and Back / Sound / Info, on desktop (one row) and phone (two rows).
+- Channel TV on the KV-5200: 14 channels on its own keys, channel guide on CH 02, YouTube / Spotify / GIF / WebP channels from one line of HTML each, only the channel on air plays, clickable screen when zoomed in.
 - Shelf version: two-level shelf, realistic PS1 / GBA / Vita / PSP cases and books with editable titles, four arrangements, console props (PS one, DualShock, Game Boy Advance, PS Vita, PSP Go).
 
 ## Decisions already made
@@ -46,7 +47,9 @@ Do not reopen these without the owner asking.
 | Smoke | Static haze for the smoky vibe; no drifting animation (2026-11-12) |
 | Consoles on the floor | Not wanted (the `consoles` attribute exists but is off) |
 | Orange TV | Frame and screen centred vertically, equal margins top and bottom |
-| Navigation | One bottom dock, the 3D pager; always on screen, also over the full-screen page |
+| Navigation | One bottom dock, the 3D pager (design A of five); always on screen, also over the full-screen page |
+| Pager look | Corners as round as the LCD bezel, wide margin round the LCD, DotGothic16 on the LCD, continuous scrolling text |
+| TV 4 (KV-5200) | Channel TV: no full screen, stays at TV zoom; 14 channels (2–13, U1, U2) of YouTube, Spotify or GIF / WebP; CH 02 is a green-phosphor guide in the style of the owner's two references |
 | Two repositories | Assets and site are kept separate so the assets stay reusable |
 
 ## Next up
@@ -62,14 +65,13 @@ Do not reopen these without the owner asking.
 
 ## Known gaps
 
-- **The preview artifact cannot show YouTube or Spotify** (its sandbox blocks other sites in frames, and files must be inlined). The real site can.
-
+- **The preview artifact cannot show YouTube or Spotify** (its sandbox blocks other sites in frames), and GIF / WebP files only if they are inlined into the preview. The real site can show all of them.
 - **Pager on phones covers the bottom of the tower** (the big TV's lower edge). The dock text on the Info key and the TV keys' descriptions are placeholders.
 - **The pager is a generic shape**, not modelled on a real pager.
-
 - **Not tested on a real phone or with real touch.** Everything was checked in headless desktop Chromium at desktop and phone viewport sizes.
 - **Performance is unmeasured.** The scene now only redraws on interaction (the smoke is static). Low-end phone behaviour is unknown.
-- **The tube page is not clickable.** A tap on a focused screen opens the reader, so links only work in the full-screen view. This was a deliberate trade for readability.
+- **The tube page is not clickable on TVs 1–3.** A tap on a focused screen opens the reader, so links only work in the full-screen view. This was a deliberate trade for readability. The channel TV is the exception: its screen takes clicks once zoomed in.
+- **No real YouTube or Spotify link has been tried yet.** Channel switching, unloading of inactive players and the clickable screen were tested with a test picture and a local test page only.
 - **Tower on phones is taller than the screen**, so the big TV starts partly below the fold and the visitor scrolls to it.
 - **PVM-20M4E front panel and KV-9PR1 top buttons are reconstructions**, not measured. A straight-on photo of each would allow correcting them.
 - **Case and book designs are from memory**, not matched to photos. Platform names are plain lettering, not real logos.
@@ -86,6 +88,6 @@ Do not reopen these without the owner asking.
 ## Working notes
 
 - The bundle in `vendor/retro-3d.js` must be rebuilt and copied from `retro-3d-assets` after any 3D change; see `CLAUDE.md` in each repository.
-- **Always publish a preview after every change (owner's standing request, 2026-11-12).** The owner previews work through a single-file build of the site published as a private artifact, updated in place at the same link: https://claude.ai/artifact/Qyfjne9njFyZAonph82WGT (pass it as `url` when publishing from a new session, after reading it). To build it from `index.html`: replace the `styles.css` link with a `<style>` holding the file; drop the `vendor/retro-3d.js` script tag and add one `<script type="module">` holding the bundle (with `</script` escaped as `<\/script`) where `</body>` was; remove the doctype, `<html>`, `<head>`, `<body>` tags and the charset and viewport metas, which the publish wrapper adds. Test it locally with a `<meta charset="utf-8">` in front, or the bundle's Japanese regular expressions fail to parse.
+- **Always publish a preview after every change (owner's standing request, 2026-11-12).** The owner previews work through a single-file build of the site published as an artifact (the owner has shared it as "anyone with the link"), updated in place at the same link: https://claude.ai/artifact/Qyfjne9njFyZAonph82WGT (pass it as `url` when publishing from a new session, after reading it). To build it from `index.html`: replace the `styles.css` link with a `<style>` holding the file; drop the `vendor/retro-3d.js` script tag and add one `<script type="module">` holding the bundle (with `</script` escaped as `<\/script`) where `</body>` was; remove the doctype, `<html>`, `<head>`, `<body>` tags and the charset and viewport metas, which the publish wrapper adds. Test it locally with a `<meta charset="utf-8">` in front, or the bundle's Japanese regular expressions fail to parse.
 - **Merge to `main` when work is done** (owner's request, 2026-11-12). Sessions may develop on a `claude/…` branch; fast-forward `main` to it and push both repositories.
 - The cloud environment's allowed hosts include `www.adcom.it` and `pro.sony`, added early on to fetch two PDFs. Both sites refused automated downloads, so the entries are unused and can be removed.
