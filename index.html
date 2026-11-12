@@ -223,9 +223,30 @@
       page.className = 'tv tv-channel';
       page.slot = `kv-5200:ch-${ch}`;
       page.append(media);
+      // what the pager shows as "now playing" on this channel: the file name for a picture,
+      // the real title for YouTube and Spotify once known (the guide title until then)
+      page.dataset.kind = kind === 'PICTURE' ? 'GIF' : kind;
+      page.dataset.nowPlaying = kind === 'PICTURE' ? c.image : c.title || (kind === 'VIDEO' ? 'YouTube' : 'Spotify');
+      if (kind === 'MUSIC') {
+        fetch('https://open.spotify.com/oembed?url=' + encodeURIComponent(c.spotify))
+          .then((r) => (r.ok ? r.json() : null))
+          .then((d) => { if (d?.title) page.dataset.nowPlaying = d.title; })
+          .catch(() => {});
+      }
       shelf.append(page);
       onAir[ch] = String(c.title || kind).toUpperCase();
     }
+    // YouTube players report their video's title once they are running
+    addEventListener('message', (e) => {
+      if (!/^https:\/\/www\.youtube(-nocookie)?\.com$/.test(e.origin)) return;
+      let d;
+      try { d = typeof e.data === 'string' ? JSON.parse(e.data) : e.data; } catch { return; }
+      const title = d?.info?.videoData?.title;
+      if (!title) return;
+      for (const f of document.querySelectorAll('.tv-channel iframe')) {
+        if (f.contentWindow === e.source) f.closest('.tv-channel').dataset.nowPlaying = title;
+      }
+    });
     if (!list) return;
     for (const ch of ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', 'u1', 'u2']) {
       const li = document.createElement('li');
