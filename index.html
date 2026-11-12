@@ -573,17 +573,14 @@
     shelf.addEventListener('pvm-input', (e) => { if (e.detail.tv === 'kv-5200') { channel = e.detail.input; update(); } });
   })();
 
-  // a hand that taps the channel TV's key 2 every few seconds while the Program Guide is on, to show that
-  // the keys on the set can be pressed. It stops for the rest of the visit once the channel is changed.
+  // a pulsing ring on the channel TV's key 2 while the Program Guide is on, to show that the keys on the
+  // set can be pressed. It stops for the rest of the visit once the channel is changed.
   (() => {
     const shelf = document.getElementById('shelf');
     const hand = document.createElement('div');
     hand.className = 'key-hint';
     hand.setAttribute('aria-hidden', 'true');
-    const shape = '<rect x="11" y="1" width="7" height="22" rx="3.5"/><rect x="5" y="15" width="21" height="21" rx="7"/><rect x="2" y="19" width="9" height="9" rx="4.5" transform="rotate(-25 6 23)"/>';
-    hand.innerHTML = `<span class="key-hint-ring"></span><span class="key-hint-hand"><svg viewBox="0 0 30 38" width="30" height="38">
-      <g fill="#031208" stroke="#031208" stroke-width="4" stroke-linejoin="round">${shape}</g><g fill="#f3efe6">${shape}</g>
-      <path d="M11 24v5M15.5 24v5M20 24v5" stroke="#9a958a" stroke-width="1.2" stroke-linecap="round"/></svg></span>`;
+    hand.innerHTML = '<span class="key-hint-ring"></span><span class="key-hint-ring"></span>';
     document.body.append(hand);
     let channel = 'ch-1', learned = false, raf = 0, wait = 0;
     const place = () => {
