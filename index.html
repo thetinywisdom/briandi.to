@@ -71,16 +71,11 @@
 
   <!-- 5-inch portable TV: the channel TV.
        It has 14 channels: 2 to 13, U1 and U2. Its own channel keys switch them.
-       Channel 2 is the guide below; the list on it fills itself in from the
-       channels you add. A channel with nothing on it shows static.
-
-       Add a channel with one line. Paste the normal link; it is turned into a player:
-         <div class="tv tv-channel" slot="kv-5200:ch-3" data-youtube="https://www.youtube.com/watch?v=..." data-title="Studio tour"></div>
-         <div class="tv tv-channel" slot="kv-5200:ch-4" data-spotify="https://open.spotify.com/track/..." data-title="Drawing playlist"></div>
-         <div class="tv tv-channel" slot="kv-5200:ch-5" data-image="media/loop.gif" data-title="Sketch loop"></div>
-       slot is the channel: kv-5200:ch-3 ... kv-5200:ch-13, kv-5200:ch-u1, kv-5200:ch-u2.
-       data-title is the name shown in the guide. Put GIF and WebP files in the media folder.
-       YouTube starts playing silently; Spotify needs a press of its play button. -->
+       Channel 2 is the guide below. Channels 3 to 13, U1 and U2 come from the
+       briandi.to-channels repository (channels.json and its media folder): the
+       script at the end of this file reads it from GitHub and fills in the guide.
+       To change what is on, edit that repository; this file does not change.
+       A channel with nothing on it shows static. -->
   <div class="tv tv-guide" slot="kv-5200">
     <div class="guide-top"><span>BRIANDI.TO</span><span>CH 02 &#9654;</span></div>
     <h2 class="guide-title">------- CHANNELS -------</h2>
@@ -93,8 +88,6 @@
     <i class="guide-mark" style="left: 6px; top: 6px"></i><i class="guide-mark" style="right: 6px; top: 6px"></i>
     <i class="guide-mark" style="left: 6px; bottom: 6px"></i><i class="guide-mark" style="right: 6px; bottom: 6px"></i>
   </div>
-
-  <!-- channels: add yours here (see above) -->
 
   <!-- The "Say hi" page that was on this TV, kept until it has a new home:
   <div class="tv tv-contact" slot="...">
@@ -172,8 +165,12 @@
 </retro-pager>
 
 <script>
-  // channel TV: turn pasted links into players, then list the channels in the guide on channel 2
-  (() => {
+  // channel TV: read the channel list from the briandi.to-channels repository,
+  // turn each entry into a player or picture on its channel, and list them in the guide on channel 2
+  const CHANNELS = 'https://raw.githubusercontent.com/thetinywisdom/briandi.to-channels/main/';
+  (async () => {
+    const shelf = document.getElementById('shelf');
+    const list = document.querySelector('.guide-list');
     const youtubeId = (u) => {
       try {
         const x = new URL(u);
@@ -189,41 +186,48 @@
         return parts.length >= 2 ? `https://open.spotify.com/embed/${parts[0]}/${parts[1]}` : null;
       } catch { return null; }
     };
-    const kinds = { youtube: 'VIDEO', spotify: 'MUSIC', image: 'PICTURE' };
-    for (const el of document.querySelectorAll('.tv-channel')) {
-      const d = el.dataset;
-      let media = null;
-      if (d.youtube) {
-        const id = youtubeId(d.youtube);
-        if (id) {
-          media = document.createElement('iframe');
-          media.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&playsinline=1&rel=0`;
-          media.allow = 'autoplay; encrypted-media; picture-in-picture';
-        }
-      } else if (d.spotify) {
-        const src = spotifyEmbed(d.spotify);
-        if (src) { media = document.createElement('iframe'); media.src = src; media.allow = 'autoplay; encrypted-media'; }
-      } else if (d.image) {
+    let entries = [];
+    try {
+      const res = await fetch(CHANNELS + 'channels.json', { cache: 'no-cache' });
+      if (res.ok) entries = (await res.json()).channels || [];
+    } catch {}
+    const onAir = {};
+    for (const c of entries) {
+      const ch = String(c.channel ?? '').toLowerCase();
+      if (!/^(1[0-3]|[3-9]|u[12])$/.test(ch) || onAir[ch]) continue;
+      let media = null, kind = '';
+      if (c.youtube && youtubeId(c.youtube)) {
+        const id = youtubeId(c.youtube);
+        media = document.createElement('iframe');
+        media.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&playsinline=1&rel=0`;
+        media.allow = 'autoplay; encrypted-media; picture-in-picture';
+        kind = 'VIDEO';
+      } else if (c.spotify && spotifyEmbed(c.spotify)) {
+        media = document.createElement('iframe');
+        media.src = spotifyEmbed(c.spotify);
+        media.allow = 'autoplay; encrypted-media';
+        kind = 'MUSIC';
+      } else if (c.image && /\.(gif|webp)$/i.test(c.image)) {
         media = document.createElement('img');
-        media.src = d.image;
-        media.alt = d.title || '';
+        media.src = CHANNELS + 'media/' + encodeURIComponent(c.image);
+        media.alt = c.title || '';
+        kind = 'PICTURE';
       }
-      if (media) {
-        if (media.tagName === 'IFRAME') media.title = d.title || 'Channel';
-        el.replaceChildren(media);
-      }
+      if (!media) continue;
+      if (media.tagName === 'IFRAME') media.title = c.title || `Channel ${ch.toUpperCase()}`;
+      const page = document.createElement('div');
+      page.className = 'tv tv-channel';
+      page.slot = `kv-5200:ch-${ch}`;
+      page.append(media);
+      shelf.append(page);
+      onAir[ch] = String(c.title || kind).toUpperCase();
     }
-    const list = document.querySelector('.guide-list');
     if (!list) return;
-    const channels = ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', 'u1', 'u2'];
-    for (const ch of channels) {
-      const el = ch === '2' ? null : document.querySelector(`[slot="kv-5200:ch-${ch}"]`);
-      const kind = el && Object.keys(kinds).find((k) => el.dataset[k]);
+    for (const ch of ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', 'u1', 'u2']) {
       const li = document.createElement('li');
-      li.className = ch === '2' ? 'on' : el ? '' : 'empty';
-      const name = ch === '2' ? 'THIS GUIDE' : el ? (el.dataset.title || kinds[kind] || 'ON AIR') : 'NO SIGNAL';
+      li.className = ch === '2' ? 'on' : onAir[ch] ? '' : 'empty';
       li.innerHTML = `<b>${ch.toUpperCase().padStart(2, '0')}</b> <span></span>`;
-      li.querySelector('span').textContent = name.toUpperCase();
+      li.querySelector('span').textContent = ch === '2' ? 'THIS GUIDE' : onAir[ch] || 'NO SIGNAL';
       list.append(li);
     }
   })();
