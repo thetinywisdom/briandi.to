@@ -55,6 +55,6 @@ There are no tests. Serve the folder, open it in a browser at desktop and phone 
 - Plain HTML and CSS, no framework, no build. Keep it that way unless the owner asks.
 - All copy in `index.html` is still placeholder text. Do not invent biography, contact details or comic titles; ask the owner.
 - When the owner asks for help with Japanese text, they want the hiragana reading, an English translation and the grammar points explained alongside any correction.
-- Fonts come from Google Fonts (Barlow Semi Condensed, IBM Plex Sans, IBM Plex Mono).
+- Fonts come from Google Fonts (Barlow Semi Condensed, IBM Plex Sans, IBM Plex Mono, and DotGothic16 for the pager screen).
 - Work is committed straight to `main` and pushed (or merged into `main` from a session branch). The site is not deployed anywhere yet (see `PLAN.md`).
 - **After every change, publish a preview for the owner** (single-file build, see `PLAN.md` → Working notes). The owner asked for this to happen every time.
