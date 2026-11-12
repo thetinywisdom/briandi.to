@@ -48,6 +48,8 @@ Do not reopen these without the owner asking.
 | Smoke | Static haze for the smoky vibe; no drifting animation (2026-11-12) |
 | Consoles on the floor | Not wanted (the `consoles` attribute exists but is off) |
 | Orange TV | Frame and screen centred vertically, equal margins top and bottom |
+| Arrival | 3 s after the page is ready, the camera glides (2.2 s, ease in / out) in to the channel TV and its Program Guide, unless the visitor has already clicked, tapped, scrolled or pressed a key (owner's request, 2026-11-12) |
+| Zoomed-in framing | A TV is framed in the space above the pager (`--focus-inset-bottom` on `<retro-shelf>`: 128 px, 176 px under 560 px wide) with a safe side and top margin; the channel TV is framed on its picture and keys (not its handle), so on a phone they fill the width (owner's request). The other TVs were not reviewed: tapping them opens the full page anyway (owner's call) |
 | Site name in the top corner | Removed (owner's request, 2026-11-12); the name stays in the page title and on the pager's screen |
 | Navigation | One bottom dock, the 3D pager (design A of five); always on screen, also over the full-screen page |
 | Pager look | Corners as round as the LCD bezel, wide margin round the LCD, DotGothic16 on the LCD, continuous scrolling text |

@@ -551,6 +551,18 @@
     show(0);
   })();
 
+  // 3 s after arriving, glide in to the channel TV and its Program Guide, unless the visitor has already
+  // started looking around themselves
+  (() => {
+    const shelf = document.getElementById('shelf');
+    let touched = false;
+    for (const t of ['pointerdown', 'keydown', 'wheel', 'touchstart']) addEventListener(t, () => { touched = true; }, { once: true, capture: true, passive: true });
+    const go = () => setTimeout(() => {
+      if (!touched && !shelf._focusKey && !shelf._reading) shelf.focusTV('kv-5200', { duration: 2200 });
+    }, 3000);
+    if (shelf._ready) go(); else shelf.addEventListener('shelf-ready', go, { once: true });
+  })();
+
   // body.reading is set while a page is open full screen (for styling)
   document.getElementById('shelf').addEventListener('shelf-read', (e) => document.body.classList.toggle('reading', e.detail.open));
 </script>
