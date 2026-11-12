@@ -182,10 +182,10 @@
   When nothing is pointed at, the screen shows what to do next ("Tap a TV to look closer").
 -->
 <retro-pager for="shelf" name="briandi.to" aria-label="Site">
-  <button type="button" data-tv="pvm-20m4e" data-label="Home" data-info="Hello, I'm Brian. The front page">Home</button>
-  <button type="button" data-tv="pvm-9042qm" data-label="Latest" data-info="The newest strip">Latest strip</button>
-  <button type="button" data-tv="kv-9pr1" data-label="About" data-info="About the artist">About</button>
-  <button type="button" data-tv="kv-5200" data-label="TV" data-info="14 channels. Change them with the keys on the set">Channel TV</button>
+  <button type="button" data-tv="kv-5200" data-label="Guide" data-info="The guide channel. It points out what's worth catching on the others">Guide</button>
+  <button type="button" data-tv="pvm-20m4e" data-label="Work" data-info="My WORK channel. 11+ years in design, today a Design Manager at PayPay">Work</button>
+  <button type="button" data-tv="kv-9pr1" data-label="Create" data-info="My CREATE channel. Home to The Tiny Wisdom">Create</button>
+  <button type="button" data-tv="pvm-9042qm" data-label="Game" data-info="My GAME channel. The retro games I love and keep coming back to">Game</button>
   <button type="button" data-action="back">Back</button>
   <button type="button" data-action="sound">Sound</button>
   <button type="button" data-action="info" data-info="Four old Sony TVs in a dark room, built in code">About this site</button>
@@ -563,18 +563,16 @@
     if (shelf._ready) go(); else shelf.addEventListener('shelf-ready', go, { once: true });
   })();
 
-  // while the Program Guide is on screen (camera in on the channel TV, channel 1), the set's channel keys
-  // are lit like a backlit keyboard, as a hint that they can be pressed; it fades out otherwise
+  // the channel TV's keys are lit like a backlit keyboard all the time, as a hint that they can be pressed
   (() => {
     const shelf = document.getElementById('shelf');
-    let channel = 'ch-1';
-    const update = () => shelf.tv('kv-5200')?.setBacklight(shelf._focusKey === 'kv-5200' && channel === 'ch-1');
-    shelf.addEventListener('shelf-focus', update);
-    shelf.addEventListener('pvm-input', (e) => { if (e.detail.tv === 'kv-5200') { channel = e.detail.input; update(); } });
+    const on = () => shelf.tv('kv-5200')?.setBacklight(true);
+    if (shelf._ready) on(); else shelf.addEventListener('shelf-ready', on, { once: true });
   })();
 
-  // a pulsing ring on the channel TV's key 2 while the Program Guide is on, to show that the keys on the
-  // set can be pressed. It stops for the rest of the visit once the channel is changed.
+  // a pulsing ring on the channel TV's key 2 the first time the Program Guide is on after the page loads,
+  // to show that the keys on the set can be pressed. Once it goes (channel changed, TV left) it stays gone
+  // until the next visit or refresh.
   (() => {
     const shelf = document.getElementById('shelf');
     const hand = document.createElement('div');
@@ -588,8 +586,11 @@
       if (pt) hand.style.transform = `translate(${pt.x.toFixed(1)}px, ${pt.y.toFixed(1)}px)`;
       raf = requestAnimationFrame(place);
     };
+    let shown = false;
     const show = (on) => {
       cancelAnimationFrame(raf);
+      if (!on && shown) learned = true;                                // first time only
+      shown = shown || on;
       hand.classList.toggle('on', on);
       if (on) place();
     };
