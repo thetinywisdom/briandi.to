@@ -517,6 +517,7 @@
       li.className = ch === '1' ? 'on' : builtIn || onAir[ch] ? '' : 'empty';
       // each line is a button that tunes the set to that channel, as if its key were pressed
       li.innerHTML = `<button type="button"><b>${ch.toUpperCase().padStart(2, '0')}</b> <span></span></button>`;
+      li.style.setProperty('--i', list.children.length);              // staggers the shimmer down the list
       li.querySelector('span').textContent = name;
       li.querySelector('button').addEventListener('click', () => shelf.tv('kv-5200')?.press(`ch-${ch}`));
       list.append(li);
