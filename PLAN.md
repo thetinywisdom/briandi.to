@@ -61,7 +61,7 @@ Do not reopen these without the owner asking.
    - Is it one project for one TV, or one repository per TV?
 
    Two ways to wire it in were offered: embed its live address in a frame (best when it has its own build; the host must allow framing), or copy its built pages into this site (best for plain HTML). Suggested approach if a whole site is embedded: a simple title card on the tube and the real site only in the reader, because a full site is unreadable at 640 × 480.
-2. **Channel media and the Say hi page.** The owner will fill `briandi.to-channels` with YouTube / Spotify links and GIF / WebP files for channels 3–13, U1, U2 (its `channels.json` is empty so far). The "Say hi" contact page used to be on the KV-5200; it is kept, commented out, in `index.html` until the owner says where it goes.
+2. **Channel media and the Say hi page.** The owner will fill `briandi.to-channels` with YouTube / Spotify links and GIF / WebP files for channels 3–13, U1, U2 (so far only channel 3 is filled: a YouTube video, with no title yet, so the guide calls it VIDEO). The "Say hi" contact page used to be on the KV-5200; it is kept, commented out, in `index.html` until the owner says where it goes.
 3. **Real content.** Every page in `index.html` is placeholder text ("Hello, I'm Brian", "Latest strip", "About", "Say hi"). The owner needs to supply copy, strips and contact details. Do not invent them.
 4. **Deploy.** Nothing is hosted yet. The folder is ready for GitHub Pages (`.nojekyll` is present) or any static host. The domain is presumably briandi.to; confirm with the owner.
 
