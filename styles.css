@@ -109,6 +109,28 @@ retro-shelf { height: 100vh; height: 100dvh; }
   .tv-interference .static, .tv-interference .tear, .tv-interrupt .interrupt-sub { animation: none; }
 }
 
+/* a hand tapping the channel TV's key 2 while the Program Guide is on (placed on the key by script) */
+.key-hint { position: fixed; z-index: 15; left: 0; top: 0; pointer-events: none; opacity: 0; transition: opacity 0.4s ease; }
+.key-hint.on { opacity: 1; }
+.key-hint-hand { position: absolute; left: -14px; top: -1px; filter: drop-shadow(0 0 6px rgba(141, 255, 154, 0.45)) drop-shadow(0 3px 4px rgba(0, 0, 0, 0.6));
+  transform-origin: 14px 1px; animation: key-hint-tap 3s ease-in-out infinite; }
+.key-hint-ring { position: absolute; left: -14px; top: -14px; width: 28px; height: 28px; border-radius: 50%; border: 2px solid rgba(141, 255, 154, 0.8);
+  opacity: 0; animation: key-hint-ring 3s ease-out infinite; }
+@keyframes key-hint-tap {
+  0% { transform: translate(22px, 30px); opacity: 0; }
+  18% { transform: translate(6px, 9px); opacity: 1; }
+  34% { transform: translate(0, 0) scale(1); }
+  40% { transform: translate(0, 1px) scale(0.86); }
+  48% { transform: translate(0, 0) scale(1); }
+  70% { transform: translate(6px, 9px); opacity: 1; }
+  88%, 100% { transform: translate(22px, 30px); opacity: 0; }
+}
+@keyframes key-hint-ring { 0%, 39% { opacity: 0; transform: scale(0.4); } 41% { opacity: 1; transform: scale(0.5); } 62%, 100% { opacity: 0; transform: scale(1.6); } }
+@media (prefers-reduced-motion: reduce) {
+  .key-hint-hand { animation: none; transform: translate(4px, 6px); }
+  .key-hint-ring { display: none; }
+}
+
 /* channel TV, channel 2: How to use. The guide's look, one line at a time. */
 .tv-howto .howto-list { list-style: none; margin: 0; padding: 0; flex: 1; display: flex; align-items: center; }
 .tv-howto .howto-list li { display: none; gap: 18px; font-size: 30px; line-height: 1.3; text-wrap: pretty; }
