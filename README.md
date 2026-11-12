@@ -1,6 +1,8 @@
 # briandi.to
 
-A portfolio site built as a 3D shelf: four old Sony TVs stacked on a shelf unit, with PS1 cases, Game Boy Advance boxes, PS Vita and PSP cases, books and a few consoles inside it.
+A portfolio site built as a dark room: four old Sony TVs stand on a black concrete floor and are the only light, with a dim green glow behind them. Each TV shows a page of the site and throws that page's background colour onto the floor.
+
+The same code also has a shelf version, with PS1, Game Boy Advance, PS Vita and PSP cases, books and consoles under the TVs. The note at the top of `index.html` says how to switch.
 
 It is a plain static site. There is no build step: open `index.html` through any web server, or host the folder as it is (GitHub Pages, Netlify, Cloudflare Pages).
 
@@ -23,7 +25,7 @@ Everything is in `index.html`.
 
 Each block is ordinary HTML laid out at 640 × 480 pixels. Its styles are in `styles.css` under "pages shown on the TVs".
 
-**Games and books.** One `<retro-item>` line each:
+**Games and books (shelf version only).** One `<retro-item>` line each:
 
 ```html
 <retro-item type="ps1" title="My Comic" subtitle="2024" color="#e4572e"
@@ -42,9 +44,9 @@ Each block is ordinary HTML laid out at 640 × 480 pixels. Its styles are in `st
 
 The shelf has two long levels. If it is full, extra items are skipped and a warning appears in the browser console. Thick books are drawn as hardbacks and thin ones as paperbacks; add `binding="hard"` or `binding="paper"` to choose.
 
-**Stack.** On `<retro-shelf>`, `stack="pyramid"` or `stack="pile"`.
+**Room.** On `<retro-shelf>`: `stack="scatter tower"` sets the layout for wide screens and then phones (choices: `pyramid`, `pile`, `tower`, `row`, `scatter`); `backlight` is the green glow (`backlight="#aa2233"` for another colour); `lighting="dim"` leaves a little room light on.
 
-**Arrangement.** On `<retro-shelf>`, `arrange="browsed"` (things half pulled out and leaning), `"piled"` (stacks with consoles on top), `"display"` (one cover of each kind facing out) or `"tidy"`.
+**Arrangement (shelf version only).** On `<retro-shelf>`, `arrange="browsed"` (things half pulled out and leaning), `"piled"` (stacks with consoles on top), `"display"` (one cover of each kind facing out) or `"tidy"`.
 
 **Badge.** `brand="YOUR NAME"` on `<retro-shelf>` replaces the SONY badge on every TV; `brand=""` removes it.
 

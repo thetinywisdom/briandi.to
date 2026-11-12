@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>briandi.to</title>
-<meta name="description" content="Comics and drawings. A shelf of old TVs, games and books to look through.">
-<meta name="theme-color" content="#131211">
+<meta name="description" content="Comics and drawings, shown on a stack of old TVs in a dark room.">
+<meta name="theme-color" content="#030403">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="styles.css">
@@ -19,12 +19,21 @@
 </header>
 
 <!--
-  THE SHELF
-  stack="pyramid" or stack="pile" changes how the TVs are stacked.
-  arrange="browsed", "piled", "display" or "tidy" changes how the shelf contents are set out.
-  brand="..." replaces the SONY badge on every TV (brand="" removes it).
+  THE ROOM
+  A dark room: the TVs stand on a black concrete floor and are the only light,
+  with a dim green glow behind them. Each TV throws the background colour of
+  its page onto the floor.
+
+  stack="scatter tower"  layout on wide screens, then on phones.
+                         Choices: pyramid, pile, tower, row, scatter.
+  backlight              dim green. backlight="#aa2233" for another colour; remove it for none.
+  lighting="dim"         leaves a little room light on.
+  brand="..."            replaces the SONY badge on every TV (brand="" removes it).
+
+  To go back to the shelf of games and books, replace the attributes with
+  stack="pyramid" arrange="browsed".
 -->
-<retro-shelf id="shelf" stack="pyramid" arrange="browsed">
+<retro-shelf id="shelf" scene="floor" lighting="dark" stack="scatter tower" backlight>
 
   <!-- ============ TV SCREENS ============
        One block per TV. Each is a normal piece of the page (640 x 480). -->
@@ -32,7 +41,7 @@
   <!-- 20-inch studio monitor: the main screen -->
   <div class="tv tv-home" slot="pvm-20m4e">
     <h1>Hello, I'm Brian.</h1>
-    <p>I draw comic strips. Pick a game or a book from the shelf below, or tap another TV.</p>
+    <p>I draw comic strips. Tap a TV to look closer.</p>
     <p class="note">Placeholder text. Edit it in index.html.</p>
   </div>
 
@@ -56,6 +65,7 @@
   </div>
 
   <!-- ============ SHELF CONTENTS ============
+       Only shown in the shelf version (see the note at the top).
        One line per item. Change title / subtitle / color freely.
        cover="image.jpg" puts artwork on the front.
        href="..." adds an Open button. Text inside shows on the card. -->

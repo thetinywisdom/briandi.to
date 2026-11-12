@@ -1,4 +1,4 @@
-/* briandi.to: one dark room, one shelf. */
+/* briandi.to: a dark room lit by old TVs. */
 :root {
   color-scheme: dark;
   --room-0: #0b0a0a;
@@ -14,7 +14,7 @@
 }
 html, body { margin: 0; height: 100%; }
 body {
-  background: radial-gradient(120% 80% at 50% 100%, var(--room-2) 0%, var(--room-1) 55%, var(--room-0) 100%) fixed;
+  background: #030403;
   color: var(--ink);
   font: 400 16px/1.5 var(--body);
   overflow: hidden;
