@@ -20,20 +20,22 @@
 
 <!--
   THE ROOM
-  A dark room: the TVs stand on a black concrete floor and are the only light,
+  A dark room: the TVs stand on a moss green carpet and are the only light,
   with a dim green glow behind them. Each TV throws the background colour of
   its page onto the floor.
 
   stack="scatter tower"  layout on wide screens, then on phones.
                          Choices: pyramid, pile, tower, row, scatter.
   backlight              dim green. backlight="#aa2233" for another colour; remove it for none.
+  floor="carpet"         matt carpet; floor-color="#55682f" changes its colour.
+                         Remove floor for dark, slightly shiny concrete.
   lighting="dim"         leaves a little room light on.
   brand="..."            replaces the SONY badge on every TV (brand="" removes it).
 
   To go back to the shelf of games and books, replace the attributes with
   stack="pyramid" arrange="browsed".
 -->
-<retro-shelf id="shelf" scene="floor" lighting="dark" stack="scatter tower" backlight>
+<retro-shelf id="shelf" scene="floor" lighting="dark" floor="carpet" stack="scatter tower" backlight>
 
   <!-- ============ TV SCREENS ============
        One block per TV. Each is a normal piece of the page (640 x 480). -->
