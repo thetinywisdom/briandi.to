@@ -199,7 +199,11 @@
       if (c.youtube && youtubeId(c.youtube)) {
         const id = youtubeId(c.youtube);
         media = document.createElement('iframe');
-        media.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&playsinline=1&rel=0`;
+        // starts with sound (tuning in is a key press, so browsers usually allow it); the TV's volume slider
+        // and the pager's Sound key then control it. If a browser still blocks the sound, the TV plays it
+        // muted and turns the sound on at the visitor's next click.
+        const origin = /^https?:/.test(location.origin) ? `&origin=${encodeURIComponent(location.origin)}` : '';
+        media.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&loop=1&playlist=${id}&playsinline=1&rel=0&enablejsapi=1${origin}`;
         media.allow = 'autoplay; encrypted-media; picture-in-picture';
         kind = 'VIDEO';
       } else if (c.spotify && spotifyEmbed(c.spotify)) {
