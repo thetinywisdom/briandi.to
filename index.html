@@ -312,6 +312,29 @@
       box.append(track);
       return box;
     };
+    // one audio engine for the page's own sound, switched on at the visitor's first tap or key press
+    // (Safari will not start it otherwise)
+    let engine = null;
+    const audioEngine = () => {
+      if (!engine) { const Ctx = window.AudioContext || window.webkitAudioContext; if (!Ctx) return null; try { engine = new Ctx(); } catch { return null; } }
+      if (engine.state === 'suspended') engine.resume().catch(() => {});
+      return engine;
+    };
+    for (const t of ['pointerdown', 'keydown', 'touchend']) addEventListener(t, () => audioEngine(), { capture: true, passive: true });
+    // an old TV's small speaker in a plastic box: no bass, a soft top and a boxy middle
+    const tvSpeaker = (a) => {
+      if (a._speaker) return a._speaker;
+      const ctx = audioEngine();
+      if (!ctx) return null;
+      const src = ctx.createMediaElementSource(a);
+      const lowCut = ctx.createBiquadFilter(); lowCut.type = 'highpass'; lowCut.frequency.value = 250; lowCut.Q.value = 0.7;
+      const highCut = ctx.createBiquadFilter(); highCut.type = 'lowpass'; highCut.frequency.value = 3500; highCut.Q.value = 0.6;
+      const box = ctx.createBiquadFilter(); box.type = 'peaking'; box.frequency.value = 1200; box.Q.value = 1.1; box.gain.value = 4;
+      const clean = ctx.createGain();
+      src.connect(lowCut).connect(box).connect(highCut);
+      highCut.connect(clean).connect(ctx.destination);
+      return (a._speaker = { ctx, tone: highCut, clean });
+    };
     // a song for a picture channel: fetched (and labelled as audio, which GitHub does not do) the first time the
     // channel comes on air, then looped on its own. The TV pauses it off air and sets its volume and mute.
     const soundtrack = (page, file) => {
@@ -328,12 +351,12 @@
         fetching = true;
         fetch(mediaUrl(file))
           .then((r) => (r.ok ? r.blob() : Promise.reject()))
-          .then((b) => { a.src = URL.createObjectURL(new Blob([b], { type })); if (onAir()) a.play().catch(() => {}); })
+          .then((b) => { a.src = URL.createObjectURL(new Blob([b], { type })); tvSpeaker(a); if (onAir()) a.play().catch(() => {}); })
           .catch(() => { fetching = false; setTimeout(wait, 5000); });
       };
       wait();
       // a browser that refused to start it with sound gets another go at the visitor's next click or key press
-      const retry = () => { if (a.src && a.paused && onAir()) a.play().catch(() => {}); a._ctx?.resume?.(); };
+      const retry = () => { if (a.src && a.paused && onAir()) a.play().catch(() => {}); };
       addEventListener('pointerdown', retry, true);
       addEventListener('keydown', retry, true);
       return a;
@@ -357,20 +380,16 @@
     })();
     // the song's path through Web Audio: the clean song, a crushed and muffled copy, and hiss, each with its own level
     const badRadio = (a) => {
-      const Ctx = window.AudioContext || window.webkitAudioContext;
-      if (!Ctx) return null;
-      let ctx;
-      try { ctx = new Ctx(); } catch { return null; }
-      a._ctx = ctx;
-      const src = ctx.createMediaElementSource(a);
-      const clean = ctx.createGain(), dirty = ctx.createGain(), hiss = ctx.createGain();
+      const sp = tvSpeaker(a);
+      if (!sp) return null;
+      const { ctx, tone: src, clean } = sp;                            // the song as the TV's speaker plays it
+      const dirty = ctx.createGain(), hiss = ctx.createGain();
       dirty.gain.value = 0; hiss.gain.value = 0;
       const shaper = ctx.createWaveShaper();
       const curve = new Float32Array(1024);
       for (let k = 0; k < 1024; k++) { const x = k / 511.5 - 1; curve[k] = Math.tanh(x * 18) * 0.8; }
       shaper.curve = curve;
       const muffle = ctx.createBiquadFilter(); muffle.type = 'bandpass'; muffle.frequency.value = 1400; muffle.Q.value = 0.9;
-      src.connect(clean).connect(ctx.destination);
       src.connect(shaper).connect(muffle).connect(dirty).connect(ctx.destination);
       const buf = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate), d = buf.getChannelData(0);
       for (let k = 0; k < d.length; k++) d[k] = Math.random() * 2 - 1;
@@ -378,11 +397,9 @@
       const tint = ctx.createBiquadFilter(); tint.type = 'highpass'; tint.frequency.value = 900;
       noise.connect(tint).connect(hiss).connect(ctx.destination);
       noise.start();
-      // the hiss is not part of the song, so it follows the TV's volume and mute itself, and stops off air
-      a.addEventListener('pause', () => ctx.suspend());
-      a.addEventListener('play', () => ctx.resume());
-      if (a.paused) ctx.suspend();
-      const level = () => (a.muted ? 0 : a.volume);
+      // the hiss is not part of the song, so it follows the TV's volume and mute itself, and is silent
+      // while the song is paused (off air, or the camera on another TV)
+      const level = () => (a.muted || a.paused ? 0 : a.volume);
       return {
         breakUp(ms) {
           const t = ctx.currentTime, n = Math.max(4, Math.round(ms / 90));
