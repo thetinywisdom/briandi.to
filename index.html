@@ -34,6 +34,8 @@
   floor="carpet"         matt carpet; floor-color="#55682f" changes its colour.
                          Remove floor for dark, slightly shiny concrete.
   smoke                  still haze; smoke="2" is thicker, remove it for none.
+  no-reader="kv-5200"    TVs that never open full screen and stay at TV zoom (the
+                         channel TV). Their screen can be clicked once you are in on it.
   grain                  still film grain over everything; grain="2" is heavier, remove it for none.
   front-light="2"        brighter soft lamp on the TV fronts (it is on, faintly, by default; "0" is off).
   lighting="dim"         leaves a little room light on.
@@ -42,7 +44,7 @@
   To go back to the shelf of games and books, replace the attributes with
   stack="pyramid" arrange="browsed".
 -->
-<retro-shelf id="shelf" scene="floor" lighting="dark" floor="carpet" stack="scatter tower" backlight smoke grain>
+<retro-shelf id="shelf" scene="floor" lighting="dark" floor="carpet" stack="scatter tower" backlight smoke grain no-reader="kv-5200">
 
   <!-- ============ TV SCREENS ============
        One block per TV. Each is a normal piece of the page (640 x 480). -->
@@ -67,11 +69,39 @@
     <p>A few lines about you.</p>
   </div>
 
-  <!-- 5-inch portable TV -->
-  <div class="tv tv-contact" slot="kv-5200">
+  <!-- 5-inch portable TV: the channel TV.
+       It has 14 channels: 2 to 13, U1 and U2. Its own channel keys switch them.
+       Channel 2 is the guide below; the list on it fills itself in from the
+       channels you add. A channel with nothing on it shows static.
+
+       Add a channel with one line. Paste the normal link; it is turned into a player:
+         <div class="tv tv-channel" slot="kv-5200:ch-3" data-youtube="https://www.youtube.com/watch?v=..." data-title="Studio tour"></div>
+         <div class="tv tv-channel" slot="kv-5200:ch-4" data-spotify="https://open.spotify.com/track/..." data-title="Drawing playlist"></div>
+         <div class="tv tv-channel" slot="kv-5200:ch-5" data-image="media/loop.gif" data-title="Sketch loop"></div>
+       slot is the channel: kv-5200:ch-3 ... kv-5200:ch-13, kv-5200:ch-u1, kv-5200:ch-u2.
+       data-title is the name shown in the guide. Put GIF and WebP files in the media folder.
+       YouTube starts playing silently; Spotify needs a press of its play button. -->
+  <div class="tv tv-guide" slot="kv-5200">
+    <div class="guide-top"><span>BRIANDI.TO</span><span>CH 02 &#9654;</span></div>
+    <h2 class="guide-title">------- CHANNELS -------</h2>
+    <ol class="guide-list" aria-label="Channels"></ol>
+    <dl class="guide-keys">
+      <div><dt>SELECT</dt><dd>: CH KEYS ON THE SET</dd></div>
+      <div><dt>BACK</dt><dd>: BACK KEY OR ESC</dd></div>
+    </dl>
+    <p class="guide-blink">[ PRESS A CHANNEL KEY ]</p>
+    <i class="guide-mark" style="left: 6px; top: 6px"></i><i class="guide-mark" style="right: 6px; top: 6px"></i>
+    <i class="guide-mark" style="left: 6px; bottom: 6px"></i><i class="guide-mark" style="right: 6px; bottom: 6px"></i>
+  </div>
+
+  <!-- channels: add yours here (see above) -->
+
+  <!-- The "Say hi" page that was on this TV, kept until it has a new home:
+  <div class="tv tv-contact" slot="...">
     <h2>Say hi</h2>
     <p>your@email.example</p>
   </div>
+  -->
 
   <!-- ============ SHELF CONTENTS ============
        Only shown in the shelf version (see the note at the top).
@@ -135,13 +165,69 @@
   <button type="button" data-tv="pvm-20m4e" data-label="Home" data-info="Hello, I'm Brian. The front page">Home</button>
   <button type="button" data-tv="pvm-9042qm" data-label="Latest" data-info="The newest strip">Latest strip</button>
   <button type="button" data-tv="kv-9pr1" data-label="About" data-info="About the artist">About</button>
-  <button type="button" data-tv="kv-5200" data-label="Say hi" data-info="How to get in touch">Say hi</button>
+  <button type="button" data-tv="kv-5200" data-label="TV" data-info="14 channels. Change them with the keys on the set">Channel TV</button>
   <button type="button" data-action="back">Back</button>
   <button type="button" data-action="sound">Sound</button>
   <button type="button" data-action="info" data-info="Four old Sony TVs in a dark room, built in code">About this site</button>
 </retro-pager>
 
 <script>
+  // channel TV: turn pasted links into players, then list the channels in the guide on channel 2
+  (() => {
+    const youtubeId = (u) => {
+      try {
+        const x = new URL(u);
+        if (x.hostname.endsWith('youtu.be')) return x.pathname.slice(1);
+        const parts = x.pathname.split('/');
+        if (['shorts', 'embed', 'live'].includes(parts[1])) return parts[2];
+        return x.searchParams.get('v');
+      } catch { return null; }
+    };
+    const spotifyEmbed = (u) => {
+      try {
+        const parts = new URL(u).pathname.split('/').filter((p) => p && !p.startsWith('intl-'));
+        return parts.length >= 2 ? `https://open.spotify.com/embed/${parts[0]}/${parts[1]}` : null;
+      } catch { return null; }
+    };
+    const kinds = { youtube: 'VIDEO', spotify: 'MUSIC', image: 'PICTURE' };
+    for (const el of document.querySelectorAll('.tv-channel')) {
+      const d = el.dataset;
+      let media = null;
+      if (d.youtube) {
+        const id = youtubeId(d.youtube);
+        if (id) {
+          media = document.createElement('iframe');
+          media.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&playsinline=1&rel=0`;
+          media.allow = 'autoplay; encrypted-media; picture-in-picture';
+        }
+      } else if (d.spotify) {
+        const src = spotifyEmbed(d.spotify);
+        if (src) { media = document.createElement('iframe'); media.src = src; media.allow = 'autoplay; encrypted-media'; }
+      } else if (d.image) {
+        media = document.createElement('img');
+        media.src = d.image;
+        media.alt = d.title || '';
+      }
+      if (media) {
+        if (media.tagName === 'IFRAME') media.title = d.title || 'Channel';
+        el.replaceChildren(media);
+      }
+    }
+    const list = document.querySelector('.guide-list');
+    if (!list) return;
+    const channels = ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', 'u1', 'u2'];
+    for (const ch of channels) {
+      const el = ch === '2' ? null : document.querySelector(`[slot="kv-5200:ch-${ch}"]`);
+      const kind = el && Object.keys(kinds).find((k) => el.dataset[k]);
+      const li = document.createElement('li');
+      li.className = ch === '2' ? 'on' : el ? '' : 'empty';
+      const name = ch === '2' ? 'THIS GUIDE' : el ? (el.dataset.title || kinds[kind] || 'ON AIR') : 'NO SIGNAL';
+      li.innerHTML = `<b>${ch.toUpperCase().padStart(2, '0')}</b> <span></span>`;
+      li.querySelector('span').textContent = name.toUpperCase();
+      list.append(li);
+    }
+  })();
+
   // hide the site name while a page is open full screen
   document.getElementById('shelf').addEventListener('shelf-read', (e) => document.body.classList.toggle('reading', e.detail.open));
 </script>

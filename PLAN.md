@@ -15,6 +15,8 @@ The site works end to end with placeholder content. It is not deployed.
 
 **Current interaction (decided by the owner):** tap a TV to move in to it; tap its screen to open that TV's page full screen as a normal scrolling page; `Esc` returns. The goal is that content is easy to read.
 
+**Channel TV (decided by the owner, 2026-11-12):** TV 4, the KV-5200 portable on top of the orange set, is a channel TV, not a page. It never opens full screen and stays at TV zoom (`no-reader="kv-5200"`). It has 14 channels (2–13, U1, U2) switched by its own keys; each channel plays one piece of media: a YouTube link, a Spotify link, or an uploaded GIF / WebP (`media/`). Channel 2 is a green-phosphor channel guide (styled after two references the owner supplied: a radar "BUNKER" screen and a "NUE 2020" menu) that lists the channels from what is in `index.html`. Empty channels show static. Its pager key is "TV".
+
 **Navigation (decided by the owner, 2026-11-12):** all navigation is one bottom dock, a 3D pager (`<retro-pager>`, design "A" of five 2D mockups). Its LCD always shows something: what the pointed-at key or TV is, or else the scene's hint ("Tap a TV to look closer"). Keys: one per TV (press once to move in, again to read full screen; while reading, switches page), Back, Sound, Info. The scene's own hint, Back and Read buttons are hidden by the site's CSS.
 
 ## Done
@@ -54,10 +56,13 @@ Do not reopen these without the owner asking.
    - Is it one project for one TV, or one repository per TV?
 
    Two ways to wire it in were offered: embed its live address in a frame (best when it has its own build; the host must allow framing), or copy its built pages into this site (best for plain HTML). Suggested approach if a whole site is embedded: a simple title card on the tube and the real site only in the reader, because a full site is unreadable at 640 × 480.
-2. **Real content.** Every page in `index.html` is placeholder text ("Hello, I'm Brian", "Latest strip", "About", "Say hi"). The owner needs to supply copy, strips and contact details. Do not invent them.
-3. **Deploy.** Nothing is hosted yet. The folder is ready for GitHub Pages (`.nojekyll` is present) or any static host. The domain is presumably briandi.to; confirm with the owner.
+2. **Channel media and the Say hi page.** The owner will supply the YouTube / Spotify links and GIF / WebP files for channels 3–13, U1, U2 (none are in yet). The "Say hi" contact page used to be on the KV-5200; it is kept, commented out, in `index.html` until the owner says where it goes.
+3. **Real content.** Every page in `index.html` is placeholder text ("Hello, I'm Brian", "Latest strip", "About", "Say hi"). The owner needs to supply copy, strips and contact details. Do not invent them.
+4. **Deploy.** Nothing is hosted yet. The folder is ready for GitHub Pages (`.nojekyll` is present) or any static host. The domain is presumably briandi.to; confirm with the owner.
 
 ## Known gaps
+
+- **The preview artifact cannot show YouTube or Spotify** (its sandbox blocks other sites in frames, and files must be inlined). The real site can.
 
 - **Pager on phones covers the bottom of the tower** (the big TV's lower edge). The dock text on the Info key and the TV keys' descriptions are placeholders.
 - **The pager is a generic shape**, not modelled on a real pager.

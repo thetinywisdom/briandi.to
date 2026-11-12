@@ -43,6 +43,37 @@ retro-shelf { height: 100vh; height: 100dvh; }
 .tv-about { background: #ffd23f; }
 .tv-contact { background: #ff7a59; font-size: 34px; }
 .tv-contact h2 { font-size: 84px; }
+/* channel TV, channel 2: the guide. Green phosphor on black, a dashed grid, pixel lettering. */
+.tv-guide {
+  --phosphor: #8dff9a; --phosphor-dim: #3f8f4a;
+  position: relative; height: 100%; padding: 18px 34px; display: flex; flex-direction: column; gap: 8px;
+  background-color: #031208; color: var(--phosphor);
+  background-image:
+    repeating-linear-gradient(90deg, rgba(141, 255, 154, 0.13) 0 1px, transparent 1px 40px),
+    repeating-linear-gradient(0deg, rgba(141, 255, 154, 0.13) 0 1px, transparent 1px 40px);
+  font: 400 28px/1.2 "DotGothic16", var(--mono);
+  text-shadow: 0 0 6px rgba(141, 255, 154, 0.55);
+}
+.tv-guide .guide-top { display: flex; justify-content: space-between; font-size: 21px; }
+.tv-guide .guide-title { margin: 0; text-align: center; font: inherit; font-size: 34px; letter-spacing: 0.04em; }
+.tv-guide .guide-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; grid-auto-flow: column; grid-template-rows: repeat(7, auto); column-gap: 20px; row-gap: 0; }
+.tv-guide .guide-list li { display: flex; gap: 14px; padding: 0 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tv-guide .guide-list b { font-weight: 400; }
+.tv-guide .guide-list li.on { background: var(--phosphor); color: #031208; text-shadow: none; box-shadow: 0 0 10px rgba(141, 255, 154, 0.5); }
+.tv-guide .guide-list li.empty { color: var(--phosphor-dim); text-shadow: none; }
+.tv-guide .guide-keys { margin: 2px 0 0; padding-top: 8px; border-top: 2px solid var(--phosphor); font-size: 21px; display: grid; gap: 0; }
+.tv-guide .guide-keys div { display: flex; }
+.tv-guide .guide-keys dt { width: 5.5em; }
+.tv-guide .guide-keys dd { margin: 0; }
+.tv-guide .guide-blink { margin: auto 0 0; text-align: center; font-size: 26px; animation: guide-blink 1.1s steps(1) infinite; }
+.tv-guide .guide-mark { position: absolute; width: 14px; height: 14px; border: 2px solid var(--phosphor); box-shadow: inset 0 0 0 3px #031208, inset 0 0 0 5px var(--phosphor); }
+@keyframes guide-blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .tv-guide .guide-blink { animation: none; } }
+
+/* channel TV, the other channels: the player or picture fills the tube */
+.tv-channel { height: 100%; padding: 0; background: #000; }
+.tv-channel iframe, .tv-channel img { display: block; width: 100%; height: 100%; border: 0; object-fit: cover; }
+
 .panels { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 6px 0 16px; }
 .panels i { aspect-ratio: 3 / 4; border: 4px solid #f3efe6; background: rgba(243, 239, 230, 0.14); }
 
