@@ -70,14 +70,14 @@
   </div>
 
   <!-- 5-inch portable TV: the channel TV.
-       It has 14 channels: 2 to 13, U1 and U2. Its own channel keys switch them.
-       Channel 2 is the guide below. Channels 3 to 13, U1 and U2 come from the
+       It has 14 channels: 1 to 12, U1 and U2. Its own channel keys switch them.
+       Channel 1 is the guide below. Channels 2 to 12, U1 and U2 come from the
        briandi.to-channels repository (channels.json and its media folder): the
        script at the end of this file reads it from GitHub and fills in the guide.
        To change what is on, edit that repository; this file does not change.
        A channel with nothing on it shows static. -->
   <div class="tv tv-guide" slot="kv-5200">
-    <div class="guide-top"><span>BRIANDI.TO</span><span>CH 02 &#9654;</span></div>
+    <div class="guide-top"><span>BRIANDI.TO</span><span>CH 01 &#9654;</span></div>
     <h2 class="guide-title">------- CHANNELS -------</h2>
     <ol class="guide-list" aria-label="Channels"></ol>
     <dl class="guide-keys">
@@ -166,7 +166,7 @@
 
 <script>
   // channel TV: read the channel list from the briandi.to-channels repository,
-  // turn each entry into a player or picture on its channel, and list them in the guide on channel 2
+  // turn each entry into a player or picture on its channel, and list them in the guide on channel 1
   const CHANNELS = 'https://raw.githubusercontent.com/thetinywisdom/briandi.to-channels/main/';
   (async () => {
     const shelf = document.getElementById('shelf');
@@ -254,7 +254,7 @@
     const onAir = {};
     for (const c of entries) {
       const ch = String(c.channel ?? '').toLowerCase();
-      if (!/^(1[0-3]|[3-9]|u[12])$/.test(ch) || onAir[ch]) continue;
+      if (!/^(1[0-2]|[2-9]|u[12])$/.test(ch) || onAir[ch]) continue;
       let media = null, kind = '';
       if (c.youtube && youtubeId(c.youtube)) {
         const id = youtubeId(c.youtube);
@@ -311,11 +311,11 @@
       }
     });
     if (!list) return;
-    for (const ch of ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', 'u1', 'u2']) {
+    for (const ch of ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 'u1', 'u2']) {
       const li = document.createElement('li');
-      li.className = ch === '2' ? 'on' : onAir[ch] ? '' : 'empty';
+      li.className = ch === '1' ? 'on' : onAir[ch] ? '' : 'empty';
       li.innerHTML = `<b>${ch.toUpperCase().padStart(2, '0')}</b> <span></span>`;
-      li.querySelector('span').textContent = ch === '2' ? 'THIS GUIDE' : onAir[ch] || 'NO SIGNAL';
+      li.querySelector('span').textContent = ch === '1' ? 'THIS GUIDE' : onAir[ch] || 'NO SIGNAL';
       list.append(li);
     }
   })();
