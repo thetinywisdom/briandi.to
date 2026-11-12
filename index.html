@@ -246,6 +246,59 @@
       };
       step();
     };
+    // tall pictures stacked 1, 2, 3 ... from top to bottom, each the width of the tube, slowly scrolling
+    // down and round again. The stack is drawn twice so the end runs straight into the start.
+    const SCROLL_SPEED = 30;                                          // tube pixels per second
+    const scroller = (files) => {
+      const box = document.createElement('div');
+      box.className = 'tv-scroll';
+      const track = document.createElement('div');
+      track.className = 'tv-scroll-track';
+      const imgs = [];
+      for (const copy of [0, 1]) {
+        for (const f of files) {
+          const img = document.createElement('img');
+          img.loading = 'lazy';                                        // nothing loads until the channel is first tuned in
+          img.src = mediaUrl(f);
+          img.alt = copy ? '' : baseName(f);
+          if (copy) img.setAttribute('aria-hidden', 'true');
+          track.append(img);
+          if (!copy) imgs.push(img);
+        }
+      }
+      // start moving once the first copy has loaded and its height is known
+      Promise.all(imgs.map((img) => (img.complete ? null : new Promise((ok) => { img.onload = img.onerror = ok; })))).then(() => {
+        const h = imgs.reduce((sum, img) => sum + (img.naturalWidth ? 640 * img.naturalHeight / img.naturalWidth : 0), 0);
+        if (h) { track.style.animationDuration = `${(h / SCROLL_SPEED).toFixed(1)}s`; track.classList.add('moving'); }
+      });
+      box.append(track);
+      return box;
+    };
+    // a song for a picture channel: fetched (and labelled as audio, which GitHub does not do) the first time the
+    // channel comes on air, then looped on its own. The TV pauses it off air and sets its volume and mute.
+    const soundtrack = (page, file) => {
+      const a = document.createElement('audio');
+      a.loop = true;
+      a.autoplay = true;
+      a.preload = 'none';
+      page.append(a);
+      const type = /\.mp3$/i.test(file) ? 'audio/mpeg' : /\.(ogg|opus)$/i.test(file) ? 'audio/ogg' : /\.wav$/i.test(file) ? 'audio/wav' : 'audio/mp4';
+      let fetching = false;
+      const onAir = () => page.getClientRects().length > 0;
+      const wait = () => {
+        if (!onAir()) { setTimeout(wait, 800); return; }
+        fetching = true;
+        fetch(mediaUrl(file))
+          .then((r) => (r.ok ? r.blob() : Promise.reject()))
+          .then((b) => { a.src = URL.createObjectURL(new Blob([b], { type })); if (onAir()) a.play().catch(() => {}); })
+          .catch(() => { fetching = false; setTimeout(wait, 5000); });
+      };
+      wait();
+      // a browser that refused to start it with sound gets another go at the visitor's next click or key press
+      const retry = () => { if (a.src && a.paused && onAir()) a.play().catch(() => {}); };
+      addEventListener('pointerdown', retry, true);
+      addEventListener('keydown', retry, true);
+    };
     let entries = [];
     try {
       const res = await fetch(CHANNELS + 'channels.json', { cache: 'no-cache' });
@@ -279,17 +332,23 @@
       } else if (Array.isArray(c.images)) {
         const files = c.images.filter((f) => /\.(gif|webp)$/i.test(f));
         if (files.length) { media = files; kind = 'PICTURE'; }
+      } else if (Array.isArray(c.scroll)) {
+        const files = c.scroll.filter((f) => /\.(jpe?g|png|webp|gif)$/i.test(f));
+        if (files.length) { media = scroller(files); kind = 'PICTURE'; }
       }
+      const song = typeof c.audio === 'string' && kind === 'PICTURE' && /\.(m4a|mp3|aac|ogg|opus|wav)$/i.test(c.audio) ? c.audio : null;
+      if (song) kind = 'MUSIC';
       if (!media) continue;
       if (media.tagName === 'IFRAME') media.title = c.title || `Channel ${ch.toUpperCase()}`;
       const page = document.createElement('div');
       page.className = 'tv tv-channel';
       page.slot = `kv-5200:ch-${ch}`;
       if (Array.isArray(media)) playlist(page, media); else page.append(media);
+      if (song) soundtrack(page, song);
       // what the pager shows as "now playing" on this channel: the file name for a picture,
       // the real title for YouTube and Spotify once known (the guide title until then)
       page.dataset.kind = kind === 'PICTURE' ? 'GIF' : kind;
-      page.dataset.nowPlaying = kind === 'PICTURE' ? baseName(c.image || media[0]) : c.title || (kind === 'VIDEO' ? 'YouTube' : 'Spotify');
+      page.dataset.nowPlaying = song ? c.title || baseName(song) : kind === 'PICTURE' ? baseName(c.image || (Array.isArray(media) ? media[0] : c.scroll[0])) : c.title || (kind === 'VIDEO' ? 'YouTube' : 'Spotify');
       if (kind === 'MUSIC') {
         fetch('https://open.spotify.com/oembed?url=' + encodeURIComponent(c.spotify))
           .then((r) => (r.ok ? r.json() : null))
