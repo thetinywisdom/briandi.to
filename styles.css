@@ -50,3 +50,18 @@ retro-shelf { height: 100vh; height: 100dvh; }
 
 /* the card that opens when a game or book is picked can be restyled:
    retro-shelf::part(card) { ... }   retro-shelf::part(back) { ... } */
+
+/* ---- the same pages opened full screen (tap a TV, then tap its screen) ----
+   The page fills the window and scrolls. Text is sized for reading, in one
+   column, not for a 640 x 480 tube. */
+.tv[slot="reader"] {
+  padding: clamp(72px, 12vh, 120px) max(24px, calc((100% - 46rem) / 2)) clamp(48px, 10vh, 96px);
+  font-size: clamp(18px, 1.1rem + 0.4vw, 22px);
+  line-height: 1.6;
+}
+.tv[slot="reader"] h1 { font-size: clamp(44px, 9vw, 88px); }
+.tv[slot="reader"] h2 { font-size: clamp(38px, 7vw, 72px); }
+.tv[slot="reader"] .note { font-size: 15px; }
+.tv-contact[slot="reader"] { font-size: clamp(22px, 3vw, 30px); }
+
+body.reading .site-head { display: none; }

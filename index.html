@@ -20,6 +20,10 @@
 
 <!--
   THE ROOM
+  Visitors tap a TV to move in to it, then tap its screen to read that page
+  full screen. Each page below is therefore shown at two sizes: on the tube
+  (640 x 480) and filling the window. styles.css has a section for each.
+
   A dark room: the TVs stand on a moss green carpet and are the only light,
   with a dim green glow behind them. Each TV throws the background colour of
   its page onto the floor.
@@ -113,6 +117,11 @@
     <p>This site is a 3D shelf and needs a browser with WebGL.</p>
   </div>
 </retro-shelf>
+
+<script>
+  // hide the site name while a page is open full screen
+  document.getElementById('shelf').addEventListener('shelf-read', (e) => document.body.classList.toggle('reading', e.detail.open));
+</script>
 
 </body>
 </html>

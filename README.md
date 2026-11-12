@@ -14,6 +14,8 @@ npx serve .
 
 Everything is in `index.html`.
 
+**How visitors read it.** One tap on a TV moves in to it. A tap on its screen then opens that TV's page full screen, as a normal scrolling page; "Back to the TV" or `Esc` returns.
+
 **TV screens.** Each TV has one block, marked by its `slot`:
 
 | `slot` | TV |
@@ -23,7 +25,7 @@ Everything is in `index.html`.
 | `kv-9pr1` | 9-inch orange TV |
 | `kv-5200` | 5-inch portable TV |
 
-Each block is ordinary HTML laid out at 640 × 480 pixels. Its styles are in `styles.css` under "pages shown on the TVs".
+Each block is ordinary HTML. On the tube it is laid out at 640 × 480 pixels (styles under "pages shown on the TVs" in `styles.css`); opened full screen it fills the window (styles under "the same pages opened full screen").
 
 **Games and books (shelf version only).** One `<retro-item>` line each:
 
