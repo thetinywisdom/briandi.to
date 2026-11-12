@@ -517,7 +517,6 @@
       li.className = ch === '1' ? 'on' : builtIn || onAir[ch] ? '' : 'empty';
       // each line is a button that tunes the set to that channel, as if its key were pressed
       li.innerHTML = `<button type="button"><b>${ch.toUpperCase().padStart(2, '0')}</b> <span></span></button>`;
-      li.style.setProperty('--i', list.children.length);              // staggers the shimmer down the list
       li.querySelector('span').textContent = name;
       li.querySelector('button').addEventListener('click', () => shelf.tv('kv-5200')?.press(`ch-${ch}`));
       list.append(li);
@@ -564,8 +563,8 @@
     if (shelf._ready) go(); else shelf.addEventListener('shelf-ready', go, { once: true });
   })();
 
-  // when the Program Guide is on screen (camera in on the channel TV, channel 1), the number cells above
-  // the set's channel keys glow softly in a wave, with the guide's own shimmer, as a hint they can be pressed
+  // when the Program Guide is on screen (camera in on the channel TV, channel 1), the set's channel keys
+  // and their number cells glow softly in a wave, as a hint that they can be pressed
   (() => {
     const shelf = document.getElementById('shelf');
     let channel = 'ch-1';
