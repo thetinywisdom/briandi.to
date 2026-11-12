@@ -74,20 +74,20 @@
        A channel with nothing on it shows static. -->
   <div class="tv tv-guide" slot="kv-5200">
     <div class="guide-top"><span>BRIANDI.TO</span><span>CH 01 &#9654;</span></div>
-    <h2 class="guide-title">------- CHANNELS -------</h2>
-    <ol class="guide-list" aria-label="Channels"></ol>
+    <h2 class="guide-title">---- PROGRAM GUIDE ----</h2>
+    <ol class="guide-list" aria-label="Program guide"></ol>
     <dl class="guide-keys">
-      <div><dt>SELECT</dt><dd>: CH KEYS ON THE SET</dd></div>
+      <div><dt>SELECT</dt><dd>: TAP A CHANNEL, OR CH KEYS</dd></div>
       <div><dt>BACK</dt><dd>: BACK KEY OR ESC</dd></div>
     </dl>
-    <p class="guide-blink">[ PRESS A CHANNEL KEY ]</p>
+    <p class="guide-blink">[ PICK A CHANNEL ]</p>
     <i class="guide-mark" style="left: 6px; top: 6px"></i><i class="guide-mark" style="right: 6px; top: 6px"></i>
     <i class="guide-mark" style="left: 6px; bottom: 6px"></i><i class="guide-mark" style="right: 6px; bottom: 6px"></i>
   </div>
 
   <!-- Channel 2: How to use. Built into the site like the guide, so channels.json cannot use channel 2.
-       One line at a time, like teletext pages: each stays up long enough to read, a click on the
-       screen shows the next, and it starts from 1 whenever the channel is tuned in. Edit the lines
+       One line at a time, like teletext pages: each stays up long enough to read, PREV / NEXT
+       turn the page, and it starts from 1 whenever the channel is tuned in. Edit the lines
        below; add or remove <li>s freely. data-title is its name in the guide and on the pager. -->
   <div class="tv tv-guide tv-howto" slot="kv-5200:ch-2" data-title="How to use" data-kind="GUIDE">
     <div class="guide-top"><span>BRIANDI.TO</span><span>CH 02 &#9654;</span></div>
@@ -103,9 +103,13 @@
       <li>That's the end of tonight's programming. Thanks for watching.</li>
       <li>Signing off, Brian.</li>
     </ol>
-    <div class="howto-progress" aria-hidden="true"></div>
+    <div class="howto-pager">
+      <button type="button" class="howto-prev" aria-label="Previous line">&lt; PREV</button>
+      <span class="howto-progress"></span>
+      <button type="button" class="howto-next" aria-label="Next line">NEXT &gt;</button>
+    </div>
     <dl class="guide-keys">
-      <div><dt>NEXT</dt><dd>: WAIT, OR TAP THE SCREEN</dd></div>
+      <div><dt>PAGE</dt><dd>: PREV / NEXT, OR WAIT</dd></div>
       <div><dt>SELECT</dt><dd>: CH KEYS ON THE SET</dd></div>
     </dl>
     <i class="guide-mark" style="left: 6px; top: 6px"></i><i class="guide-mark" style="right: 6px; top: 6px"></i>
@@ -294,6 +298,17 @@
         const h = imgs.reduce((sum, img) => sum + (img.naturalWidth ? 640 * img.naturalHeight / img.naturalWidth : 0), 0);
         if (h) { track.style.animationDuration = `${(h / SCROLL_SPEED).toFixed(1)}s`; track.classList.add('moving'); }
       });
+      // keep the place: off air the stack is hidden, which restarts a CSS animation, so remember how far it
+      // had got and start it again from there (a negative delay) when the channel comes back
+      // (read from the animation itself while it runs, so the place is exact however late it started)
+      let pos = 0, wasOn = false;
+      setInterval(() => {
+        const on = box.getClientRects().length > 0;
+        const run = track.getAnimations?.()[0];
+        if (on && !wasOn) track.style.animationDelay = `-${(pos / 1000).toFixed(2)}s`;
+        else if (on && run && run.currentTime != null) pos = run.currentTime - (run.effect?.getTiming().delay || 0);   // the delay is the head start it was given
+        wasOn = on;
+      }, 200);
       box.append(track);
       return box;
     };
@@ -318,9 +333,109 @@
       };
       wait();
       // a browser that refused to start it with sound gets another go at the visitor's next click or key press
-      const retry = () => { if (a.src && a.paused && onAir()) a.play().catch(() => {}); };
+      const retry = () => { if (a.src && a.paused && onAir()) a.play().catch(() => {}); a._ctx?.resume?.(); };
       addEventListener('pointerdown', retry, true);
       addEventListener('keydown', retry, true);
+      return a;
+    };
+
+    // a bad signal: every few seconds the broadcast breaks up for 2-3 s. The picture shakes, tears and
+    // splits its colours under static, a "broadcast interrupted" card comes up, and the song drops out,
+    // stutters and distorts under radio hiss. Then the picture comes back.
+    const CLEAR_MS = 5000;
+    const noiseTile = (() => {
+      let url = null;
+      return () => {
+        if (url) return url;
+        const c = document.createElement('canvas');
+        c.width = c.height = 160;
+        const g = c.getContext('2d'), img = g.createImageData(160, 160);
+        for (let k = 0; k < img.data.length; k += 4) { const v = Math.random() * 255; img.data[k] = img.data[k + 1] = img.data[k + 2] = v; img.data[k + 3] = 255; }
+        g.putImageData(img, 0, 0);
+        return (url = c.toDataURL());
+      };
+    })();
+    // the song's path through Web Audio: the clean song, a crushed and muffled copy, and hiss, each with its own level
+    const badRadio = (a) => {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return null;
+      let ctx;
+      try { ctx = new Ctx(); } catch { return null; }
+      a._ctx = ctx;
+      const src = ctx.createMediaElementSource(a);
+      const clean = ctx.createGain(), dirty = ctx.createGain(), hiss = ctx.createGain();
+      dirty.gain.value = 0; hiss.gain.value = 0;
+      const shaper = ctx.createWaveShaper();
+      const curve = new Float32Array(1024);
+      for (let k = 0; k < 1024; k++) { const x = k / 511.5 - 1; curve[k] = Math.tanh(x * 18) * 0.8; }
+      shaper.curve = curve;
+      const muffle = ctx.createBiquadFilter(); muffle.type = 'bandpass'; muffle.frequency.value = 1400; muffle.Q.value = 0.9;
+      src.connect(clean).connect(ctx.destination);
+      src.connect(shaper).connect(muffle).connect(dirty).connect(ctx.destination);
+      const buf = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate), d = buf.getChannelData(0);
+      for (let k = 0; k < d.length; k++) d[k] = Math.random() * 2 - 1;
+      const noise = ctx.createBufferSource(); noise.buffer = buf; noise.loop = true;
+      const tint = ctx.createBiquadFilter(); tint.type = 'highpass'; tint.frequency.value = 900;
+      noise.connect(tint).connect(hiss).connect(ctx.destination);
+      noise.start();
+      // the hiss is not part of the song, so it follows the TV's volume and mute itself, and stops off air
+      a.addEventListener('pause', () => ctx.suspend());
+      a.addEventListener('play', () => ctx.resume());
+      if (a.paused) ctx.suspend();
+      const level = () => (a.muted ? 0 : a.volume);
+      return {
+        breakUp(ms) {
+          const t = ctx.currentTime, n = Math.max(4, Math.round(ms / 90));
+          const cleanCurve = new Float32Array(n), dirtyCurve = new Float32Array(n), hissCurve = new Float32Array(n);
+          for (let k = 0; k < n; k++) {
+            const cut = Math.random() < 0.45;                           // stutter: chopped in and out
+            cleanCurve[k] = cut ? 0 : 0.15 + Math.random() * 0.35;
+            dirtyCurve[k] = cut ? 0.1 : 0.4 + Math.random() * 0.6;
+            hissCurve[k] = (0.25 + Math.random() * 0.35) * level();
+          }
+          cleanCurve[n - 1] = 1; dirtyCurve[n - 1] = 0; hissCurve[n - 1] = 0;
+          for (const [node, c] of [[clean, cleanCurve], [dirty, dirtyCurve], [hiss, hissCurve]]) {
+            node.gain.cancelScheduledValues(t);
+            node.gain.setValueCurveAtTime(c, t, ms / 1000);
+          }
+        },
+        clear() {
+          const t = ctx.currentTime;
+          for (const [node, v] of [[clean, 1], [dirty, 0], [hiss, 0]]) { node.gain.cancelScheduledValues(t); node.gain.setValueAtTime(v, t); }
+        },
+      };
+    };
+    const interference = (page, ch, audio) => {
+      page.classList.add('has-interference');
+      const fx = document.createElement('div');
+      fx.className = 'tv-interference';
+      fx.setAttribute('aria-hidden', 'true');
+      fx.innerHTML = '<div class="static"></div><div class="tear"></div>';
+      fx.querySelector('.static').style.backgroundImage = `url(${noiseTile()})`;
+      const card = document.createElement('div');
+      card.className = 'tv-interrupt';
+      card.setAttribute('role', 'status');
+      card.innerHTML = `<div class="interrupt-top"><span>BRIANDI.TO</span><span>CH ${ch.toUpperCase().padStart(2, '0')} &#9654;</span></div>
+        <p class="interrupt-title">[ BROADCAST INTERRUPTED ]</p><p class="interrupt-sub">PLEASE STAND BY</p>`;
+      page.append(fx, card);
+      let radio = null, timer = 0, wasOn = false;
+      const onAir = () => page.getClientRects().length > 0;
+      const clearUp = () => { page.classList.remove('interrupted'); radio?.clear(); };
+      const breakUp = () => {
+        if (!onAir()) return;
+        if (audio && !radio && audio.src) radio = badRadio(audio);
+        const ms = 2000 + Math.random() * 1000;
+        page.classList.add('interrupted');
+        radio?.breakUp(ms);
+        timer = setTimeout(() => { clearUp(); timer = setTimeout(breakUp, CLEAR_MS); }, ms);
+      };
+      // (re)start the cycle each time the channel is tuned in, with a clear picture first
+      setInterval(() => {
+        const on = onAir();
+        if (on && !wasOn) { clearTimeout(timer); clearUp(); timer = setTimeout(breakUp, CLEAR_MS); }
+        if (!on && wasOn) { clearTimeout(timer); clearUp(); }
+        wasOn = on;
+      }, 300);
     };
     let entries = [];
     try {
@@ -368,7 +483,8 @@
       page.className = 'tv tv-channel';
       page.slot = `kv-5200:ch-${ch}`;
       if (Array.isArray(media)) playlist(page, media); else page.append(media);
-      if (song) soundtrack(page, song);
+      const audioEl = song ? soundtrack(page, song) : null;
+      if (c.interference) interference(page, ch, audioEl);
       // what the pager shows as "now playing" on this channel: the file name for a picture,
       // the real title for YouTube and Spotify once known (the guide title until then)
       page.dataset.kind = kind === 'PICTURE' ? 'GIF' : kind;
@@ -397,15 +513,17 @@
     for (const ch of ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 'u1', 'u2']) {
       const li = document.createElement('li');
       const builtIn = document.querySelector(`[slot="kv-5200:ch-${ch}"][data-title]`);
-      const name = ch === '1' ? 'THIS GUIDE' : builtIn ? builtIn.dataset.title.toUpperCase() : onAir[ch] || 'NO SIGNAL';
+      const name = ch === '1' ? 'PROGRAM GUIDE' : builtIn ? builtIn.dataset.title.toUpperCase() : onAir[ch] || 'NO SIGNAL';
       li.className = ch === '1' ? 'on' : builtIn || onAir[ch] ? '' : 'empty';
-      li.innerHTML = `<b>${ch.toUpperCase().padStart(2, '0')}</b> <span></span>`;
+      // each line is a button that tunes the set to that channel, as if its key were pressed
+      li.innerHTML = `<button type="button"><b>${ch.toUpperCase().padStart(2, '0')}</b> <span></span></button>`;
       li.querySelector('span').textContent = name;
+      li.querySelector('button').addEventListener('click', () => shelf.tv('kv-5200')?.press(`ch-${ch}`));
       list.append(li);
     }
   })();
 
-  // channel 2, How to use: one line at a time, each up long enough to read; a click shows the next;
+  // channel 2, How to use: one line at a time, each up long enough to read; PREV / NEXT turn the page;
   // starts from the first line whenever the channel comes on air
   (() => {
     const page = document.querySelector('.tv-howto');
@@ -414,11 +532,12 @@
     const items = [...page.querySelectorAll('.howto-list li')];
     items.forEach((li, n) => { li.dataset.n = String(n + 1).padStart(2, '0'); });
     const bar = page.querySelector('.howto-progress');
+    const sq = (n) => (n === i ? '\u25a0' : '\u25a1');
     let i = 0, timer = 0, wasOn = false;
     const show = (k) => {
       i = (k + items.length) % items.length;
       items.forEach((li, n) => li.classList.toggle('on', n === i));
-      bar.textContent = `${String(i + 1).padStart(2, '0')} / ${String(items.length).padStart(2, '0')}  ` + items.map((_, n) => (n === i ? '\u25a0' : '\u25a1')).join('');
+      bar.textContent = `${String(i + 1).padStart(2, '0')} / ${String(items.length).padStart(2, '0')}  ` + items.map((_, n) => sq(n)).join('');
       clearTimeout(timer);
       // about 14 characters a second, never less than 4 s
       timer = setTimeout(tick, Math.max(4000, items[i].textContent.length * 70));
@@ -427,7 +546,8 @@
     const tick = () => { if (wasOn && page.getClientRects().length) show(i + 1); else timer = setTimeout(tick, 600); };
     // start again at 1 each time the channel is tuned in
     setInterval(() => { const on = page.getClientRects().length > 0; if (on && !wasOn) show(0); wasOn = on; }, 300);
-    page.addEventListener('click', () => show(i + 1));
+    page.querySelector('.howto-prev').addEventListener('click', () => show(i - 1));
+    page.querySelector('.howto-next').addEventListener('click', () => show(i + 1));
     show(0);
   })();
 
