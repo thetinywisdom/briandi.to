@@ -12,7 +12,7 @@ Last updated: 2026-11-12.
 
 The site works end to end with placeholder content. It is being put on GitHub Pages at https://thetinywisdom.github.io/briandi.to/ (see Next up). The owner follows progress through a preview link (see Working notes).
 
-**Current look (decided by the owner):** a near-black room. Four Sony CRTs stand on a moss green carpet, lit only by their own screens, with a dim green light behind them, still haze (static smoke), still film grain and a faint front lamp so the buttons can be seen. On wide screens the sets are in two stacks ("scatter"): the 20-inch with the 9-inch monitor on top, and the orange TV with the small portable on top. On phones they form one tower.
+**Current look (decided by the owner):** a near-black room. Four Sony CRTs stand on a moss green carpet, lit only by their own screens, with a dim green light behind them, still haze (static smoke), still film grain and a faint front lamp so the buttons can be seen. The sets stand in one tower on every screen (on wide screens they used to be in two stacks): from the top the small portable (channel TV), the orange TV, the 9-inch monitor and the 20-inch.
 
 **Current interaction (decided by the owner):** tap a TV to move in to it; tap its screen to open that TV's page full screen as a normal scrolling page; `Esc` returns. The goal is that content is easy to read. This holds for TVs 1–3 (20-inch home, 9-inch latest strip, orange about); TV 4 is the channel TV below.
 
@@ -40,7 +40,7 @@ Do not reopen these without the owner asking.
 | --- | --- |
 | Overall direction | Straight-on view of the whole scene ("direction A"); no disc-insert animation |
 | Main look | Dark room with TVs on the floor. The shelf with games and books is kept in the code but is not the site's look |
-| Layout | `stack="scatter tower"`; in scatter the portable sits on the orange TV |
+| Layout | `stack="tower"` on every screen (owner, 2026-11-12; before: two stacks on wide screens, `scatter tower`): from the top the channel TV, the orange TV, the 9-inch monitor, the 20-inch |
 | Floor | Matt moss green carpet, not reflective |
 | Darkness | Near pitch black, matched to a reference image the owner supplied |
 | Green light | Dark and dim |

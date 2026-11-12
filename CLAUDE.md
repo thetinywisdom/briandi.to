@@ -27,7 +27,7 @@ Any static server works. Opening `index.html` from the file system does not, bec
 
 ```html
 <retro-shelf id="shelf" scene="floor" lighting="dark" floor="carpet"
-             stack="scatter tower" backlight smoke grain no-reader="kv-5200">
+             stack="tower" backlight smoke grain no-reader="kv-5200">
   <div class="tv tv-home" slot="pvm-20m4e">…</div>
   <div class="tv tv-latest" slot="pvm-9042qm">…</div>
   <div class="tv tv-about" slot="kv-9pr1">…</div>
