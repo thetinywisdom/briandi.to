@@ -10,7 +10,7 @@ Last updated: 2026-11-12.
 
 ## Where things stand
 
-The site works end to end with placeholder content. It is not deployed. The owner follows progress through a preview link (see Working notes).
+The site works end to end with placeholder content. It is being put on GitHub Pages at https://thetinywisdom.github.io/briandi.to/ (see Next up). The owner follows progress through a preview link (see Working notes).
 
 **Current look (decided by the owner):** a near-black room. Four Sony CRTs stand on a moss green carpet, lit only by their own screens, with a dim green light behind them, still haze (static smoke), still film grain and a faint front lamp so the buttons can be seen. On wide screens the sets are in two stacks ("scatter"): the 20-inch with the 9-inch monitor on top, and the orange TV with the small portable on top. On phones they form one tower.
 
@@ -63,7 +63,7 @@ Do not reopen these without the owner asking.
    Two ways to wire it in were offered: embed its live address in a frame (best when it has its own build; the host must allow framing), or copy its built pages into this site (best for plain HTML). Suggested approach if a whole site is embedded: a simple title card on the tube and the real site only in the reader, because a full site is unreadable at 640 × 480.
 2. **Channel media and the Say hi page.** The owner will fill `briandi.to-channels` with YouTube / Spotify links and GIF / WebP files for channels 3–13, U1, U2 (so far only channel 3 is filled: a YouTube video, with no title yet, so the guide calls it VIDEO). The "Say hi" contact page used to be on the KV-5200; it is kept, commented out, in `index.html` until the owner says where it goes.
 3. **Real content.** Every page in `index.html` is placeholder text ("Hello, I'm Brian", "Latest strip", "About", "Say hi"). The owner needs to supply copy, strips and contact details. Do not invent them.
-4. **Deploy.** Nothing is hosted yet. The folder is ready for GitHub Pages (`.nojekyll` is present) or any static host. The domain is presumably briandi.to; confirm with the owner.
+4. **Deploy (decided 2026-11-12): GitHub Pages at https://thetinywisdom.github.io/briandi.to/**, served from the `main` branch, folder `/ (root)`, so every push to `main` publishes. The owner turns it on in the repository's Settings → Pages (agents have no tool for that setting). All paths in the site are relative so it works under `/briandi.to/`; keep them relative. A custom domain (briandi.to) can be added later in the same settings page.
 
 ## Known gaps
 

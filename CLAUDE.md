@@ -58,5 +58,5 @@ There are no tests. Serve the folder, open it in a browser at desktop and phone 
 - All copy in `index.html` is still placeholder text. Do not invent biography, contact details, comic titles or channel media; ask the owner.
 - When the owner asks for help with Japanese text, they want the hiragana reading, an English translation and the grammar points explained alongside any correction.
 - Fonts come from Google Fonts (Barlow Semi Condensed, IBM Plex Sans, IBM Plex Mono, and DotGothic16 for the pager screen).
-- Work is committed straight to `main` and pushed (or merged into `main` from a session branch). The site is not deployed anywhere yet (see `PLAN.md`).
+- Work is committed straight to `main` and pushed (or merged into `main` from a session branch). The site is published by GitHub Pages from `main` at https://thetinywisdom.github.io/briandi.to/, so a push to `main` goes live. Keep every path relative (no leading `/`), because the site lives under `/briandi.to/`.
 - **After every change, publish a preview for the owner** (single-file build, see `PLAN.md` → Working notes). The owner asked for this to happen every time.
