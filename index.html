@@ -186,6 +186,66 @@
         return parts.length >= 2 ? `https://open.spotify.com/embed/${parts[0]}/${parts[1]}` : null;
       } catch { return null; }
     };
+    // a media path inside the channels repository, with each folder name encoded
+    const mediaUrl = (file) => CHANNELS + 'media/' + String(file).split('/').map(encodeURIComponent).join('/');
+    const baseName = (file) => String(file).split('/').pop();
+    // how long one run of an animated GIF or WebP lasts, read from its frame timings
+    const animLength = (buf) => {
+      const b = new Uint8Array(buf);
+      let ms = 0;
+      const skipBlocks = (i) => { while (i < b.length && b[i]) i += b[i] + 1; return i + 1; };   // data sub-blocks, then the 0 terminator
+      if (b[0] === 0x47 && b[1] === 0x49 && b[2] === 0x46) {          // GIF: walk the blocks, add up each frame's delay
+        let i = 13;
+        if (b[10] & 0x80) i += 3 * (1 << ((b[10] & 7) + 1));         // global colour table
+        while (i < b.length) {
+          if (b[i] === 0x21) {                                         // extension
+            if (b[i + 1] === 0xf9) { const d = b[i + 4] | (b[i + 5] << 8); ms += (d < 2 ? 10 : d) * 10; }
+            i = skipBlocks(i + 2);
+          } else if (b[i] === 0x2c) {                                  // image: descriptor, local colour table, LZW data
+            const packed = b[i + 9];
+            i += 10;
+            if (packed & 0x80) i += 3 * (1 << ((packed & 7) + 1));
+            i = skipBlocks(i + 1);
+          } else break;                                                // 0x3b trailer, or something unexpected
+        }
+      } else if (b[8] === 0x57 && b[9] === 0x45 && b[10] === 0x42 && b[11] === 0x50) {   // WebP: walk the chunks, add up ANMF durations
+        for (let i = 12; i + 8 <= b.length;) {
+          const size = b[i + 4] | (b[i + 5] << 8) | (b[i + 6] << 16) | (b[i + 7] << 24);
+          if (b[i] === 0x41 && b[i + 1] === 0x4e && b[i + 2] === 0x4d && b[i + 3] === 0x46) ms += b[i + 20] | (b[i + 21] << 8) | (b[i + 22] << 16);
+          i += 8 + size + (size & 1);
+        }
+      }
+      return ms || 5000;
+    };
+    // several pictures on one channel: each plays through (repeated until about 6 s), then the next, round and round.
+    // Only the picture on screen and the next one are downloaded, and only while the channel is on.
+    const playlist = (page, files) => {
+      const blobs = {};
+      const load = (k) => (blobs[k] ||= fetch(mediaUrl(files[k]))
+        .then((r) => (r.ok ? r.arrayBuffer() : Promise.reject()))
+        .then((buf) => ({ blob: new Blob([buf], { type: /\.webp$/i.test(files[k]) ? 'image/webp' : 'image/gif' }), ms: animLength(buf) }))
+        .catch(() => null));
+      let i = 0, url = null;
+      const step = async () => {
+        if (!page.getClientRects().length) { setTimeout(step, 800); return; }   // channel not on air: wait
+        const cur = await load(i);
+        load((i + 1) % files.length);
+        if (cur) {
+          // a fresh address each time, so the animation starts from its first frame
+          if (url) URL.revokeObjectURL(url);
+          url = URL.createObjectURL(cur.blob);
+          const img = document.createElement('img');
+          img.src = url;
+          img.alt = '';
+          page.replaceChildren(img);
+          page.dataset.nowPlaying = baseName(files[i]);
+        }
+        const ms = cur ? cur.ms * Math.max(1, Math.ceil(6000 / cur.ms)) : 1000;
+        i = (i + 1) % files.length;
+        setTimeout(step, ms);
+      };
+      step();
+    };
     let entries = [];
     try {
       const res = await fetch(CHANNELS + 'channels.json', { cache: 'no-cache' });
@@ -213,20 +273,23 @@
         kind = 'MUSIC';
       } else if (c.image && /\.(gif|webp)$/i.test(c.image)) {
         media = document.createElement('img');
-        media.src = CHANNELS + 'media/' + encodeURIComponent(c.image);
+        media.src = mediaUrl(c.image);
         media.alt = c.title || '';
         kind = 'PICTURE';
+      } else if (Array.isArray(c.images)) {
+        const files = c.images.filter((f) => /\.(gif|webp)$/i.test(f));
+        if (files.length) { media = files; kind = 'PICTURE'; }
       }
       if (!media) continue;
       if (media.tagName === 'IFRAME') media.title = c.title || `Channel ${ch.toUpperCase()}`;
       const page = document.createElement('div');
       page.className = 'tv tv-channel';
       page.slot = `kv-5200:ch-${ch}`;
-      page.append(media);
+      if (Array.isArray(media)) playlist(page, media); else page.append(media);
       // what the pager shows as "now playing" on this channel: the file name for a picture,
       // the real title for YouTube and Spotify once known (the guide title until then)
       page.dataset.kind = kind === 'PICTURE' ? 'GIF' : kind;
-      page.dataset.nowPlaying = kind === 'PICTURE' ? c.image : c.title || (kind === 'VIDEO' ? 'YouTube' : 'Spotify');
+      page.dataset.nowPlaying = kind === 'PICTURE' ? baseName(c.image || media[0]) : c.title || (kind === 'VIDEO' ? 'YouTube' : 'Spotify');
       if (kind === 'MUSIC') {
         fetch('https://open.spotify.com/oembed?url=' + encodeURIComponent(c.spotify))
           .then((r) => (r.ok ? r.json() : null))
