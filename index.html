@@ -336,7 +336,7 @@
         const files = c.scroll.filter((f) => /\.(jpe?g|png|webp|gif)$/i.test(f));
         if (files.length) { media = scroller(files); kind = 'PICTURE'; }
       }
-      const song = typeof c.audio === 'string' && kind === 'PICTURE' && /\.(m4a|mp3|aac|ogg|opus|wav)$/i.test(c.audio) ? c.audio : null;
+      const song = typeof c.audio === 'string' && kind === 'PICTURE' && /\.(m4a|mp4|mp3|aac|ogg|opus|wav)$/i.test(c.audio) ? c.audio : null;
       if (song) kind = 'MUSIC';
       if (!media) continue;
       if (media.tagName === 'IFRAME') media.title = c.title || `Channel ${ch.toUpperCase()}`;
