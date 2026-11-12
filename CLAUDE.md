@@ -56,4 +56,5 @@ There are no tests. Serve the folder, open it in a browser at desktop and phone 
 - All copy in `index.html` is still placeholder text. Do not invent biography, contact details or comic titles; ask the owner.
 - When the owner asks for help with Japanese text, they want the hiragana reading, an English translation and the grammar points explained alongside any correction.
 - Fonts come from Google Fonts (Barlow Semi Condensed, IBM Plex Sans, IBM Plex Mono).
-- Work is committed straight to `main` and pushed. The site is not deployed anywhere yet (see `PLAN.md`).
+- Work is committed straight to `main` and pushed (or merged into `main` from a session branch). The site is not deployed anywhere yet (see `PLAN.md`).
+- **After every change, publish a preview for the owner** (single-file build, see `PLAN.md` → Working notes). The owner asked for this to happen every time.
