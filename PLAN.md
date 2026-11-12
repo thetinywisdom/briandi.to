@@ -11,7 +11,7 @@ Last updated: 2026-11-12.
 
 The site works end to end with placeholder content. It is not deployed.
 
-**Current look (decided by the owner):** a near-black room. Four Sony CRTs stand on a moss green carpet, lit only by their own screens, with a dim green light behind them, slow drifting smoke, still film grain and a faint front lamp so the buttons can be seen. On wide screens the sets are in two stacks ("scatter"): the 20-inch with the 9-inch monitor on top, and the orange TV with the small portable on top. On phones they form one tower.
+**Current look (decided by the owner):** a near-black room. Four Sony CRTs stand on a moss green carpet, lit only by their own screens, with a dim green light behind them, still haze (static smoke), still film grain and a faint front lamp so the buttons can be seen. On wide screens the sets are in two stacks ("scatter"): the 20-inch with the 9-inch monitor on top, and the orange TV with the small portable on top. On phones they form one tower.
 
 **Current interaction (decided by the owner):** tap a TV to move in to it; tap its screen to open that TV's page full screen as a normal scrolling page; "Back to the TV" or `Esc` returns. The goal is that content is easy to read.
 
@@ -38,12 +38,14 @@ Do not reopen these without the owner asking.
 | Darkness | Near pitch black, matched to a reference image the owner supplied |
 | Green light | Dark and dim |
 | Grain | Still, fine, film-like. Not animated |
+| Smoke | Static haze for the smoky vibe; no drifting animation (2026-11-12) |
 | Consoles on the floor | Not wanted (the `consoles` attribute exists but is off) |
 | Orange TV | Frame and screen centred vertically, equal margins top and bottom |
 | Two repositories | Assets and site are kept separate so the assets stay reusable |
 
 ## Next up
 
+0. **Bottom dock navigation (in progress).** The owner wants all navigation in one always-visible bottom dock: main navigation, additional information, and an info screen that changes to describe whatever is hovered. The "Tap a TV to look closer" line stays on at all times. 2D mockups of several designs (including a 3D pager idea) were offered for the owner to choose from.
 1. **Embed the owner's content in the full-screen view.** The owner plans to send a separate GitHub repository to show inside the reader. Open questions put to the owner, not yet answered:
    - Where is that project deployed, or should deployment be set up?
    - Is it one project for one TV, or one repository per TV?
@@ -55,8 +57,7 @@ Do not reopen these without the owner asking.
 ## Known gaps
 
 - **Not tested on a real phone or with real touch.** Everything was checked in headless desktop Chromium at desktop and phone viewport sizes.
-- **Smoke and grain were only seen in still screenshots.** The motion of the smoke and the final strength of the grain and front lamp were never viewed live by the agent that built them; the owner has seen them.
-- **Performance is unmeasured.** Smoke keeps the scene redrawing about 14 times a second. Battery and low-end phone behaviour are unknown.
+- **Performance is unmeasured.** The scene now only redraws on interaction (the smoke is static). Low-end phone behaviour is unknown.
 - **The tube page is not clickable.** A tap on a focused screen opens the reader, so links only work in the full-screen view. This was a deliberate trade for readability.
 - **Tower on phones is taller than the screen**, so the big TV starts partly below the fold and the visitor scrolls to it.
 - **PVM-20M4E front panel and KV-9PR1 top buttons are reconstructions**, not measured. A straight-on photo of each would allow correcting them.
@@ -67,7 +68,6 @@ Do not reopen these without the owner asking.
 
 ## Ideas offered but not asked for
 
-- Sharper, more distinct smoke wisps.
 - A slightly lighter wall so the concrete seams show.
 - Pictures or links on the handheld screens.
 - Mixing shelf arrangements (for example "browsed" with one pile).
