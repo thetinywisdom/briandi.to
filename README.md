@@ -29,7 +29,7 @@ Everything is in `index.html`.
 
 Each block is ordinary HTML. On the tube it is laid out at 640 × 480 pixels (styles under "pages shown on the TVs" in `styles.css`); opened full screen it fills the window (styles under "the same pages opened full screen").
 
-**Channel TV.** The 5-inch portable has 14 channels: 1 to 12, U1 and U2. Channel 1 is the channel guide (the green block with `slot="kv-5200"`); it lists the other channels by itself. What plays on channels 2 to 12, U1 and U2 is not in this repository: it is in [thetinywisdom/briandi.to-channels](https://github.com/thetinywisdom/briandi.to-channels), in `channels.json` (a YouTube link, a Spotify link, or a GIF / WebP from its `media` folder, one line per channel). Its README explains the format. The site reads it from GitHub, so a change there shows here a few minutes later.
+**Channel TV.** The 5-inch portable has 14 channels: 1 to 12, U1 and U2. Channel 1 is the channel guide (the green block with `slot="kv-5200"`); it lists the other channels by itself. Channel 2 is "How to use" (the block with `slot="kv-5200:ch-2"`): edit its lines there, one `<li>` each. What plays on channels 3 to 12, U1 and U2 is not in this repository: it is in [thetinywisdom/briandi.to-channels](https://github.com/thetinywisdom/briandi.to-channels), in `channels.json` (a YouTube link, a Spotify link, or a GIF / WebP from its `media` folder, one line per channel). Its README explains the format. The site reads it from GitHub, so a change there shows here a few minutes later.
 
 **Games and books (shelf version only).** One `<retro-item>` line each:
 

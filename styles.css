@@ -61,6 +61,15 @@ retro-shelf { height: 100vh; height: 100dvh; }
 @keyframes guide-blink { 50% { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .tv-guide .guide-blink { animation: none; } }
 
+/* channel TV, channel 2: How to use. The guide's look, one line at a time. */
+.tv-howto { cursor: pointer; }
+.tv-howto .howto-list { list-style: none; margin: 0; padding: 0; flex: 1; display: flex; align-items: center; }
+.tv-howto .howto-list li { display: none; gap: 18px; font-size: 30px; line-height: 1.3; text-wrap: pretty; }
+.tv-howto .howto-list li.on { display: flex; }
+.tv-howto .howto-list li::before { content: attr(data-n); flex: none; align-self: flex-start;
+  padding: 0 6px; background: var(--phosphor); color: #031208; text-shadow: none; box-shadow: 0 0 10px rgba(141, 255, 154, 0.5); }
+.tv-howto .howto-progress { font-size: 20px; letter-spacing: 0.04em; color: var(--phosphor-dim); text-shadow: none; white-space: pre; }
+
 /* channel TV, the other channels: the player or picture fills the tube */
 .tv-channel { height: 100%; padding: 0; background: #000; }
 .tv-channel iframe, .tv-channel img { display: block; width: 100%; height: 100%; border: 0; }
