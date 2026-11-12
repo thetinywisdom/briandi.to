@@ -564,6 +564,16 @@
     if (shelf._ready) go(); else shelf.addEventListener('shelf-ready', go, { once: true });
   })();
 
+  // when the Program Guide is on screen (camera in on the channel TV, channel 1), the number cells above
+  // the set's channel keys glow softly in a wave, with the guide's own shimmer, as a hint they can be pressed
+  (() => {
+    const shelf = document.getElementById('shelf');
+    let channel = 'ch-1';
+    const hint = () => { if (shelf._focusKey === 'kv-5200' && channel === 'ch-1') shelf.tv('kv-5200')?.shimmerLamps('channel'); };
+    shelf.addEventListener('shelf-focus', (e) => { if (e.detail.tv === 'kv-5200') hint(); });
+    shelf.addEventListener('pvm-input', (e) => { if (e.detail.tv === 'kv-5200') { channel = e.detail.input; hint(); } });
+  })();
+
   // body.reading is set while a page is open full screen (for styling)
   document.getElementById('shelf').addEventListener('shelf-read', (e) => document.body.classList.toggle('reading', e.detail.open));
 </script>
