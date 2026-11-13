@@ -94,7 +94,7 @@ retro-shelf { height: 100vh; height: 100dvh; }
   font: 700 10px/12px var(--mono); letter-spacing: 0; color: #f2f2f2; white-space: pre; opacity: 0; }
 .ident-figures { transform: translate(-50%, -50%) scale(0.3); }
 .ident-logo { transform: translate(-50%, -50%) scale(0.285); }
-.ident-art.on { opacity: 1; animation: ident-scan 6s both; }
+.ident-art.on { opacity: 1; animation: ident-scan 6s both, ident-flicker 1.7s steps(1) infinite; }
 /* each picture scans in from the top and goes the same way, top to bottom, line by line */
 @keyframes ident-scan {
   0% { clip-path: inset(0 0 100% 0); animation-timing-function: steps(40); }
@@ -102,9 +102,27 @@ retro-shelf { height: 100vh; height: 100dvh; }
   75% { clip-path: inset(0 0 0 0); animation-timing-function: steps(40); }
   100% { clip-path: inset(100% 0 0 0); }
 }
+/* an uneven tube flicker on the pictures and the grid: brightness dips and the odd soft frame */
+@keyframes ident-flicker {
+  0% { opacity: 1; filter: none; }
+  6% { opacity: 0.72; }
+  9% { opacity: 1; }
+  23% { opacity: 0.88; filter: blur(0.6px); }
+  27% { opacity: 1; filter: none; }
+  41% { opacity: 0.55; }
+  43% { opacity: 0.95; }
+  46% { opacity: 0.7; }
+  49% { opacity: 1; }
+  64% { opacity: 0.84; filter: brightness(1.4); }
+  67% { opacity: 1; filter: none; }
+  82% { opacity: 0.62; filter: blur(0.5px); }
+  85% { opacity: 1; filter: none; }
+  93% { opacity: 0.9; }
+  96% { opacity: 1; }
+}
 /* noughts and crosses: logo on the X squares, figures on the O squares, popping in one after another and out again in the same order */
 .ident-grid { position: absolute; inset: 52px 64px 52px; display: none; grid-template: repeat(3, 1fr) / repeat(3, 1fr); gap: 8px; }
-.ident-grid.on { display: grid; }
+.ident-grid.on { display: grid; animation: ident-flicker 1.7s steps(1) infinite; }
 .ident-grid i { background: center / contain no-repeat; opacity: 0; }
 .ident-grid.on i { animation: ident-pop 2.3s steps(1) both; }
 .ident-grid.on i:nth-child(2) { animation-delay: 0.08s; } .ident-grid.on i:nth-child(3) { animation-delay: 0.16s; }
@@ -113,7 +131,7 @@ retro-shelf { height: 100vh; height: 100dvh; }
 .ident-grid.on i:nth-child(8) { animation-delay: 0.56s; } .ident-grid.on i:nth-child(9) { animation-delay: 0.64s; }
 /* each square stays 2.3 s from when it comes on, so they go in the same order: top left to bottom right */
 @keyframes ident-pop { 0% { opacity: 0; } 0.1% { opacity: 1; } 99.9% { opacity: 1; } 100% { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .ident-air, .ident-art.on, .ident-grid.on i { animation: none; } .ident-grid.on i { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .ident-air, .ident-art.on, .ident-grid.on, .ident-grid.on i { animation: none; } .ident-grid.on i { opacity: 1; } }
 .tv-contact { background: #ff7a59; font-size: 34px; }
 .tv-contact h2 { font-size: 84px; }
 /* channel TV, channel 2: the guide. Green phosphor on black, a dashed grid, pixel lettering. */
