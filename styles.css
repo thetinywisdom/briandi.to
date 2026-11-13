@@ -31,6 +31,9 @@ retro-shelf { height: 100vh; height: 100dvh; }
 .tv a { color: inherit; }
 .tv-latest { background: #1c3a5e; color: #f3efe6; }
 
+/* a screen saver rests while the camera is in on another TV */
+.tv[data-idle], .tv[data-idle] * { animation-play-state: paused !important; }
+
 /* GAME TV: a standby screen on the tube (SMPTE-style colour bars that break up every few seconds under a
    GAME OVER card that stays up); the page itself when it is opened full screen */
 .tv-latest:not([slot="reader"]) { padding: 0; height: 100%; background: #131313; }

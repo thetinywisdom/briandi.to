@@ -814,7 +814,7 @@
         kind = 'MUSIC';
       } else if (c.image && /\.(gif|webp)$/i.test(c.image)) {
         media = document.createElement('img');
-        media.src = mediaUrl(c.image);
+        media.dataset.src = mediaUrl(c.image);                         // loaded the first time the channel is on
         media.alt = c.title || '';
         kind = 'PICTURE';
       } else if (Array.isArray(c.images)) {
@@ -837,6 +837,9 @@
       page.className = 'tv tv-channel';
       page.slot = `kv-5200:ch-${ch}`;
       if (Array.isArray(media)) playlist(page, media); else page.append(media);
+      if (media.tagName === 'IMG' && media.dataset.src) {
+        const wait = setInterval(() => { if (page.getClientRects().length) { media.src = media.dataset.src; clearInterval(wait); } }, 600);
+      }
       const audioEl = song ? soundtrack(page, song) : null;
       if (c.interference) interference(page, ch, audioEl);
       // what the pager shows as "now playing" on this channel: the file name for a picture,
@@ -975,7 +978,7 @@
       const paint = () => { logo.style.color = COLORS[color]; logo.style.setProperty('--logo', COLORS[color]); logo.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`; };
       const frame = (now) => {
         requestAnimationFrame(frame);
-        if (!box.getClientRects().length) { last = 0; return; }        // not on screen (or opened full screen)
+        if (!box.getClientRects().length || box.closest('[data-idle]')) { last = 0; return; }   // not on screen, opened full screen, or another TV in view
         const W = box.clientWidth - logo.offsetWidth, H = box.clientHeight - logo.offsetHeight;
         if (reduced) { x = W / 2; y = H / 2; paint(); return; }
         const dt = last ? Math.min(0.05, (now - last) / 1000) : 0;
@@ -1005,7 +1008,7 @@
     g.putImageData(img, 0, 0);
     box.querySelector('.static').style.backgroundImage = `url(${c.toDataURL()})`;
     const breakUp = () => {
-      if (!box.getClientRects().length) { setTimeout(breakUp, 1000); return; }   // opened full screen
+      if (!box.getClientRects().length || box.closest('[data-idle]')) { setTimeout(breakUp, 1000); return; }   // opened full screen, or another TV in view
       box.classList.add('interrupted');
       setTimeout(() => { box.classList.remove('interrupted'); setTimeout(breakUp, 3000); }, 2000 + Math.random() * 1000);
     };
@@ -1043,6 +1046,7 @@
     const STEPS = [[figures, 6000], [logo, 6000], [grid, 3000]];
     let at = 0;
     const next = () => {
+      if (box.closest('[data-idle]')) { setTimeout(next, 1000); return; }   // another TV in view: hold where it is
       const [el, ms] = STEPS[at];
       show(el);
       at = (at + 1) % STEPS.length;
@@ -1059,6 +1063,7 @@
     g.putImageData(img, 0, 0);
     snow.style.backgroundImage = `url(${c.toDataURL()})`;
     const burst = () => {
+      if (box.closest('[data-idle]')) { setTimeout(burst, 3000); return; }
       snow.classList.add('on');
       setTimeout(() => snow.classList.remove('on'), 120 + Math.random() * 280);
       setTimeout(burst, 5000 + Math.random() * 6000);
@@ -1067,6 +1072,19 @@
     more.textContent = matchMedia('(hover: none)').matches ? more.dataset.tap : more.dataset.click;
     const tick = () => { const d = new Date(); clock.textContent = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`; };
     tick(); setInterval(tick, 10000);
+  })();
+
+  // screen savers rest while the camera is in on another TV (they run in the room view and on their own TV):
+  // a page gets data-idle, which pauses its CSS animations and its scripts above
+  (() => {
+    const shelf = document.getElementById('shelf');
+    const pages = [...shelf.querySelectorAll(':scope > .tv[slot="pvm-20m4e"], :scope > .tv[slot="pvm-9042qm"], :scope > .tv[slot="kv-9pr1"]')];
+    const sync = () => {
+      const on = shelf._focusKey;
+      for (const page of pages) page.toggleAttribute('data-idle', !!on && on !== page.getAttribute('slot') && page.getAttribute('slot') !== 'reader');
+    };
+    shelf.addEventListener('shelf-focus', sync);
+    shelf.addEventListener('shelf-read', sync);
   })();
 
   // the channel TV's keys are lit like a backlit keyboard all the time, as a hint that they can be pressed
