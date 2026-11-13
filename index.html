@@ -336,6 +336,7 @@
                  :*********:                  **********                     +*******************-      :+******************=.                 -*************=   :***************-               =****************+:                ********************. .*******************-  +*******************
                   -=======-                   .========.                     =+++++++++++++++++++-            .-=====-:.                           :=+++=:        ..                                  -=+***+=:</pre>
       </div>
+      <div class="ident-snow"></div>
       <div class="ident-grid"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
       <div class="ident-bar ident-more" data-click="&#9654; CLICK TO SEE MORE" data-tap="&#9654; TAP TO SEE MORE">&#9654; CLICK TO SEE MORE</div>
     </div>
@@ -1037,6 +1038,21 @@
       setTimeout(next, ms);
     };
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) show(logo); else next();
+    // now and then, as the picture flickers, a burst of snow like an empty channel: a fraction of a
+    // second, every 5 to 11 s
+    const snow = box.querySelector('.ident-snow');
+    const c = document.createElement('canvas');
+    c.width = c.height = 160;
+    const g = c.getContext('2d'), img = g.createImageData(160, 160);
+    for (let k = 0; k < img.data.length; k += 4) { const v = Math.random() * 255; img.data[k] = img.data[k + 1] = img.data[k + 2] = v; img.data[k + 3] = 255; }
+    g.putImageData(img, 0, 0);
+    snow.style.backgroundImage = `url(${c.toDataURL()})`;
+    const burst = () => {
+      snow.classList.add('on');
+      setTimeout(() => snow.classList.remove('on'), 120 + Math.random() * 280);
+      setTimeout(burst, 5000 + Math.random() * 6000);
+    };
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) setTimeout(burst, 4000 + Math.random() * 4000);
     more.textContent = matchMedia('(hover: none)').matches ? more.dataset.tap : more.dataset.click;
     const tick = () => { const d = new Date(); clock.textContent = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`; };
     tick(); setInterval(tick, 10000);

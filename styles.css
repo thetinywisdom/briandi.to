@@ -102,6 +102,10 @@ retro-shelf { height: 100vh; height: 100dvh; }
   75% { clip-path: inset(0 0 0 0); animation-timing-function: steps(40); }
   100% { clip-path: inset(100% 0 0 0); }
 }
+/* a short burst of snow now and then, like an empty channel */
+.ident-snow { position: absolute; inset: -160px; z-index: 2; pointer-events: none; display: none; background-size: 160px 160px;
+  image-rendering: pixelated; opacity: 0.38; mix-blend-mode: screen; }
+.ident-snow.on { display: block; animation: tv-static 0.24s steps(4) infinite; }
 /* an uneven tube flicker on the pictures and the grid: brightness dips and the odd soft frame */
 @keyframes ident-flicker {
   0% { opacity: 1; filter: none; }
