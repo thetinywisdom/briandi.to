@@ -79,6 +79,7 @@ Do not reopen these without the owner asking.
 - **The tube page is not clickable on TVs 1–3.** A tap on a focused screen opens the reader, so links only work in the full-screen view. This was a deliberate trade for readability. The channel TV is the exception: its screen takes clicks once zoomed in.
 - **No real YouTube or Spotify link has been tried yet.** Channel switching, unloading of inactive players and the clickable screen were tested with a test picture, a local test page and a stand-in `channels.json`; reading the real (empty) list from GitHub was tested.
 - **YouTube sound control was tested against a stand-in player**, because this environment cannot reach YouTube. Safari's behaviour (most likely to block sound) is untested.
+- **Not tested in Safari / WebKit** (not installed in the agent's environment). Channel 5's scroll was a tall CSS-animated layer that stayed black on the owner's iPhone; it is now drawn on a 640 × 480 canvas, checked in Chromium only.
 - **The site depends on raw.githubusercontent.com for channels.** If GitHub is down or the repository goes private, the guide shows every channel as NO SIGNAL and the rest of the site works.
 - **Tower on phones is taller than the screen**, so the big TV starts partly below the fold and the visitor scrolls to it.
 - **PVM-20M4E front panel and KV-9PR1 top buttons are reconstructions**, not measured. A straight-on photo of each would allow correcting them.

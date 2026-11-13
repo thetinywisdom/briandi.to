@@ -139,11 +139,7 @@ retro-shelf { height: 100vh; height: 100dvh; }
 /* pictures fill the tube at their own shape: never stretched, the edges that do not fit are cut off */
 .tv-channel img { object-fit: cover; }
 /* a scrolling stack of tall pictures: each the width of the tube, moving slowly up the screen */
-.tv-channel .tv-scroll { height: 100%; overflow: hidden; }
-.tv-channel .tv-scroll-track img { height: auto; object-fit: initial; }
-.tv-channel .tv-scroll-track.moving { animation: tv-scroll linear infinite; }
-@keyframes tv-scroll { to { transform: translateY(-50%); } }
-@media (prefers-reduced-motion: reduce) { .tv-channel .tv-scroll-track.moving { animation: none; } }
+.tv-channel .tv-scroll { display: block; width: 100%; height: 100%; }
 
 .panels { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 6px 0 16px; }
 .panels i { aspect-ratio: 3 / 4; border: 4px solid #f3efe6; background: rgba(243, 239, 230, 0.14); }

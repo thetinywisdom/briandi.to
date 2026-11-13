@@ -274,43 +274,44 @@
       step();
     };
     // tall pictures stacked 1, 2, 3 ... from top to bottom, each the width of the tube, slowly scrolling
-    // down and round again. The stack is drawn twice so the end runs straight into the start.
+    // down and round again. Drawn on a canvas the size of the tube: a tall scrolling layer is too big for
+    // phones to draw inside the 3D scene (it stayed black in Safari on iPhone).
     const SCROLL_SPEED = 30;                                          // tube pixels per second
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const scroller = (files) => {
-      const box = document.createElement('div');
-      box.className = 'tv-scroll';
-      const track = document.createElement('div');
-      track.className = 'tv-scroll-track';
-      const imgs = [];
-      for (const copy of [0, 1]) {
-        for (const f of files) {
-          const img = document.createElement('img');
-          img.loading = 'lazy';                                        // nothing loads until the channel is first tuned in
-          img.src = mediaUrl(f);
-          img.alt = copy ? '' : baseName(f);
-          if (copy) img.setAttribute('aria-hidden', 'true');
-          track.append(img);
-          if (!copy) imgs.push(img);
+      const c = document.createElement('canvas');
+      c.className = 'tv-scroll';
+      c.width = 640; c.height = 480;
+      c.setAttribute('role', 'img');
+      c.setAttribute('aria-label', files.map(baseName).join(', '));
+      const g = c.getContext('2d');
+      let imgs = null, heights = [], total = 0, pos = 0, last = 0;
+      const measure = () => {
+        heights = imgs.map((im) => (im.naturalWidth ? 640 * im.naturalHeight / im.naturalWidth : 0));
+        total = heights.reduce((a, b) => a + b, 0);
+      };
+      const frame = (now) => {
+        requestAnimationFrame(frame);
+        if (!c.getClientRects().length) { last = 0; return; }       // off air: keep the place, draw nothing
+        if (!imgs) {                                                   // first time on air: load the pictures
+          imgs = files.map((f) => { const im = new Image(); im.crossOrigin = 'anonymous'; im.decoding = 'async'; im.onload = im.onerror = measure; im.src = mediaUrl(f); return im; });
         }
-      }
-      // start moving once the first copy has loaded and its height is known
-      Promise.all(imgs.map((img) => (img.complete ? null : new Promise((ok) => { img.onload = img.onerror = ok; })))).then(() => {
-        const h = imgs.reduce((sum, img) => sum + (img.naturalWidth ? 640 * img.naturalHeight / img.naturalWidth : 0), 0);
-        if (h) { track.style.animationDuration = `${(h / SCROLL_SPEED).toFixed(1)}s`; track.classList.add('moving'); }
-      });
-      // keep the place: off air the stack is hidden, which restarts a CSS animation, so remember how far it
-      // had got and start it again from there (a negative delay) when the channel comes back
-      // (read from the animation itself while it runs, so the place is exact however late it started)
-      let pos = 0, wasOn = false;
-      setInterval(() => {
-        const on = box.getClientRects().length > 0;
-        const run = track.getAnimations?.()[0];
-        if (on && !wasOn) track.style.animationDelay = `-${(pos / 1000).toFixed(2)}s`;
-        else if (on && run && run.currentTime != null) pos = run.currentTime - (run.effect?.getTiming().delay || 0);   // the delay is the head start it was given
-        wasOn = on;
-      }, 200);
-      box.append(track);
-      return box;
+        if (!total) return;
+        const dt = last ? Math.min(0.1, (now - last) / 1000) : 0;
+        last = now;
+        if (!reducedMotion) pos = (pos + dt * SCROLL_SPEED) % total;
+        g.fillStyle = '#000';
+        g.fillRect(0, 0, 640, 480);
+        // the stack, then the stack again, so the end runs straight into the start
+        let y = -pos;
+        for (let k = 0; y < 480 && k < imgs.length * 2; k++) {
+          const i = k % imgs.length, h = heights[i];
+          if (h && y + h > 0) g.drawImage(imgs[i], 0, y, 640, h);
+          y += h;
+        }
+      };
+      requestAnimationFrame(frame);
+      return c;
     };
     // one audio engine for the page's own sound, switched on at the visitor's first tap or key press
     // (Safari will not start it otherwise)
