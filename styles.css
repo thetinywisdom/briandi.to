@@ -291,6 +291,46 @@ retro-shelf { height: 100vh; height: 100dvh; }
 .tv-contact[slot="reader"] { font-size: clamp(22px, 3vw, 30px); }
 
 
+/* WORK page full screen ("How I Lead"): an editorial long read on warm paper (option A). Wider than the other
+   pages; each chapter has its label on the left and the story on the right, and each case leads with its result */
+.tv-home[slot="reader"] { --paper: #f2efe8; --ink: #17181b; --muted: #5d5f66; --line: #d9d4c8; --accent: #3156d3; --gold: #ffd23f;
+  background: var(--paper); color: #2b2d31; padding-left: max(24px, calc((100% - 72rem) / 2)); padding-right: max(24px, calc((100% - 72rem) / 2));
+  font-size: 17px; line-height: 1.6; }
+.work h1, .work h2, .work h3 { color: var(--ink); text-wrap: balance; }
+.work-kicker { font: 500 13px/1 var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); }
+.tv-home[slot="reader"] .work h1 { margin: 14px 0 22px; font: 800 clamp(56px, 10vw, 128px)/0.9 var(--legend); text-transform: uppercase; }
+.work-lede { max-width: 60ch; font-size: clamp(18px, 1rem + 0.4vw, 21px); line-height: 1.55; color: #2b2d31; }
+.work-chapters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+.work-chapters button { font: 600 16px/1 var(--legend); text-transform: uppercase; letter-spacing: 0.04em; padding: 10px 16px; color: var(--ink);
+  background: transparent; border: 1.5px solid var(--ink); border-radius: 999px; cursor: pointer; }
+.work-chapters button b { color: var(--accent); margin-right: 6px; }
+.work-chapters button:hover, .work-chapters button:focus-visible { background: var(--ink); color: var(--paper); outline: none; }
+.work-chapter { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr); gap: 24px 56px; margin-top: 72px; padding-top: 28px;
+  border-top: 2px solid var(--ink); scroll-margin-top: 24px; }
+.work-chapter > aside { font: 700 24px/1.1 var(--legend); text-transform: uppercase; color: var(--ink); align-self: start; position: sticky; top: 24px; }
+.work-chapter > aside span { display: block; margin-bottom: 8px; font: 500 12px/1 var(--mono); letter-spacing: 0.14em; color: var(--muted); }
+.work-chapter > div { min-width: 0; }
+.work-intro { max-width: 62ch; font-size: 19px; color: #2b2d31; margin: 0 0 28px; }
+.tv-home[slot="reader"] .work h2 { margin: 40px 0 14px; font: 700 clamp(30px, 4vw, 40px)/1.05 var(--legend); text-transform: uppercase; }
+.work-intro + h2 { margin-top: 8px !important; }
+.work-result { display: flex; gap: 20px; align-items: center; padding: 18px 22px; margin: 0 0 28px; background: var(--ink); color: var(--paper); border-radius: 6px; }
+.work-result strong { flex: none; font: 800 clamp(30px, 4vw, 44px)/1 var(--legend); text-transform: uppercase; color: var(--gold); }
+.work-result span { font-size: 16px; line-height: 1.45; }
+.work-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+.work-steps section, .work-principles section { padding-top: 12px; border-top: 1px solid var(--line); }
+.work h3 { margin: 0 0 10px; font: 500 12px/1.2 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+.work-steps p, .work-principles p { margin: 0 0 12px; font-size: 16px; line-height: 1.6; }
+.work-steps b { color: var(--ink); font-weight: 600; }
+.work-principles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 40px; }
+.tv-home[slot="reader"] .work-principles h3 { font: 700 26px/1.1 var(--legend); letter-spacing: 0; text-transform: none; color: var(--ink); }
+@media (max-width: 1100px) { .work-steps { grid-template-columns: 1fr; gap: 8px; } }
+@media (max-width: 760px) {
+  .work-chapter { grid-template-columns: 1fr; margin-top: 48px; }
+  .work-chapter > aside { position: static; }
+  .work-principles { grid-template-columns: 1fr; }
+  .work-result { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+
 /* ---- the dock: a 3D pager at the bottom, always on screen ----
    It replaces the scene's own hint and Back / Read buttons. */
 /* the hologram map of the stack, on the left, clear of the pager */
