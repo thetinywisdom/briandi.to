@@ -188,10 +188,49 @@
   <button type="button" data-tv="pvm-9042qm" data-label="Game" data-info="Brian, sometimes Link from Zelda, Michael De Santa from GTA V, or Joker from Persona 5.">Game</button>
   <button type="button" data-action="back">Back</button>
   <button type="button" data-action="sound">Sound</button>
-  <button type="button" data-action="info" data-info="Four old Sony TVs in a dark room, built in code">About this site</button>
+  <button type="button" data-action="info" data-info="How to use the controls">Controls</button>
 </retro-pager>
 
+<!-- the pager's i key opens this: how the controls work, in the Program Guide's style -->
+<dialog class="controls-dialog" aria-labelledby="controls-title">
+  <div class="tv-guide controls-panel">
+    <div class="guide-top"><span>BRIANDI.TO</span><span>INFO &#9654;</span></div>
+    <h2 id="controls-title" class="guide-title">----- CONTROLS -----</h2>
+    <dl class="controls-list">
+      <div><dt>TAP A TV</dt><dd>MOVE IN TO IT</dd></div>
+      <div><dt>TAP ITS SCREEN</dt><dd>OPEN THE PAGE FULL SCREEN</dd></div>
+      <div><dt>SCROLL / SWIPE</dt><dd>NEXT TV UP OR DOWN</dd></div>
+      <div><dt>&#8593; &#8595; KEYS</dt><dd>NEXT TV UP OR DOWN</dd></div>
+      <div><dt>01&ndash;04</dt><dd>GO TO THAT TV</dd></div>
+      <div><dt>&#8592; OR ESC</dt><dd>GO BACK</dd></div>
+      <div><dt>&#9834;</dt><dd>SOUND ON / OFF</dd></div>
+      <div><dt>GUIDE TV</dt><dd>TAP A CHANNEL OR ITS KEY ON THE SET</dd></div>
+      <div><dt>VOLUME</dt><dd>THE SLIDER ON EACH SET</dd></div>
+    </dl>
+    <button type="button" class="controls-close">[ CLOSE ]</button>
+    <i class="guide-mark" style="left: 6px; top: 6px"></i><i class="guide-mark" style="right: 6px; top: 6px"></i>
+    <i class="guide-mark" style="left: 6px; bottom: 6px"></i><i class="guide-mark" style="right: 6px; bottom: 6px"></i>
+  </div>
+</dialog>
+
 <script>
+  // the pager's i key opens the controls; Esc, CLOSE, a tap outside or i again close it. While it is open
+  // the room's own keys (Esc, arrows) are left alone.
+  (() => {
+    const dlg = document.querySelector('.controls-dialog');
+    const pager = document.querySelector('retro-pager');
+    if (!dlg || !pager) return;
+    const close = () => { if (dlg.open) dlg.close(); };
+    pager.addEventListener('pager-press', (e) => { if (e.detail.action !== 'info') return; dlg.open ? close() : dlg.showModal(); });
+    dlg.querySelector('.controls-close').addEventListener('click', close);
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) close(); });   // the backdrop
+    addEventListener('keydown', (e) => {
+      if (!dlg.open) return;
+      if (e.key === 'Escape') { e.preventDefault(); close(); }
+      if (['Escape', 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown'].includes(e.key)) e.stopImmediatePropagation();
+    }, true);
+  })();
+
   // channel TV: read the channel list from the briandi.to-channels repository,
   // turn each entry into a player or picture on its channel, and list them in the guide on channel 1
   const CHANNELS = 'https://raw.githubusercontent.com/thetinywisdom/briandi.to-channels/main/';
