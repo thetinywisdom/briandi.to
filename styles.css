@@ -41,7 +41,7 @@ retro-shelf { height: 100vh; height: 100dvh; }
   font-family: var(--legend); text-transform: uppercase; will-change: transform; }
 .standby-logo b { font-size: 96px; font-weight: 800; font-style: italic; line-height: 0.9; letter-spacing: 0.04em; filter: drop-shadow(0 0 10px currentColor); }
 /* the subtitle cut out of a solid oval tucked right under WORK, like the disc under the DVD logo */
-.standby-disc { display: block; margin-top: -20px; overflow: visible; filter: drop-shadow(0 0 3px currentColor); }
+.standby-disc { display: block; margin-top: -15px; overflow: visible; filter: drop-shadow(0 0 3px currentColor); }
 .standby-disc-text { font: italic 700 19px var(--mono); letter-spacing: 0.04em; text-transform: none; }
 .standby.corner { animation: standby-corner 0.6s ease-out; }
 @keyframes standby-corner { 0% { background: rgba(255, 255, 255, 0.35); } 100% { background: transparent; } }
