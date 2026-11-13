@@ -79,39 +79,39 @@ retro-shelf { height: 100vh; height: 100dvh; }
 @keyframes standby-corner { 0% { background: rgba(255, 255, 255, 0.35); } 100% { background: transparent; } }
 .tv-latest .note { color: #b9c6d6; }
 .tv-about { background: #ffd23f; }
-/* CREATE TV: a standby screen on the tube like an old station ident (the owner's ASCII art scanning in,
-   THE TINY WISDOM under it, ON AIR and a clock); the page itself when it is opened full screen */
-.tv-about:not([slot="reader"]) { padding: 0; height: 100%; background: #0d0b1a; }
+/* CREATE TV: a standby screen on the tube like an old station ident, in black and white (the owner's two
+   ASCII pictures taking turns, ON AIR and a clock); the page itself when it is opened full screen */
+.tv-about:not([slot="reader"]) { padding: 0; height: 100%; background: #050505; }
 .tv-about:not([slot="reader"]) .page-body { display: none; }
 .tv-about[slot="reader"] .ident { display: none; }
-.ident { position: relative; height: 100%; overflow: hidden; display: flex; flex-direction: column; align-items: center; color: #f3efe6;
-  background: radial-gradient(ellipse at 50% 42%, #2a1f4a 0%, #0d0b1a 70%); }
-.ident-top { align-self: stretch; display: flex; justify-content: space-between; padding: 16px 26px 0; font: 500 18px/1 var(--mono); letter-spacing: 0.08em; }
-.ident-air { color: #ff5d5d; animation: guide-blink 1.2s steps(1) infinite; }
-.ident-clock { color: #cfc8ff; }
+.ident { position: relative; height: 100%; overflow: hidden; display: flex; flex-direction: column; color: #f2f2f2; background: #050505; }
+.ident-bar { display: flex; justify-content: space-between; padding: 16px 26px; font: 500 18px/1 var(--mono); letter-spacing: 0.08em; }
+.ident-air { animation: guide-blink 1.2s steps(1) infinite; }
+.ident-more { justify-content: center; padding-top: 0; padding-bottom: 20px; }
+.ident-frame { position: relative; flex: 1; }
 /* the art is set at a normal size and scaled down, so no browser's smallest-font setting gets in the way */
-.ident-frame { position: relative; width: 384px; height: 342px; margin-top: 0; }
-.ident-art { position: absolute; left: 50%; top: 0; margin: 0; transform-origin: 50% 0; transform: translateX(-50%) scale(0.37);
-  font: 700 10px/12px var(--mono); letter-spacing: 0; color: #8a84b0; white-space: pre;
-  animation: ident-scan 10s infinite; }
-.ident-art .a { color: #ff8a3d; }
-.ident-art .b { color: #ffd23f; }
-.ident-art .c { color: #f3efe6; }
+.ident-art { position: absolute; left: 50%; top: 50%; margin: 0; transform-origin: 50% 50%;
+  font: 700 10px/12px var(--mono); letter-spacing: 0; color: #f2f2f2; white-space: pre; opacity: 0; }
+.ident-figures { transform: translate(-50%, -50%) scale(0.3); }
+.ident-logo { transform: translate(-50%, -50%) scale(0.285); }
+.ident-art.on { opacity: 1; animation: ident-scan 6s both; }
 @keyframes ident-scan {
-  0% { clip-path: inset(0 0 100% 0); opacity: 1; animation-timing-function: steps(44); }
-  22% { clip-path: inset(0 0 0 0); opacity: 1; }
-  94% { clip-path: inset(0 0 0 0); opacity: 1; }
+  0% { clip-path: inset(0 0 100% 0); opacity: 1; animation-timing-function: steps(40); }
+  30% { clip-path: inset(0 0 0 0); opacity: 1; }
+  93% { clip-path: inset(0 0 0 0); opacity: 1; }
   100% { clip-path: inset(0 0 0 0); opacity: 0; }
 }
-.ident-name { margin: 2px 0 0; font: italic 800 44px/1 var(--legend); letter-spacing: 0.06em; color: #ffd23f;
-  text-shadow: 3px 3px 0 #ff5d3d, 0 0 14px rgba(255, 170, 80, 0.5); animation: ident-name 10s infinite; }
-@keyframes ident-name {
-  0%, 20% { clip-path: inset(0 100% 0 0); animation-timing-function: steps(15); }
-  30%, 94% { clip-path: inset(0 0 0 0); opacity: 1; }
-  100% { clip-path: inset(0 0 0 0); opacity: 0; }
-}
-.ident-more { margin: 8px 0 0; padding: 3px 16px; border: 2px solid #f3efe6; border-radius: 999px; font: italic 700 16px/1.2 var(--mono); }
-@media (prefers-reduced-motion: reduce) { .ident-air, .ident-art, .ident-name { animation: none; } }
+/* noughts and crosses: logo on the X squares, figures on the O squares, popping in one after another */
+.ident-grid { position: absolute; inset: 52px 64px 52px; display: none; grid-template: repeat(3, 1fr) / repeat(3, 1fr); gap: 8px; }
+.ident-grid.on { display: grid; }
+.ident-grid i { background: center / contain no-repeat; opacity: 0; }
+.ident-grid.on i { animation: ident-pop 3s steps(1) both; }
+.ident-grid.on i:nth-child(2) { animation-delay: 0.08s; } .ident-grid.on i:nth-child(3) { animation-delay: 0.16s; }
+.ident-grid.on i:nth-child(4) { animation-delay: 0.24s; } .ident-grid.on i:nth-child(5) { animation-delay: 0.32s; }
+.ident-grid.on i:nth-child(6) { animation-delay: 0.4s; } .ident-grid.on i:nth-child(7) { animation-delay: 0.48s; }
+.ident-grid.on i:nth-child(8) { animation-delay: 0.56s; } .ident-grid.on i:nth-child(9) { animation-delay: 0.64s; }
+@keyframes ident-pop { 0% { opacity: 0; } 1% { opacity: 1; } 100% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .ident-air, .ident-art.on, .ident-grid.on i { animation: none; } .ident-grid.on i { opacity: 1; } }
 .tv-contact { background: #ff7a59; font-size: 34px; }
 .tv-contact h2 { font-size: 84px; }
 /* channel TV, channel 2: the guide. Green phosphor on black, a dashed grid, pixel lettering. */
@@ -131,6 +131,8 @@ retro-shelf { height: 100vh; height: 100dvh; }
 .tv-guide .guide-list li { display: flex; white-space: nowrap; overflow: hidden; }
 .tv-guide .guide-list button { all: unset; box-sizing: border-box; display: flex; gap: 14px; width: 100%; padding: 0 8px; cursor: pointer; overflow: hidden; text-overflow: ellipsis; }
 .tv-guide .guide-list button span { overflow: hidden; text-overflow: ellipsis; }
+.tv-guide .guide-list button span.rolling { display: flex; text-overflow: clip; }
+.tv-guide .guide-list button span.rolling i { flex: none; font-style: normal; padding-right: 48px; }
 .tv-guide .guide-list button:hover, .tv-guide .guide-list button:focus-visible { outline: 2px solid var(--phosphor); outline-offset: -2px; }
 
 .tv-guide .guide-list b { font-weight: 400; }
