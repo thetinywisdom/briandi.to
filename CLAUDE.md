@@ -42,6 +42,7 @@ Any static server works. Opening `index.html` from the file system does not, bec
 - The background colour of each page is also the colour of light that TV throws into the room.
 - The attributes on `<retro-shelf>` are documented in the comment above it and in the `retro-3d-assets` README.
 - Navigation is the `<retro-pager>` after the shelf: one `<button>` per key (`data-tv`, `data-label`, `data-info`, or `data-action="back|sound|info"`). `styles.css` fixes it to the bottom and hides the shelf's own hint and Back / Read buttons.
+- The loading screen (`#boot`, styled and scripted in `<head>`) downloads `vendor/retro-3d.js` itself to show progress; there is no `<script src>` tag for the bundle.
 - `body.reading` is set while the reader is open (see the small script at the end of `index.html`).
 
 ## Changing the 3D
