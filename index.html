@@ -13,7 +13,9 @@
      The 3D bundle is downloaded by the script below (so the bar can show real progress) and then started;
      the screen goes once the room has been built ("shelf-ready"). -->
 <style>
-  retro-shelf:not(:defined), retro-pager:not(:defined) { visibility: hidden; }
+  /* until the 3D has started, its pages would lay out as plain (and very wide) blocks: keep them out of the
+     layout, or phones widen the page and the loading screen shows zoomed and off centre for a moment */
+  retro-shelf:not(:defined), retro-pager:not(:defined), retro-map:not(:defined) { display: none; }
   .boot { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 16px; background: #030403;
     color: #8dff9a; font: 400 22px/1.2 "DotGothic16", ui-monospace, Menlo, Consolas, monospace; text-shadow: 0 0 6px rgba(141, 255, 154, 0.55);
     transition: opacity 0.6s ease, visibility 0s linear 0.6s; }
