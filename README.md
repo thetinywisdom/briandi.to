@@ -14,7 +14,7 @@ npx serve .
 
 Everything is in `index.html`.
 
-**How visitors read it.** One tap on a TV (or its key on the pager) moves in to it. A tap on its screen (or a second press of the key) then opens that TV's page full screen, as a normal scrolling page; the pager's Back key or `Esc` returns. The channel TV never opens full screen: visitors change its channels with the keys on the set.
+**How visitors read it.** One tap on a TV (or its key on the pager) moves in to it. A tap on its screen then opens that TV's page full screen, as a normal scrolling page; the pager's Back key or `Esc` returns, and any TV key on the pager goes back out to the room, in on that TV. The channel TV never opens full screen: visitors change its channels with the keys on the set.
 
 **The pager.** In `<retro-pager>` at the end of `index.html`, one `<button>` per key. `data-label` is the word on the key and `data-info` is what the pager's screen says when the key is pointed at.
 
