@@ -46,10 +46,18 @@
        One block per TV. Each is a normal piece of the page (640 x 480). -->
 
   <!-- 20-inch studio monitor: the main screen -->
-  <div class="tv tv-home" slot="pvm-20m4e">
-    <h1>Hello, I'm Brian.</h1>
-    <p>I draw comic strips. Tap a TV to look closer.</p>
-    <p class="note">Placeholder text. Edit it in index.html.</p>
+  <!-- On the tube it shows a standby screen: WORK bouncing round like an old DVD player's logo, changing
+       colour at each edge. Opened full screen it shows the page below the standby screen instead.
+       data-glow is the light the TV throws into the room (the black screen would throw none). -->
+  <div class="tv tv-home" slot="pvm-20m4e" data-glow="#9fb1d6">
+    <div class="standby" aria-hidden="true">
+      <div class="standby-logo"><b>WORK</b><span class="on-click">Click to see more</span><span class="on-tap">Tap to see more</span></div>
+    </div>
+    <div class="page-body">
+      <h1>Hello, I'm Brian.</h1>
+      <p>I draw comic strips. Tap a TV to look closer.</p>
+      <p class="note">Placeholder text. Edit it in index.html.</p>
+    </div>
   </div>
 
   <!-- 9-inch studio monitor -->
@@ -623,6 +631,36 @@
       if (!touched && !shelf._focusKey && !shelf._reading) shelf.focusTV('kv-5200', { duration: 2200 });
     }, 1250);
     if (shelf._ready) go(); else shelf.addEventListener('shelf-ready', go, { once: true });
+  })();
+
+  // standby screens: a logo drifting round the tube like an old DVD player's, changing colour at each edge
+  // (and the screen flashing if it lands exactly in a corner). Runs only while the TV shows it.
+  (() => {
+    const COLORS = ['#ff5d8f', '#4fc3ff', '#ffd23f', '#7dff8a', '#ff8a3d', '#b58cff'];
+    const SPEED = 110;                                                 // tube pixels per second
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    for (const box of document.querySelectorAll('.standby')) {
+      const logo = box.querySelector('.standby-logo');
+      let x = 60, y = 80, vx = SPEED, vy = SPEED * 0.78, color = 0, last = 0;
+      const paint = () => { logo.style.color = COLORS[color]; logo.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`; };
+      const frame = (now) => {
+        requestAnimationFrame(frame);
+        if (!box.getClientRects().length) { last = 0; return; }        // not on screen (or opened full screen)
+        const W = box.clientWidth - logo.offsetWidth, H = box.clientHeight - logo.offsetHeight;
+        if (reduced) { x = W / 2; y = H / 2; paint(); return; }
+        const dt = last ? Math.min(0.05, (now - last) / 1000) : 0;
+        last = now;
+        x += vx * dt; y += vy * dt;
+        let hitX = false, hitY = false;
+        if (x <= 0 || x >= W) { vx = -vx; x = Math.max(0, Math.min(W, x)); hitX = true; }
+        if (y <= 0 || y >= H) { vy = -vy; y = Math.max(0, Math.min(H, y)); hitY = true; }
+        if (hitX || hitY) color = (color + 1 + Math.floor(Math.random() * (COLORS.length - 1))) % COLORS.length;
+        if (hitX && hitY) { box.classList.remove('corner'); void box.offsetWidth; box.classList.add('corner'); }
+        paint();
+      };
+      paint();
+      requestAnimationFrame(frame);
+    }
   })();
 
   // the channel TV's keys are lit like a backlit keyboard all the time, as a hint that they can be pressed

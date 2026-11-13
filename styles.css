@@ -30,6 +30,21 @@ retro-shelf { height: 100vh; height: 100dvh; }
 .tv .note { font: 400 16px/1.4 var(--mono); color: #6a655b; }
 .tv a { color: inherit; }
 .tv-latest { background: #1c3a5e; color: #f3efe6; }
+
+/* big TV: a standby screen on the tube (WORK drifting round like an old DVD logo); the page itself when
+   it is opened full screen */
+.tv-home:not([slot="reader"]) { padding: 0; height: 100%; background: #04050a; }
+.tv-home:not([slot="reader"]) .page-body { display: none; }
+.tv-home[slot="reader"] .standby { display: none; }
+.standby { position: relative; height: 100%; overflow: hidden; }
+.standby-logo { position: absolute; left: 0; top: 0; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 14px;
+  font-family: var(--legend); text-transform: uppercase; will-change: transform; filter: drop-shadow(0 0 10px currentColor); }
+.standby-logo b { font-size: 96px; line-height: 0.9; letter-spacing: 0.04em; }
+.standby-logo span { font: 500 20px/1 var(--mono); letter-spacing: 0.08em; text-transform: none; }
+.standby-logo .on-tap { display: none; }
+@media (hover: none) { .standby-logo .on-click { display: none; } .standby-logo .on-tap { display: inline; } }
+.standby.corner { animation: standby-corner 0.6s ease-out; }
+@keyframes standby-corner { 0% { background: rgba(255, 255, 255, 0.35); } 100% { background: transparent; } }
 .tv-latest .note { color: #b9c6d6; }
 .tv-about { background: #ffd23f; }
 .tv-contact { background: #ff7a59; font-size: 34px; }
