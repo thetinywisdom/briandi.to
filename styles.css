@@ -31,6 +31,37 @@ retro-shelf { height: 100vh; height: 100dvh; }
 .tv a { color: inherit; }
 .tv-latest { background: #1c3a5e; color: #f3efe6; }
 
+/* GAME TV: a standby screen on the tube (SMPTE-style colour bars that break up every few seconds under a
+   GAME OVER card that stays up); the page itself when it is opened full screen */
+.tv-latest:not([slot="reader"]) { padding: 0; height: 100%; background: #131313; }
+.tv-latest:not([slot="reader"]) .page-body { display: none; }
+.tv-latest[slot="reader"] .game-standby { display: none; }
+.game-standby { position: relative; height: 100%; overflow: hidden; }
+.game-standby .bars { position: absolute; inset: 0; display: grid;
+  grid-template-columns: repeat(84, 1fr); grid-template-rows: 67fr 8fr 25fr; }
+.game-standby .bars i { grid-column: span 12; }
+.bars i:nth-child(1) { background: #c0c0c0; } .bars i:nth-child(2) { background: #c0c000; }
+.bars i:nth-child(3) { background: #00c0c0; } .bars i:nth-child(4) { background: #00c000; }
+.bars i:nth-child(5) { background: #c000c0; } .bars i:nth-child(6) { background: #c00000; }
+.bars i:nth-child(7) { background: #0000c0; }
+.bars i:nth-child(8) { background: #0000c0; } .bars i:nth-child(9) { background: #131313; }
+.bars i:nth-child(10) { background: #c000c0; } .bars i:nth-child(11) { background: #131313; }
+.bars i:nth-child(12) { background: #00c0c0; } .bars i:nth-child(13) { background: #131313; }
+.bars i:nth-child(14) { background: #c0c0c0; }
+.game-standby .bars i:nth-child(n+15) { grid-column: span 15; }
+.bars i:nth-child(15) { background: #00214c; } .bars i:nth-child(16) { background: #fff; }
+.bars i:nth-child(17) { background: #32006a; } .bars i:nth-child(18) { background: #131313; }
+.game-standby .bars i:nth-child(n+19):nth-child(-n+21) { grid-column: span 4; }
+.bars i:nth-child(19) { background: #090909; } .bars i:nth-child(20) { background: #131313; }
+.bars i:nth-child(21) { background: #1d1d1d; }
+.game-standby .bars i:nth-child(22) { grid-column: span 12; background: #131313; }
+.game-standby .tv-interference { display: none; }
+.game-standby.interrupted .bars { animation: tv-shake 0.42s steps(1) infinite;
+  filter: contrast(1.7) saturate(1.9) brightness(1.1) drop-shadow(6px 0 0 rgba(255, 0, 60, 0.7)) drop-shadow(-6px 0 0 rgba(0, 255, 230, 0.7)); }
+.game-standby.interrupted .tv-interference { display: block; position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden; }
+.game-standby .tv-interrupt { display: flex; left: 120px; right: 120px; }
+.game-standby .interrupt-title { font-size: 40px; padding: 4px 18px; }
+
 /* big TV: a standby screen on the tube (WORK drifting round like an old DVD logo); the page itself when
    it is opened full screen */
 .tv-home:not([slot="reader"]) { padding: 0; height: 100%; background: #04050a; }

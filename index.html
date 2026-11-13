@@ -60,11 +60,26 @@
     </div>
   </div>
 
-  <!-- 9-inch studio monitor -->
-  <div class="tv tv-latest" slot="pvm-9042qm">
+  <!-- 9-inch studio monitor: the GAME TV -->
+  <!-- On the tube it shows a standby screen: colour bars that break up every few seconds (like channel 5's
+       bad signal) under a "GAME OVER / CONTINUE?" card that stays up. Opened full screen it shows the page
+       below the standby screen instead. -->
+  <div class="tv tv-latest" slot="pvm-9042qm" data-glow="#b4b4c4">
+    <div class="game-standby" aria-hidden="true">
+      <div class="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="tv-interference"><div class="static"></div><div class="tear"></div></div>
+      <div class="tv-interrupt">
+        <div class="interrupt-top"><span>BRIANDI.TO</span><span>TV 03 &#9654;</span></div>
+        <p class="interrupt-title">GAME OVER</p><p class="interrupt-sub">CONTINUE?</p>
+      </div>
+    </div>
+    <div class="page-body">
     <h2>Latest strip</h2>
     <div class="panels"><i></i><i></i><i></i><i></i></div>
     <p class="note">Put your newest strip here.</p>
+    </div>
   </div>
 
   <!-- 9-inch orange TV -->
@@ -685,6 +700,25 @@
       paint();
       requestAnimationFrame(frame);
     }
+  })();
+
+  // GAME TV standby: the colour bars break up for 2-3 s after every 5 s of clear picture, like channel 5's
+  // bad signal; the GAME OVER card stays up throughout. Runs only while the bars are on the tube.
+  (() => {
+    const box = document.querySelector('.game-standby');
+    if (!box || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const c = document.createElement('canvas');
+    c.width = c.height = 160;
+    const g = c.getContext('2d'), img = g.createImageData(160, 160);
+    for (let k = 0; k < img.data.length; k += 4) { const v = Math.random() * 255; img.data[k] = img.data[k + 1] = img.data[k + 2] = v; img.data[k + 3] = 255; }
+    g.putImageData(img, 0, 0);
+    box.querySelector('.static').style.backgroundImage = `url(${c.toDataURL()})`;
+    const breakUp = () => {
+      if (!box.getClientRects().length) { setTimeout(breakUp, 1000); return; }   // opened full screen
+      box.classList.add('interrupted');
+      setTimeout(() => { box.classList.remove('interrupted'); setTimeout(breakUp, 5000); }, 2000 + Math.random() * 1000);
+    };
+    setTimeout(breakUp, 5000);
   })();
 
   // the channel TV's keys are lit like a backlit keyboard all the time, as a hint that they can be pressed
