@@ -495,7 +495,12 @@
       const song = typeof c.audio === 'string' && kind === 'PICTURE' && /\.(m4a|mp4|mp3|aac|ogg|opus|wav)$/i.test(c.audio) ? c.audio : null;
       if (song) kind = 'MUSIC';
       if (!media) continue;
-      if (media.tagName === 'IFRAME') media.title = c.title || `Channel ${ch.toUpperCase()}`;
+      if (media.tagName === 'IFRAME') {
+        media.title = c.title || `Channel ${ch.toUpperCase()}`;
+        // created unloaded: the TV loads a player the first time its channel is tuned
+        media.dataset.held = media.src;
+        media.src = 'about:blank';
+      }
       const page = document.createElement('div');
       page.className = 'tv tv-channel';
       page.slot = `kv-5200:ch-${ch}`;
