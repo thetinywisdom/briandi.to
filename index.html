@@ -51,7 +51,7 @@
        data-glow is the light the TV throws into the room (the black screen would throw none). -->
   <div class="tv tv-home" slot="pvm-20m4e" data-glow="#9fb1d6">
     <div class="standby" aria-hidden="true">
-      <div class="standby-logo"><b>WORK</b><span class="on-click">Click to see more</span><span class="on-tap">Tap to see more</span></div>
+      <div class="standby-logo"><b>WORK</b><span class="standby-disc"><span class="on-click">Click to see more</span><span class="on-tap">Tap to see more</span></span></div>
     </div>
     <div class="page-body">
       <h1>Hello, I'm Brian.</h1>
@@ -642,7 +642,7 @@
     for (const box of document.querySelectorAll('.standby')) {
       const logo = box.querySelector('.standby-logo');
       let x = 60, y = 80, vx = SPEED, vy = SPEED * 0.78, color = 0, last = 0;
-      const paint = () => { logo.style.color = COLORS[color]; logo.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`; };
+      const paint = () => { logo.style.color = COLORS[color]; logo.style.setProperty('--logo', COLORS[color]); logo.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`; };
       const frame = (now) => {
         requestAnimationFrame(frame);
         if (!box.getClientRects().length) { last = 0; return; }        // not on screen (or opened full screen)
