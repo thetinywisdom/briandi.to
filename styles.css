@@ -37,14 +37,12 @@ retro-shelf { height: 100vh; height: 100dvh; }
 .tv-home:not([slot="reader"]) .page-body { display: none; }
 .tv-home[slot="reader"] .standby { display: none; }
 .standby { position: relative; height: 100%; overflow: hidden; }
-.standby-logo { position: absolute; left: 0; top: 0; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 14px;
-  font-family: var(--legend); text-transform: uppercase; will-change: transform; filter: drop-shadow(0 0 10px currentColor); }
-.standby-logo b { font-size: 96px; font-weight: 800; font-style: italic; line-height: 0.9; letter-spacing: 0.04em; }
-/* the subtitle in a solid oval, the words cut out of it, like the disc under the DVD logo */
-.standby-disc { display: block; margin-top: 4px; padding: 9px 26px 8px; border-radius: 50%; background: var(--logo, currentColor);
-  color: #04050a; font: italic 700 19px/1 var(--mono); letter-spacing: 0.04em; text-transform: none; white-space: nowrap; }
-.standby-logo .on-tap { display: none; }
-@media (hover: none) { .standby-logo .on-click { display: none; } .standby-logo .on-tap { display: inline; } }
+.standby-logo { position: absolute; left: 0; top: 0; display: flex; flex-direction: column; align-items: center; gap: 0; padding: 6px 14px;
+  font-family: var(--legend); text-transform: uppercase; will-change: transform; }
+.standby-logo b { font-size: 96px; font-weight: 800; font-style: italic; line-height: 0.9; letter-spacing: 0.04em; filter: drop-shadow(0 0 10px currentColor); }
+/* the subtitle cut out of a solid oval tucked right under WORK, like the disc under the DVD logo */
+.standby-disc { display: block; margin-top: -10px; overflow: visible; filter: drop-shadow(0 0 3px currentColor); }
+.standby-disc-text { font: italic 700 19px var(--mono); letter-spacing: 0.04em; text-transform: none; }
 .standby.corner { animation: standby-corner 0.6s ease-out; }
 @keyframes standby-corner { 0% { background: rgba(255, 255, 255, 0.35); } 100% { background: transparent; } }
 .tv-latest .note { color: #b9c6d6; }

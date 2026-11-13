@@ -51,7 +51,7 @@
        data-glow is the light the TV throws into the room (the black screen would throw none). -->
   <div class="tv tv-home" slot="pvm-20m4e" data-glow="#9fb1d6">
     <div class="standby" aria-hidden="true">
-      <div class="standby-logo"><b>WORK</b><span class="standby-disc"><span class="on-click">Click to see more</span><span class="on-tap">Tap to see more</span></span></div>
+      <div class="standby-logo"><b>WORK</b><svg class="standby-disc" data-click="Click to see more" data-tap="Tap to see more"></svg></div>
     </div>
     <div class="page-body">
       <h1>Hello, I'm Brian.</h1>
@@ -639,8 +639,32 @@
     const COLORS = ['#ff5d8f', '#4fc3ff', '#ffd23f', '#7dff8a', '#ff8a3d', '#b58cff'];
     const SPEED = 110;                                                 // tube pixels per second
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // the subtitle is cut out of a solid oval (the screen shows through the letters, grain and all), drawn
+    // as SVG and sized to its words once the font has loaded
+    let discs = 0;
+    const drawDisc = (svg) => {
+      const NS = 'http://www.w3.org/2000/svg', id = `disc-${++discs}`;
+      const words = matchMedia('(hover: none)').matches ? svg.dataset.tap : svg.dataset.click;
+      svg.innerHTML = '';
+      const mask = document.createElementNS(NS, 'mask'), bg = document.createElementNS(NS, 'rect'), text = document.createElementNS(NS, 'text'), oval = document.createElementNS(NS, 'ellipse');
+      mask.id = id; mask.setAttribute('maskUnits', 'userSpaceOnUse');
+      bg.setAttribute('fill', '#fff'); text.setAttribute('fill', '#000');
+      text.setAttribute('class', 'standby-disc-text'); text.setAttribute('text-anchor', 'middle'); text.setAttribute('dominant-baseline', 'central');
+      text.textContent = words;
+      mask.append(bg, text);
+      svg.append(mask, oval);
+      const tw = text.getComputedTextLength() || words.length * 11.4, w = Math.ceil(tw + 52), h = 36;
+      svg.setAttribute('width', w); svg.setAttribute('height', h); svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+      bg.setAttribute('width', w); bg.setAttribute('height', h);
+      text.setAttribute('x', w / 2); text.setAttribute('y', h / 2 + 1);
+      oval.setAttribute('cx', w / 2); oval.setAttribute('cy', h / 2); oval.setAttribute('rx', w / 2); oval.setAttribute('ry', h / 2);
+      oval.setAttribute('fill', 'currentColor'); oval.setAttribute('mask', `url(#${id})`);
+      svg.setAttribute('role', 'img'); svg.setAttribute('aria-label', words);
+    };
     for (const box of document.querySelectorAll('.standby')) {
       const logo = box.querySelector('.standby-logo');
+      const disc = logo.querySelector('.standby-disc');
+      if (disc) { drawDisc(disc); document.fonts?.ready.then(() => drawDisc(disc)); }
       let x = 60, y = 80, vx = SPEED, vy = SPEED * 0.78, color = 0, last = 0;
       const paint = () => { logo.style.color = COLORS[color]; logo.style.setProperty('--logo', COLORS[color]); logo.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`; };
       const frame = (now) => {
