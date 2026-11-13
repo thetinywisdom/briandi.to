@@ -251,6 +251,10 @@ retro-shelf { height: 100vh; height: 100dvh; }
 .tv-howto .howto-list li.on { display: flex; }
 .tv-howto .howto-list li::before { content: attr(data-n); flex: none; align-self: flex-start;
   padding: 0 6px; background: var(--phosphor); color: #031208; text-shadow: none; box-shadow: 0 0 10px rgba(141, 255, 154, 0.5); }
+.tv-howto .howto-tvs { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; margin: 12px 0 0; }
+.tv-howto .howto-tvs > div { display: contents; }
+.tv-howto .howto-tvs dt { padding: 0 8px; background: var(--phosphor); color: #031208; text-shadow: none; }
+.tv-howto .howto-tvs dd { margin: 0; }
 .tv-howto .howto-pager { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .tv-howto .howto-pager button { font: inherit; font-size: 22px; line-height: 1; padding: 6px 10px; cursor: pointer;
   color: var(--phosphor); background: transparent; border: 2px solid var(--phosphor); text-shadow: inherit; box-shadow: 0 0 8px rgba(141, 255, 154, 0.3); }
