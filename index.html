@@ -462,6 +462,15 @@
 
   When nothing is pointed at, the screen shows what to do next ("Tap a TV to look closer").
 -->
+<!-- Map: a green hologram of the TV stack on the left, shown while the camera is in on a TV. It lights
+     the TV you are on and has keys for the TV above and below (none above the top TV, none below the
+     bottom one). The buttons name the TVs and number them in this order. -->
+<retro-map for="shelf" aria-label="Where you are">
+  <button type="button" data-tv="kv-5200" data-label="Guide">Guide</button>
+  <button type="button" data-tv="kv-9pr1" data-label="Create">Create</button>
+  <button type="button" data-tv="pvm-9042qm" data-label="Game">Game</button>
+  <button type="button" data-tv="pvm-20m4e" data-label="Work">Work</button>
+</retro-map>
 <retro-pager for="shelf" name="briandi.to" aria-label="Site">
   <button type="button" data-tv="kv-5200" data-label="Guide" data-info="How to navigate this website">Guide</button>
   <button type="button" data-tv="kv-9pr1" data-label="Create" data-info="Brian, also known as The Tiny Wisdom.">Create</button>

@@ -286,6 +286,13 @@ retro-shelf { height: 100vh; height: 100dvh; }
 
 /* ---- the dock: a 3D pager at the bottom, always on screen ----
    It replaces the scene's own hint and Back / Read buttons. */
+/* the hologram map of the stack, on the left, clear of the pager */
+retro-map { position: fixed; z-index: 19; left: max(16px, env(safe-area-inset-left, 0px)); top: calc(50% - 64px); transform: translateY(-50%); }
+/* on a phone the TV fills the width, so the map goes small in the top corner, over the dark room above */
+@media (max-width: 559px) {
+  retro-map { width: 64px; height: 170px; top: calc(10px + env(safe-area-inset-top, 0px)); transform: none; font-size: 10px; }
+}
+body.reading retro-map { display: none; }
 retro-pager { position: fixed; z-index: 20; left: 0; right: 0; bottom: env(safe-area-inset-bottom, 0px); }
 /* when the camera moves in to a TV, it is framed in the space above the pager (the pager is 128 px tall, 176 px on narrow screens) */
 retro-shelf { --focus-inset-bottom: calc(128px + env(safe-area-inset-bottom, 0px)); }
