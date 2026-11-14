@@ -652,6 +652,10 @@
     };
     // step 1: the question, then the choices
     let after = 'list';                                              // what comes back once he has spoken
+    // the one reply button under what he said: GOT IT after an answer, LOL after a tickle, SORRY after he gets cross
+    let replyKind = 'got';
+    const LABELS = { got: 'GOT IT', lol: 'LOL', sorry: 'SORRY' };
+    const reply = (kind) => { replyKind = kind; ok.textContent = `${LABELS[kind]} \u25B8`; ok.hidden = false; ok.focus({ preventScroll: true }); };
     const ask = (mood = 'neutral') => {
       after = 'list';
       ok.hidden = true; list.hidden = true;
@@ -666,7 +670,7 @@
       giant.face?.('thinking'); giant.play?.('thinking');
       // phones get their own wording where it differs (no keyboard there)
       const words = (touch && b.dataset.answerTouch) || b.dataset.answer;
-      wait = setTimeout(() => say(words, b.dataset.mood, () => { linkEmails(); ok.hidden = false; ok.focus({ preventScroll: true }); }), reduced ? 0 : 700);
+      wait = setTimeout(() => say(words, b.dataset.mood, () => { linkEmails(); reply('got'); }), reduced ? 0 : 700);
     };
     // the stage stands right on the pager: its bottom is the top of the pager's body
     const dock = () => {
@@ -717,9 +721,8 @@
     figure.addEventListener('click', () => {
       pokes += 1; clearTimeout(pokeT); pokeT = setTimeout(() => { pokes = 0; }, 1500);
       list.hidden = true; ok.hidden = true;
-      const back = () => { if (after === 'ok') ok.hidden = false; else list.hidden = false; };
-      if (pokes >= 3) { jiggle('shake'); say(CROSS[cross++ % CROSS.length], 'angry', back); }
-      else { jiggle('giggle'); say(LAUGHS[laugh++ % LAUGHS.length], 'happy', back); }
+      if (pokes >= 3) { jiggle('shake'); say(CROSS[cross++ % CROSS.length], 'angry', () => reply('sorry')); }
+      else { jiggle('giggle'); say(LAUGHS[laugh++ % LAUGHS.length], 'happy', () => reply('lol')); }
     });
     // add #debug to the address to see what the robot is doing (for checking on a phone)
     if (location.hash === '#debug') {
@@ -728,7 +731,11 @@
       box.append(out);
       setInterval(() => { if (!box.hidden) out.textContent = JSON.stringify(giant.status || { status: 'element not ready' }, null, 1); }, 500);
     }
-    ok.addEventListener('click', () => ask());
+    ok.addEventListener('click', () => {
+      ok.hidden = true;
+      if (replyKind === 'sorry') say("Hmph. Apology accepted. What's up?", 'neutral', () => { after = 'list'; list.hidden = false; });
+      else ask();
+    });
     pager.addEventListener('pager-press', (e) => {
       if (e.detail.action === 'info') box.hidden ? open() : close();
       else if (!box.hidden) close();
