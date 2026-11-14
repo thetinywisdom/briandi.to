@@ -303,7 +303,6 @@ retro-shelf { height: 100vh; height: 100dvh; }
 .doc b { color: var(--doc-ink); font-weight: 600; }
 .doc-crumb { margin: 0 0 0.5rem !important; font: 500 13px/1 var(--mono); color: var(--doc-dim); }
 .tv-home[slot="reader"] .doc h1 { margin: 0 0 1.5rem; font: 600 32px/1.2 var(--body); letter-spacing: -0.01em; text-transform: none; color: var(--doc-ink); }
-.doc h1 span { margin-right: 0.6em; font: 400 0.6em/1 var(--mono); color: var(--doc-dim); vertical-align: 0.15em; }
 .doc-head { scroll-margin-top: 6rem; padding-bottom: 2rem; margin-bottom: 1rem; border-bottom: 1px solid var(--doc-line); }
 .doc section { padding-top: 2rem; scroll-margin-top: 2rem; }
 .tv-home[slot="reader"] .doc h2 { margin: 1rem 0 1rem; font: 600 21px/1.35 var(--body); letter-spacing: -0.005em; text-transform: none; color: var(--doc-ink); }

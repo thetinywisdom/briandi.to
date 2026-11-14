@@ -141,7 +141,7 @@
       <nav class="doc-toc" aria-label="On this page">
         <p class="doc-toc-title">On this page</p>
         <ol>
-          <li><a href="#work-top" data-go><span>0</span>How I Lead</a></li>
+          <li><a href="#work-top" data-go><span>0</span>Overview</a></li>
           <li><a href="#work-philosophy" data-go><span>1</span>Philosophy</a></li>
           <li><a href="#work-people" data-go><span>2</span>People</a>
             <ol><li><a href="#work-a" data-go><span>2.1</span>Designer A</a></li><li><a href="#work-b" data-go><span>2.2</span>Designer B</a></li></ol></li>
@@ -153,7 +153,7 @@
       <div class="doc-body">
         <header class="doc-head" id="work-top">
           <p class="doc-crumb">Work</p>
-          <h1><span>0</span>How I Lead</h1>
+          <h1>How I Lead</h1>
           <p>I'm Brian, a Design Manager at PayPay. I've been a designer for 11 years, and for the last three to four of them I've managed design teams.</p>
           <p>The three cases below show how I grow people, earn trust from stakeholders, and give design a real say in what goes on the roadmap. The cases are grouped into three areas: People, Process, and Product.</p>
         </header>
@@ -1227,8 +1227,9 @@
       for (let li = links[at].closest('li')?.parentElement?.closest('li'); li; li = li.parentElement?.closest('li')) { li.firstElementChild.classList.add('on-path'); path.unshift(li.firstElementChild); }
       // the phone bar reads like a breadcrumb: People › Designer A › What I did
       const name = (a) => a.lastChild.textContent.trim() || a.textContent.trim();
+      path.unshift(null);                                                // the page itself starts the trail
       bar.querySelector('.doc-toc-path').innerHTML = path.map((a, k) => `<span${k === path.length - 1 ? ' class="here"' : ''}></span>`).join('<i aria-hidden="true">\u203A</i>');
-      bar.querySelectorAll('.doc-toc-path span').forEach((el, k) => { el.textContent = name(path[k]); });
+      bar.querySelectorAll('.doc-toc-path span').forEach((el, k) => { el.textContent = path[k] ? name(path[k]) : 'How I Lead'; });
     };
     // the page scrolls inside the shelf's reader (in its shadow DOM), whose scroll events do not reach the
     // document, so check a few times a second while the page is open
