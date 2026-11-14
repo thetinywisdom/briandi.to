@@ -250,7 +250,7 @@ retro-shelf { height: 100vh; height: 100dvh; }
 .giant-asks button::before { content: "\25B8  "; color: var(--phosphor-dim); }
 .giant-asks button:hover, .giant-asks button:focus-visible { background: var(--phosphor); color: #031208; text-shadow: none; }
 .giant-asks button:hover::before, .giant-asks button:focus-visible::before { color: #031208; }
-.giant-new { display: inline-block; margin-left: 8px; padding: 2px 6px 1px; border: 1px solid var(--phosphor); background: rgba(141, 255, 154, 0.12); color: var(--phosphor);
+.giant-new { display: inline-block; margin-left: 8px; padding: 2px 6px 1px; border: 1px solid var(--phosphor); border-radius: 2px; background: rgba(141, 255, 154, 0.12); color: var(--phosphor);
   font-style: normal; font-size: 11px; line-height: 1; letter-spacing: 0.08em; vertical-align: 2px; text-shadow: 0 0 6px rgba(141, 255, 154, 0.6);
   box-shadow: 0 0 6px rgba(141, 255, 154, 0.35), inset 0 0 6px rgba(141, 255, 154, 0.2); animation: giant-new 1.4s ease-in-out infinite; }
 /* the tag stays solid; only its glow pulses */
