@@ -221,14 +221,11 @@ retro-shelf { height: 100vh; height: 100dvh; }
 /* a pulsing ring on the channel TV's key 2 while the Program Guide is on (placed on the key by script) */
 .key-hint { position: fixed; z-index: 21; left: 0; top: 0; pointer-events: none; opacity: 0; transition: opacity 0.4s ease; }
 .key-hint.on { opacity: 1; }
-/* one thin, faint ring at a time, slowly: a hint, not an alarm */
-.key-hint-ring { position: absolute; left: -24px; top: -24px; width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(141, 255, 154, 0.55);
-  box-shadow: 0 0 4px rgba(141, 255, 154, 0.25); opacity: 0; animation: key-hint-ring 3s ease-out infinite; }
-.key-hint-ring + .key-hint-ring { display: none; }
-@keyframes key-hint-ring { 0% { opacity: 0; transform: scale(0.6); } 20% { opacity: 0.7; } 100% { opacity: 0; transform: scale(1.25); } }
-@media (prefers-reduced-motion: reduce) {
-  .key-hint-ring { animation: none; opacity: 0.5; transform: scale(0.9); }
-  .key-hint-ring + .key-hint-ring { display: none; }
+/* a small arrow just above the key, bobbing gently */
+.key-hint-arrow { position: absolute; left: -7px; top: -34px; color: rgba(141, 255, 154, 0.85); filter: drop-shadow(0 0 3px rgba(141, 255, 154, 0.5));
+  animation: key-hint-bob 1.6s ease-in-out infinite; }
+@keyframes key-hint-bob { 50% { transform: translateY(4px); } }
+@media (prefers-reduced-motion: reduce) { .key-hint-arrow { animation: none; } }
 }
 
 /* Help: the assistant (Giant, a hologram robot) projected from the pager (the i key). A dark veil over the

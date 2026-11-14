@@ -1380,14 +1380,14 @@
     if (shelf._ready) on(); else shelf.addEventListener('shelf-ready', on, { once: true });
   })();
 
-  // a pulsing ring on the pager's HELP key from the start, to show where Butler is; it goes for good once
+  // a small arrow bobbing above the pager's HELP key from the start, to show where Butler is; it goes for good once
   // HELP has been pressed (until the next visit or refresh), and hides while a page is open (no HELP key then)
   (() => {
     const pager = document.querySelector('retro-pager');
     const hand = document.createElement('div');
     hand.className = 'key-hint';
     hand.setAttribute('aria-hidden', 'true');
-    hand.innerHTML = '<span class="key-hint-ring"></span><span class="key-hint-ring"></span>';
+    hand.innerHTML = '<svg class="key-hint-arrow" viewBox="0 0 14 10" width="14" height="10"><path d="M1 1.5 7 8.5 13 1.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     document.body.append(hand);
     let learned = false, raf = 0;
     const place = () => {
