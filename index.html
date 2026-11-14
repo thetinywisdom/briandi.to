@@ -651,12 +651,15 @@
       }, 50);
     };
     // step 1: the question, then the choices
+    let after = 'list';                                              // what comes back once he has spoken
     const ask = (mood = 'neutral') => {
+      after = 'list';
       ok.hidden = true; list.hidden = true;
       say(HELLO, mood, () => { list.hidden = false; asks[0]?.focus({ preventScroll: true }); });
     };
     // step 2: an answer, then GOT IT
     const answer = (b) => {
+      after = 'ok';
       list.hidden = true; ok.hidden = true;
       clearInterval(typing); clearTimeout(wait);
       text.textContent = '…';
@@ -704,6 +707,20 @@
       });
     }
     for (const b of asks) b.addEventListener('click', () => answer(b));
+    // tapping Butler: one tap tickles him and he laughs; keep tapping and he gets cross
+    const figure = box.querySelector('.giant-figure');
+    const LAUGHS = ['Hehe! That tickles!', 'Ha ha, stop it!', 'Hee hee! I\'m ticklish there.'];
+    const CROSS = ['Hey! Stop poking me!', 'I said stop! I\'m made of light, not jelly.', 'That\'s enough poking for one day.'];
+    let pokes = 0, pokeT = 0, laugh = 0, cross = 0;
+    const jiggle = (cls) => { figure.classList.remove('giggle', 'shake'); void figure.offsetWidth; if (!reduced) figure.classList.add(cls); };
+    figure.style.cursor = 'pointer';
+    figure.addEventListener('click', () => {
+      pokes += 1; clearTimeout(pokeT); pokeT = setTimeout(() => { pokes = 0; }, 1500);
+      list.hidden = true; ok.hidden = true;
+      const back = () => { if (after === 'ok') ok.hidden = false; else list.hidden = false; };
+      if (pokes >= 3) { jiggle('shake'); say(CROSS[cross++ % CROSS.length], 'angry', back); }
+      else { jiggle('giggle'); say(LAUGHS[laugh++ % LAUGHS.length], 'happy', back); }
+    });
     // add #debug to the address to see what the robot is doing (for checking on a phone)
     if (location.hash === '#debug') {
       const out = document.createElement('pre');
