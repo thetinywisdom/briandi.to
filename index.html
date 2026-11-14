@@ -1199,11 +1199,19 @@
       }
       li.append(ol);
     }
+    // phones: the contents fold into a bar along the top that shows where you are; tap it to open the list
+    const bar = document.createElement('button');
+    bar.type = 'button'; bar.className = 'doc-toc-bar'; bar.setAttribute('aria-expanded', 'false');
+    bar.innerHTML = '<span class="doc-toc-path"></span><span class="doc-toc-caret" aria-hidden="true"></span>';
+    toc.prepend(bar);
+    const setOpen = (on) => { toc.classList.toggle('open', on); bar.setAttribute('aria-expanded', String(on)); };
+    bar.addEventListener('click', () => setOpen(!toc.classList.contains('open')));
     const links = [...toc.querySelectorAll('a[data-go]')];
     const targets = links.map((a) => doc.querySelector(a.getAttribute('href')));
     const smooth = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
     for (const a of links) a.addEventListener('click', (e) => {
       e.preventDefault();
+      setOpen(false);
       doc.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: smooth, block: 'start' });
     });
     let current = -1;
@@ -1215,9 +1223,12 @@
       current = at;
       for (const a of links) { a.removeAttribute('aria-current'); a.classList.remove('on-path'); }
       links[at].setAttribute('aria-current', 'location');
-      for (let li = links[at].closest('li')?.parentElement?.closest('li'); li; li = li.parentElement?.closest('li')) li.firstElementChild.classList.add('on-path');
-      // on narrow screens the contents are a sideways bar: keep the current one in view
-      if (toc.scrollWidth > toc.clientWidth) toc.scrollTo({ left: Math.max(0, links[at].offsetLeft - 24), behavior: smooth });
+      const path = [links[at]];
+      for (let li = links[at].closest('li')?.parentElement?.closest('li'); li; li = li.parentElement?.closest('li')) { li.firstElementChild.classList.add('on-path'); path.unshift(li.firstElementChild); }
+      // the phone bar reads like a breadcrumb: People › Designer A › What I did
+      const name = (a) => a.lastChild.textContent.trim() || a.textContent.trim();
+      bar.querySelector('.doc-toc-path').innerHTML = path.map((a, k) => `<span${k === path.length - 1 ? ' class="here"' : ''}></span>`).join('<i aria-hidden="true">\u203A</i>');
+      bar.querySelectorAll('.doc-toc-path span').forEach((el, k) => { el.textContent = name(path[k]); });
     };
     // the page scrolls inside the shelf's reader (in its shadow DOM), whose scroll events do not reach the
     // document, so check a few times a second while the page is open
