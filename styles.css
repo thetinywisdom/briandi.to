@@ -230,45 +230,42 @@ retro-shelf { height: 100vh; height: 100dvh; }
   .key-hint-ring + .key-hint-ring { display: none; }
 }
 
-/* Help: Giant, a hologram robot projected from the pager (the i key). A dark veil over the room, Giant standing
-   on a beam of light just above the pager, its words in a guide-style box, and the questions to pick from. */
+/* Help: the assistant (Giant, a hologram robot) projected from the pager (the i key). A dark veil over the
+   room, one speech box, and the robot standing on a beam of light that starts right on the pager. */
 .giant-overlay { position: fixed; inset: 0; z-index: 19; background: rgba(1, 4, 2, 0.72); backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);
   --phosphor: #8dff9a; --phosphor-dim: #3f8f4a; --dock: calc(128px + env(safe-area-inset-bottom, 0px));
   font: 400 18px/1.35 "DotGothic16", var(--mono); color: var(--phosphor); text-shadow: 0 0 6px rgba(141, 255, 154, 0.5); }
 .giant-overlay[hidden] { display: none; }
-.giant-stage { position: absolute; left: 0; right: 0; bottom: var(--dock); top: 0; display: grid; justify-content: center; align-content: end;
-  grid-template-columns: minmax(0, 300px) 260px minmax(0, 300px); grid-template-areas: "asks giant bubble"; gap: 0 24px; padding: 16px 16px 0; }
-.giant-stage retro-giant { grid-area: giant; height: min(46vh, 380px); position: relative; z-index: 1; }
-/* the beam from the pager up to Giant's feet: --dock is set by script to the pager's top edge, so the beam
-   starts right on the pager */
-.giant-beam { grid-area: giant; align-self: end; justify-self: center; width: 220px; height: 90px; pointer-events: none;
-  background: linear-gradient(0deg, rgba(141, 255, 154, 0.28), rgba(141, 255, 154, 0)); clip-path: polygon(38% 100%, 62% 100%, 100% 0, 0 0); }
-.giant-bubble, .giant-asks { align-self: center; padding: 14px 16px 16px; background: rgba(3, 18, 8, 0.92); border: 2px solid var(--phosphor);
-  box-shadow: 0 0 18px rgba(141, 255, 154, 0.3), inset 0 0 0 4px #031208, inset 0 0 0 5px var(--phosphor-dim); }
-.giant-bubble { grid-area: bubble; position: relative; min-height: 120px; }
-.giant-bubble::before { content: ""; position: absolute; left: -12px; top: 40px; border: 10px solid transparent; border-right-color: var(--phosphor); border-left: 0; }
-.giant-bubble .guide-top { display: flex; justify-content: space-between; font-size: 12px; color: var(--phosphor-dim); margin-bottom: 8px; }
-.giant-text { margin: 0; min-height: 3em; }
-.giant-asks { grid-area: asks; }
-.giant-asks-title { margin: 0 0 8px; font-size: 13px; color: var(--phosphor-dim); letter-spacing: 0.08em; }
-.giant-asks ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.giant-stage { position: absolute; left: 0; right: 0; top: 0; bottom: var(--dock); display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+  padding: 64px 16px 0; }
+/* the speech box, its tail pointing down at the robot */
+.giant-bubble { position: relative; box-sizing: border-box; flex: none; width: min(100%, 460px); margin-bottom: 14px; padding: 14px 16px 16px; background: rgba(3, 18, 8, 0.94);
+  border: 2px solid var(--phosphor); box-shadow: 0 0 18px rgba(141, 255, 154, 0.3), inset 0 0 0 4px #031208, inset 0 0 0 5px var(--phosphor-dim); }
+.giant-bubble::after { content: ""; position: absolute; left: 50%; bottom: -12px; margin-left: -10px; border: 10px solid transparent; border-top-color: var(--phosphor); border-bottom: 0; }
+.giant-bubble .guide-top { display: flex; justify-content: space-between; font-size: 12px; color: var(--phosphor-dim); margin-bottom: 8px; letter-spacing: 0.06em; }
+.giant-text { margin: 0; min-height: 1.35em; }
+.giant-asks { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 2px; }
+.giant-asks[hidden], .giant-ok[hidden] { display: none; }
 .giant-asks button { all: unset; box-sizing: border-box; display: block; width: 100%; padding: 6px 8px; cursor: pointer; font-size: 15px; line-height: 1.3; }
 .giant-asks button::before { content: "\25B8  "; color: var(--phosphor-dim); }
-.giant-asks button:hover, .giant-asks button:focus-visible, .giant-asks button[aria-pressed] { background: var(--phosphor); color: #031208; text-shadow: none; }
-.giant-asks button[aria-pressed]::before, .giant-asks button:hover::before { color: #031208; }
+.giant-asks button:hover, .giant-asks button:focus-visible { background: var(--phosphor); color: #031208; text-shadow: none; }
+.giant-asks button:hover::before, .giant-asks button:focus-visible::before { color: #031208; }
+.giant-ok { display: block; margin: 14px 0 0 auto; font: inherit; font-size: 15px; color: #031208; background: var(--phosphor); border: 0; padding: 8px 14px; cursor: pointer; text-shadow: none; }
+.giant-ok:hover, .giant-ok:focus-visible { outline: 2px solid var(--phosphor); outline-offset: 3px; }
+/* the robot, and the beam under it from the pager */
+.giant-stage retro-giant { position: relative; z-index: 1; flex: 0 1 auto; width: min(100%, 300px); height: min(38vh, 320px); min-height: 150px; }
+.giant-beam { flex: none; width: 220px; height: 64px; margin-top: -40px; pointer-events: none;
+  background: linear-gradient(0deg, rgba(141, 255, 154, 0.3), rgba(141, 255, 154, 0)); clip-path: polygon(38% 100%, 62% 100%, 100% 0, 0 0); }
 .giant-close { position: absolute; top: calc(12px + env(safe-area-inset-top, 0px)); right: 12px; font: inherit; font-size: 15px; color: var(--phosphor); background: transparent;
   border: 1px solid var(--phosphor-dim); padding: 8px 12px; cursor: pointer; text-shadow: inherit; }
 .giant-close:hover, .giant-close:focus-visible { color: #031208; background: var(--phosphor); text-shadow: none; outline: none; }
 body.giant-on retro-map { visibility: hidden; }
-@media (max-width: 860px) {
-  .giant-stage { grid-template-columns: minmax(0, 420px); grid-template-areas: "asks" "bubble" "giant"; align-content: end; gap: 10px; padding-top: 60px; }
-  .giant-bubble { min-height: 0; }
-  .giant-bubble::before { left: 50%; top: auto; bottom: -12px; margin-left: -10px; border: 10px solid transparent; border-top-color: var(--phosphor); border-bottom: 0; }
-  .giant-stage retro-giant { height: min(26vh, 220px); }
-  .giant-beam { height: 70px; width: 170px; grid-area: giant; }
+@media (max-width: 559px) {
+  .giant-overlay { --dock: calc(176px + env(safe-area-inset-bottom, 0px)); font-size: 16px; }
+  .giant-stage retro-giant { height: min(30vh, 240px); }
+  .giant-beam { width: 170px; height: 54px; margin-top: -34px; }
   .giant-asks button { font-size: 14px; padding: 5px 6px; }
 }
-@media (max-width: 559px) { .giant-overlay { --dock: calc(176px + env(safe-area-inset-bottom, 0px)); font-size: 16px; } }
 
 
 /* channel TV, channel 2: How to use. The guide's look, one line at a time. */

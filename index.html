@@ -580,55 +580,69 @@
 </retro-pager>
 
 <!-- the pager's i key opens this: how the controls work, in the Program Guide's style -->
-<!-- Help: the pager's i key projects Giant, a hologram robot, above the pager. Giant says hello, and visitors
-     "ask" it questions by picking from the list; the answers are the site's controls. -->
+<!-- Help: the pager's i key projects the assistant (Giant, a hologram robot) above the pager. It asks what's up
+     and offers a list of questions; it answers the one picked, then GOT IT goes back to the list. The answers
+     are the site's controls. -->
 <div class="giant-overlay" role="dialog" aria-modal="true" aria-labelledby="giant-title" hidden>
   <div class="giant-stage">
-    <div class="giant-bubble" aria-live="polite">
-      <div class="guide-top"><span>GIANT</span><span>HELP &#9654;</span></div>
-      <p class="giant-text"></p>
-    </div>
-    <retro-giant src="vendor/giant.glb" aria-label="Giant, a hologram robot"></retro-giant>
-    <div class="giant-beam" aria-hidden="true"></div>
-    <div class="giant-asks">
-      <p class="giant-asks-title" id="giant-title">ASK GIANT</p>
-      <ul>
+    <div class="giant-bubble">
+      <div class="guide-top"><span id="giant-title">ASSISTANT</span><span>HELP &#9654;</span></div>
+      <p class="giant-text" aria-live="polite"></p>
+      <ul class="giant-asks" aria-label="Questions">
         <li><button type="button" data-mood="happy" data-answer="Tap a TV and the camera moves in to it. Tap its screen to open that page full screen. The Guide TV is the exception: it stays a TV, so you can change its channels.">How do I look at a TV?</button></li>
         <li><button type="button" data-mood="wink" data-answer="Scroll or swipe up and down, or press the arrow keys. The map on the left lights up the TV you're on.">How do I get to the next TV?</button></li>
         <li><button type="button" data-mood="happy" data-answer="GUIDE, CREATE, GAME and WORK go straight to that TV. The arrow key, or Esc, goes back. The speaker key turns the sound on and off.">What do the pager keys do?</button></li>
         <li><button type="button" data-mood="surprised" data-answer="It's a channel TV. Tap a channel in its Program Guide, or press a key on the set. The slider on each set sets its volume.">What's on the Guide TV?</button></li>
         <li><button type="button" data-mood="yes" data-answer="Press the arrow key on the pager, or Esc. When a page is open, any TV key on the pager also takes you back to the room.">How do I get back?</button></li>
       </ul>
+      <button type="button" class="giant-ok" hidden>GOT IT &#9656;</button>
     </div>
+    <retro-giant src="vendor/giant.glb" aria-label="The assistant, a hologram robot"></retro-giant>
+    <div class="giant-beam" aria-hidden="true"></div>
     <button type="button" class="giant-close">CLOSE &#10005;</button>
   </div>
 </div>
 
 <script>
-  // the pager's i key projects Giant. It greets the visitor, then answers the question picked from the list,
-  // talking while its words appear. Esc, CLOSE, a tap on the dark backdrop, the Back key or i again put it away.
-  // While it is up the room's own keys (Esc, arrows) are left alone.
+  // the pager's i key projects the assistant. One speech box above it: first "What's up?" with the questions,
+  // then the answer (typed out while the robot talks) with GOT IT, which goes back to the questions.
+  // Esc, CLOSE, a tap on the dark backdrop, the Back key or i again put it away. While it is up the room's
+  // own keys (Esc, arrows) are left alone.
   (() => {
     const box = document.querySelector('.giant-overlay');
     const pager = document.querySelector('retro-pager');
     if (!box || !pager) return;
     const giant = box.querySelector('retro-giant'), text = box.querySelector('.giant-text');
-    const asks = [...box.querySelectorAll('.giant-asks button')];
+    const list = box.querySelector('.giant-asks'), ok = box.querySelector('.giant-ok');
+    const asks = [...list.querySelectorAll('button')];
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const HELLO = "Hi, I'm Giant. Pick a question below and I'll tell you how this room works.";
+    const HELLO = "I'm here to help. What's up?";
     let typing = 0, wait = 0, lastFocus = null;
-    const say = (words, mood) => {
+    const say = (words, mood, then) => {
       clearInterval(typing); clearTimeout(wait);
       text.textContent = '';
       giant.say?.(mood === 'yes' ? 'neutral' : mood);
       if (mood === 'yes') giant.play?.('yes');
-      if (reduced) { text.textContent = words; return; }
+      if (reduced) { text.textContent = words; then?.(); return; }
       giant.talk?.(true);
       let n = 0;
       typing = setInterval(() => {
         n += 2; text.textContent = words.slice(0, n);
-        if (n >= words.length) { clearInterval(typing); giant.talk?.(false); }
+        if (n >= words.length) { clearInterval(typing); giant.talk?.(false); then?.(); }
       }, 50);
+    };
+    // step 1: the question, then the choices
+    const ask = (mood = 'neutral') => {
+      ok.hidden = true; list.hidden = true;
+      say(HELLO, mood, () => { list.hidden = false; asks[0]?.focus({ preventScroll: true }); });
+    };
+    // step 2: an answer, then GOT IT
+    const answer = (b) => {
+      list.hidden = true; ok.hidden = true;
+      clearInterval(typing); clearTimeout(wait);
+      text.textContent = '…';
+      giant.face?.('thinking'); giant.play?.('thinking');
+      wait = setTimeout(() => say(b.dataset.answer, b.dataset.mood, () => { ok.hidden = false; ok.focus({ preventScroll: true }); }), reduced ? 0 : 700);
     };
     // the stage stands right on the pager: its bottom is the top of the pager's body
     const dock = () => {
@@ -642,10 +656,9 @@
       box.hidden = false;
       dock();
       document.body.classList.add('giant-on');
-      asks.forEach((b) => b.removeAttribute('aria-pressed'));
-      text.textContent = '';
-      (giant.ready || Promise.resolve()).then(() => { if (!box.hidden) say(HELLO, 'happy'); });
+      text.textContent = ''; list.hidden = true; ok.hidden = true;
       box.querySelector('.giant-close').focus({ preventScroll: true });
+      (giant.ready || Promise.resolve()).then(() => { if (!box.hidden) ask('happy'); });
     };
     const close = () => {
       if (box.hidden) return;
@@ -654,13 +667,8 @@
       document.body.classList.remove('giant-on');
       lastFocus?.focus?.({ preventScroll: true });
     };
-    for (const b of asks) b.addEventListener('click', () => {
-      asks.forEach((x) => x.toggleAttribute('aria-pressed', x === b));
-      clearInterval(typing); clearTimeout(wait);
-      text.textContent = '…';
-      giant.face?.('thinking'); giant.play?.('thinking');
-      wait = setTimeout(() => say(b.dataset.answer, b.dataset.mood), reduced ? 0 : 700);
-    });
+    for (const b of asks) b.addEventListener('click', () => answer(b));
+    ok.addEventListener('click', () => ask());
     pager.addEventListener('pager-press', (e) => {
       if (e.detail.action === 'info') box.hidden ? open() : close();
       else if (!box.hidden) close();
@@ -669,8 +677,9 @@
     // the dark backdrop closes it, but only for a tap that also started there (the tap that opened it
     // ends on the backdrop too, and used to close it again at once)
     let downOnBackdrop = false;
-    box.addEventListener('pointerdown', (e) => { downOnBackdrop = e.target === box; });
-    box.addEventListener('click', (e) => { if (e.target === box && downOnBackdrop) close(); downOnBackdrop = false; });
+    const stage = box.querySelector('.giant-stage'), bare = (t) => t === box || t === stage;
+    box.addEventListener('pointerdown', (e) => { downOnBackdrop = bare(e.target); });
+    box.addEventListener('click', (e) => { if (bare(e.target) && downOnBackdrop) close(); downOnBackdrop = false; });
     addEventListener('keydown', (e) => {
       if (box.hidden) return;
       if (e.key === 'Escape') { e.preventDefault(); close(); }
