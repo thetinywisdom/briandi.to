@@ -684,7 +684,10 @@
         const st = steps[step];
         b.dataset.answer = st.a; b.dataset.mood = st.mood;
         step = (step + 1) % steps.length;
-        b.textContent = steps[step].q;
+        // the line now asks something else: mark it NEW until it is picked
+        b.innerHTML = '<span></span>';
+        b.firstChild.textContent = steps[step].q;
+        if (step) b.insertAdjacentHTML('beforeend', ' <em class="giant-new">NEW</em>');
       });
     }
     for (const b of asks) b.addEventListener('click', () => answer(b));

@@ -250,6 +250,9 @@ retro-shelf { height: 100vh; height: 100dvh; }
 .giant-asks button::before { content: "\25B8  "; color: var(--phosphor-dim); }
 .giant-asks button:hover, .giant-asks button:focus-visible { background: var(--phosphor); color: #031208; text-shadow: none; }
 .giant-asks button:hover::before, .giant-asks button:focus-visible::before { color: #031208; }
+.giant-new { margin-left: 6px; padding: 0 5px; font-style: normal; font-size: 0.75em; color: #031208; background: #ffd23f; text-shadow: none; box-shadow: 0 0 8px rgba(255, 210, 63, 0.6);
+  vertical-align: 0.1em; animation: guide-blink 1s steps(1) infinite; }
+@media (prefers-reduced-motion: reduce) { .giant-new { animation: none; } }
 .giant-ok { display: block; margin: 14px 0 0 auto; font: inherit; font-size: 15px; color: #031208; background: var(--phosphor); border: 0; padding: 8px 14px; cursor: pointer; text-shadow: none; }
 .giant-ok:hover, .giant-ok:focus-visible { outline: 2px solid var(--phosphor); outline-offset: 3px; }
 /* the robot, and the beam under it from the pager */
