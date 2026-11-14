@@ -630,10 +630,17 @@
         if (n >= words.length) { clearInterval(typing); giant.talk?.(false); }
       }, 50);
     };
+    // the stage stands right on the pager: its bottom is the top of the pager's body
+    const dock = () => {
+      const pad = pager.shadowRoot?.querySelector('.pad')?.getBoundingClientRect();
+      if (pad?.height) box.style.setProperty('--dock', `${Math.max(0, innerHeight - pad.top - 2)}px`);
+    };
+    addEventListener('resize', () => { if (!box.hidden) dock(); });
     const open = () => {
       if (!box.hidden) return;
       lastFocus = document.activeElement;
       box.hidden = false;
+      dock();
       document.body.classList.add('giant-on');
       asks.forEach((b) => b.removeAttribute('aria-pressed'));
       text.textContent = '';

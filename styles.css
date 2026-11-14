@@ -237,10 +237,11 @@ retro-shelf { height: 100vh; height: 100dvh; }
   font: 400 18px/1.35 "DotGothic16", var(--mono); color: var(--phosphor); text-shadow: 0 0 6px rgba(141, 255, 154, 0.5); }
 .giant-overlay[hidden] { display: none; }
 .giant-stage { position: absolute; left: 0; right: 0; bottom: var(--dock); top: 0; display: grid; justify-content: center; align-content: end;
-  grid-template-columns: minmax(0, 300px) 260px minmax(0, 300px); grid-template-areas: "asks giant bubble"; gap: 0 24px; padding: 16px; }
-.giant-stage retro-giant { grid-area: giant; height: min(46vh, 380px); }
-/* the beam from the pager up to Giant's feet */
-.giant-beam { grid-area: giant; align-self: end; justify-self: center; width: 220px; height: 70px; margin-bottom: -16px; pointer-events: none;
+  grid-template-columns: minmax(0, 300px) 260px minmax(0, 300px); grid-template-areas: "asks giant bubble"; gap: 0 24px; padding: 16px 16px 0; }
+.giant-stage retro-giant { grid-area: giant; height: min(46vh, 380px); position: relative; z-index: 1; }
+/* the beam from the pager up to Giant's feet: --dock is set by script to the pager's top edge, so the beam
+   starts right on the pager */
+.giant-beam { grid-area: giant; align-self: end; justify-self: center; width: 220px; height: 90px; pointer-events: none;
   background: linear-gradient(0deg, rgba(141, 255, 154, 0.28), rgba(141, 255, 154, 0)); clip-path: polygon(38% 100%, 62% 100%, 100% 0, 0 0); }
 .giant-bubble, .giant-asks { align-self: center; padding: 14px 16px 16px; background: rgba(3, 18, 8, 0.92); border: 2px solid var(--phosphor);
   box-shadow: 0 0 18px rgba(141, 255, 154, 0.3), inset 0 0 0 4px #031208, inset 0 0 0 5px var(--phosphor-dim); }
@@ -264,7 +265,7 @@ body.giant-on retro-map { visibility: hidden; }
   .giant-bubble { min-height: 0; }
   .giant-bubble::before { left: 50%; top: auto; bottom: -12px; margin-left: -10px; border: 10px solid transparent; border-top-color: var(--phosphor); border-bottom: 0; }
   .giant-stage retro-giant { height: min(26vh, 220px); }
-  .giant-beam { height: 50px; width: 160px; grid-area: giant; }
+  .giant-beam { height: 70px; width: 170px; grid-area: giant; }
   .giant-asks button { font-size: 14px; padding: 5px 6px; }
 }
 @media (max-width: 559px) { .giant-overlay { --dock: calc(176px + env(safe-area-inset-bottom, 0px)); font-size: 16px; } }
