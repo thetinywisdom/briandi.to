@@ -134,108 +134,100 @@
     <div class="standby" aria-hidden="true">
       <div class="standby-logo"><b>WORK</b><svg class="standby-disc" data-click="Click to see more" data-tap="Tap to see more"></svg></div>
     </div>
-    <!-- the page opened full screen: "How I Lead", the owner's text (layout: option A, an editorial long read).
-         Each case: its result in a dark band, then The problem / What I did / The outcome. -->
-    <article class="page-body work">
-      <header class="work-head">
-        <span class="work-kicker">Design Manager · PayPay</span>
-        <h1>How I Lead</h1>
-        <p class="work-lede">I'm Brian, a Design Manager at PayPay. I've been a designer for 11 years, and for the last three to four of them I've managed design teams.</p>
-        <p class="work-lede">The three cases below show how I grow people, earn trust from stakeholders, and give design a real say in what goes on the roadmap. The cases are grouped into three areas: People, Process, and Product.</p>
-        <nav class="work-chapters" aria-label="Chapters">
-          <button type="button" data-go="work-people"><b>01</b>People</button>
-          <button type="button" data-go="work-process"><b>02</b>Process</button>
-          <button type="button" data-go="work-product"><b>03</b>Product</button>
-          <button type="button" data-go="work-philosophy"><b>04</b>Philosophy</button>
-        </nav>
-      </header>
+    <!-- the page opened full screen: "How I Lead", the owner's text, set as a plain document (like a product
+         manual): one narrow column, a table of contents on the left that follows your reading (a bar at the
+         top on phones), numbered sections, and each case's result as a small note. -->
+    <article class="page-body doc">
+      <nav class="doc-toc" aria-label="On this page">
+        <p class="doc-toc-title">On this page</p>
+        <ol>
+          <li><a href="#work-people" data-go><span>1</span>People</a>
+            <ol><li><a href="#work-a" data-go><span>1.1</span>Designer A</a></li><li><a href="#work-b" data-go><span>1.2</span>Designer B</a></li></ol></li>
+          <li><a href="#work-process" data-go><span>2</span>Process</a></li>
+          <li><a href="#work-product" data-go><span>3</span>Product</a></li>
+          <li><a href="#work-philosophy" data-go><span>4</span>Philosophy</a></li>
+        </ol>
+      </nav>
 
-      <section class="work-chapter" id="work-people">
-        <aside><span>01 · People</span>Growing designers who were stuck</aside>
-        <div>
-          <p class="work-intro">Two designers on my team had stopped progressing, each for a different reason. I worked with each of them on the specific issue that was holding them back, and both were promoted within a year.</p>
+      <div class="doc-body">
+        <header class="doc-head">
+          <p class="doc-crumb">Work</p>
+          <h1>How I Lead</h1>
+          <p>I'm Brian, a Design Manager at PayPay. I've been a designer for 11 years, and for the last three to four of them I've managed design teams.</p>
+          <p>The three cases below show how I grow people, earn trust from stakeholders, and give design a real say in what goes on the roadmap. The cases are grouped into three areas: People, Process, and Product.</p>
+        </header>
 
-          <h2>Designer A</h2>
-          <div class="work-result"><strong>Senior → Lead</strong><span>Promoted to Senior Designer within six months, then to Lead Designer six months later.</span></div>
-          <div class="work-steps">
-            <section><h3>The problem</h3>
-              <p><b>Influence:</b> Designer A had a lot of good ideas, but they rarely went anywhere. He would bring up a proposal and then not follow through on it, so other people didn't support it either.</p>
-              <p><b>Career progression:</b> He was a mid-level designer who wanted to become a senior designer, but nobody had ever told him what being a senior looked like in practice. He didn't know what it would take to get there.</p></section>
-            <section><h3>What I did</h3>
-              <p>To influence people, you first need their trust. I explained that people support ideas from designers they trust, and that this trust comes from consistently finishing work and presenting it clearly. So his first goal was to earn the trust of his stakeholders, knowing it would take time.</p>
-              <p>I then coached him on how to work with stakeholders, including how to align people in small conversations before a formal meeting. That way, by the time a decision is made, most people in the room already support the idea.</p>
-              <p>I also helped him follow through on his own initiatives. People won't believe in his ideas if he doesn't act on them himself.</p>
-              <p>Lastly, we made a career plan together. I showed him what we look for in a senior designer and where he currently stood. We broke his goal into smaller projects, listed his strengths and the areas where he got stuck, and worked through them one by one. We also wrote a clear description of what the senior role required, so he knew exactly what to work toward.</p></section>
-            <section><h3>The outcome</h3>
-              <p>Within six months, he was promoted to Senior Designer. He went from a designer who lacked confidence and influence to one that stakeholders trust and junior designers rely on. Six months after being promoted to Senior Designer, he was promoted again to Lead Designer.</p></section>
+        <section id="work-people">
+          <h2><span>1</span>People: Growing designers who were stuck</h2>
+          <p>Two designers on my team had stopped progressing, each for a different reason. I worked with each of them on the specific issue that was holding them back, and both were promoted within a year.</p>
+
+          <h3 id="work-a"><span>1.1</span>Designer A</h3>
+          <h4>The problem</h4>
+          <p><b>Influence:</b> Designer A had a lot of good ideas, but they rarely went anywhere. He would bring up a proposal and then not follow through on it, so other people didn't support it either.</p>
+          <p><b>Career progression:</b> He was a mid-level designer who wanted to become a senior designer, but nobody had ever told him what being a senior looked like in practice. He didn't know what it would take to get there.</p>
+          <h4>What I did</h4>
+          <p>To influence people, you first need their trust. I explained that people support ideas from designers they trust, and that this trust comes from consistently finishing work and presenting it clearly. So his first goal was to earn the trust of his stakeholders, knowing it would take time.</p>
+          <p>I then coached him on how to work with stakeholders, including how to align people in small conversations before a formal meeting. That way, by the time a decision is made, most people in the room already support the idea.</p>
+          <p>I also helped him follow through on his own initiatives. People won't believe in his ideas if he doesn't act on them himself.</p>
+          <p>Lastly, we made a career plan together. I showed him what we look for in a senior designer and where he currently stood. We broke his goal into smaller projects, listed his strengths and the areas where he got stuck, and worked through them one by one. We also wrote a clear description of what the senior role required, so he knew exactly what to work toward.</p>
+          <h4>The outcome</h4>
+          <div class="doc-note"><p>Within six months, he was promoted to Senior Designer. He went from a designer who lacked confidence and influence to one that stakeholders trust and junior designers rely on. Six months after being promoted to Senior Designer, he was promoted again to Lead Designer.</p></div>
+
+          <h3 id="work-b"><span>1.2</span>Designer B</h3>
+          <h4>The problem</h4>
+          <p><b>Motivation:</b> When I took over his team, Designer B had received low performance ratings for the past five review cycles. As a result, his motivation and confidence were very low.</p>
+          <p><b>Confidence and independence:</b> He agreed to every request, rarely disagreed with or challenged anyone's ideas, and waited for instructions instead of starting work on his own. The root cause was fear of making mistakes and of looking like he didn't know enough. His design skills were not the issue. He needed the confidence to work independently and to explain his thinking.</p>
+          <h4>What I did</h4>
+          <p>I asked him to propose his own initiatives and lead them from start to finish, including planning the next steps, and made it clear I would support him if things went wrong. I told him that "mistakes are the path to wisdom," and encouraged him to experiment and explore his ideas freely.</p>
+          <p>We also worked on why speaking up in meetings felt risky to him. He usually brought ideas without any evidence, so every question felt like a personal attack. I told him to always have a "strong why" behind his ideas. That could be a simple list of pros and cons, supporting data or research, or even an honest "I don't know yet, I'm assuming here."</p>
+          <p>Lastly, I built a career plan with him, the same way I did with Designer A.</p>
+          <h4>The outcome</h4>
+          <div class="doc-note"><p>Within about six months, he had become more confident, motivated, and independent. By the end of the review cycle, he received a top rating and was promoted to Senior Designer.</p></div>
+        </section>
+
+        <section id="work-process">
+          <h2><span>2</span>Process: Earning stakeholder trust</h2>
+          <p>At Wego, I introduced a new design process that was adopted by the head of product, the engineering team, and the designers. My first attempt did not work, and what I learned from it changed how I introduce new ideas to a team.</p>
+          <h4>The problem</h4>
+          <p><b>Missing process:</b> When I joined Wego, there were only three designers, and the team had very little design process. Designers received a request and delivered a design file, without quality checks, design reviews, a design system, or user testing. The head of product also had to approve every piece of work herself, on top of her other responsibilities.</p>
+          <p><b>Trust:</b> Soon after I joined, I told the head of product that the process needed to change. The problems were real, but I was new, and she didn't know my work yet. She had no reason to trust my recommendation, so nothing changed.</p>
+          <h4>What I did</h4>
+          <p>As a new joiner, I realized it would be hard to convince people to change their process. So instead of pushing the change from the top, I asked the designers what they wanted to improve about the current process. Together we listed what was broken, how we could fix it, and what to fix first. That made it a team initiative instead of only my own.</p>
+          <p>We then tested the new process on a live project, because a good result from real work is much harder to argue with than a proposal in a meeting.</p>
+          <p>The main change was a layered design review. Designers reviewed each other's work in rounds, and engineers joined early so technical limitations were found while changes were still easy to make. As a result, the head of product only needed to do one final review instead of approving every step.</p>
+          <p>Lastly, I built the company's first design system so designers and engineers could work from the same components and work together more efficiently.</p>
+          <h4>The outcome</h4>
+          <div class="doc-note"><p>The project was successful, and we walked the wider team through what we had changed and why. The stakeholders supported the new process, and the initiative earned me their trust.</p></div>
+        </section>
+
+        <section id="work-product">
+          <h2><span>3</span>Product: Giving designers a say in what gets built</h2>
+          <p>Designers in my team now help decide what the product should build, not only how it should look. In one case, a designer's research led to a project being cancelled, which saved hundreds of hours across product, engineering, and design.</p>
+          <h4>The problem</h4>
+          <p><b>No say in the work:</b> The team followed a fixed routine. A product manager sent a brief, a designer created the design, applied feedback, and shipped it. Designers rarely asked about the purpose of the work, and when a project's scope grew, they simply took on the extra work, resulting in burnout and low motivation across the team. Because the team couldn't push back on the wrong work, they had less time for the work that mattered.</p>
+          <p><b>Fear of speaking up:</b> The designers cared about quality, but they were afraid to turn down requests, speak up in meetings, or make mistakes that would make them look unprepared in front of product managers and stakeholders. Some felt they didn't know enough to share an opinion.</p>
+          <h4>What I did</h4>
+          <p>I made "saying no" part of the job by teaching it, practicing it with each designer, and doing it myself when stakeholders kept adding tasks to the team's workload. This showed the team that disagreeing is acceptable when you have a strong reason, and that I would support them when they did it.</p>
+          <p>I also made it easier for designers to share ideas in meetings. If they had data or research, they should present it. If they didn't have data yet, they could still share the idea as long as they were clear about it, for example: "I'm assuming here, and I don't know the right answer yet." I made it clear that not having every answer is fine, because we work as a team to find it together.</p>
+          <p>Lastly, I coached them on how to propose ideas and how to tell them as a story so they are memorable and believable. I also brought designers into many of the small conversations I had with stakeholders before big meetings, so they could learn how to align people early. After a few of these, they were able to do it on their own and started proposing their ideas for the roadmap.</p>
+          <h4>The outcome</h4>
+          <div class="doc-note">
+            <p>Designers now ask questions about a brief before they start designing: what the work is for, who it is for, what success looks like, and which business metric it should improve.</p>
+            <p>They bring their own proposals to roadmap planning, backed by real problems and data, and a few of those proposals are accepted every season. They also start their own initiatives. For example, one designer built a plugin that lets marketing, business, and design create illustrations from the same set of assets.</p>
+            <p>The clearest example is the cancelled project. After receiving a brief, one designer researched and interviewed users before starting any design work. He found that users had no real need for the feature and presented his findings. The project was cancelled, which saved hundreds of hours across product, engineering, and design.</p>
           </div>
+        </section>
 
-          <h2>Designer B</h2>
-          <div class="work-result"><strong>Top rating</strong><span>After five low review cycles: a top rating by the end of the cycle, and a promotion to Senior Designer.</span></div>
-          <div class="work-steps">
-            <section><h3>The problem</h3>
-              <p><b>Motivation:</b> When I took over his team, Designer B had received low performance ratings for the past five review cycles. As a result, his motivation and confidence were very low.</p>
-              <p><b>Confidence and independence:</b> He agreed to every request, rarely disagreed with or challenged anyone's ideas, and waited for instructions instead of starting work on his own. The root cause was fear of making mistakes and of looking like he didn't know enough. His design skills were not the issue. He needed the confidence to work independently and to explain his thinking.</p></section>
-            <section><h3>What I did</h3>
-              <p>I asked him to propose his own initiatives and lead them from start to finish, including planning the next steps, and made it clear I would support him if things went wrong. I told him that "mistakes are the path to wisdom," and encouraged him to experiment and explore his ideas freely.</p>
-              <p>We also worked on why speaking up in meetings felt risky to him. He usually brought ideas without any evidence, so every question felt like a personal attack. I told him to always have a "strong why" behind his ideas. That could be a simple list of pros and cons, supporting data or research, or even an honest "I don't know yet, I'm assuming here."</p>
-              <p>Lastly, I built a career plan with him, the same way I did with Designer A.</p></section>
-            <section><h3>The outcome</h3>
-              <p>Within about six months, he had become more confident, motivated, and independent. By the end of the review cycle, he received a top rating and was promoted to Senior Designer.</p></section>
-          </div>
-        </div>
-      </section>
-
-      <section class="work-chapter" id="work-process">
-        <aside><span>02 · Process</span>Earning stakeholder trust</aside>
-        <div>
-          <p class="work-intro">At Wego, I introduced a new design process that was adopted by the head of product, the engineering team, and the designers. My first attempt did not work, and what I learned from it changed how I introduce new ideas to a team.</p>
-          <div class="work-result"><strong>Adopted</strong><span>A new design process, taken up by the head of product, the engineering team and the designers.</span></div>
-          <div class="work-steps">
-            <section><h3>The problem</h3>
-              <p><b>Missing process:</b> When I joined Wego, there were only three designers, and the team had very little design process. Designers received a request and delivered a design file, without quality checks, design reviews, a design system, or user testing. The head of product also had to approve every piece of work herself, on top of her other responsibilities.</p>
-              <p><b>Trust:</b> Soon after I joined, I told the head of product that the process needed to change. The problems were real, but I was new, and she didn't know my work yet. She had no reason to trust my recommendation, so nothing changed.</p></section>
-            <section><h3>What I did</h3>
-              <p>As a new joiner, I realized it would be hard to convince people to change their process. So instead of pushing the change from the top, I asked the designers what they wanted to improve about the current process. Together we listed what was broken, how we could fix it, and what to fix first. That made it a team initiative instead of only my own.</p>
-              <p>We then tested the new process on a live project, because a good result from real work is much harder to argue with than a proposal in a meeting.</p>
-              <p>The main change was a layered design review. Designers reviewed each other's work in rounds, and engineers joined early so technical limitations were found while changes were still easy to make. As a result, the head of product only needed to do one final review instead of approving every step.</p>
-              <p>Lastly, I built the company's first design system so designers and engineers could work from the same components and work together more efficiently.</p></section>
-            <section><h3>The outcome</h3>
-              <p>The project was successful, and we walked the wider team through what we had changed and why. The stakeholders supported the new process, and the initiative earned me their trust.</p></section>
-          </div>
-        </div>
-      </section>
-
-      <section class="work-chapter" id="work-product">
-        <aside><span>03 · Product</span>Giving designers a say in what gets built</aside>
-        <div>
-          <p class="work-intro">Designers in my team now help decide what the product should build, not only how it should look. In one case, a designer's research led to a project being cancelled, which saved hundreds of hours across product, engineering, and design.</p>
-          <div class="work-result"><strong>100s of hours</strong><span>Saved across product, engineering and design when a designer's research cancelled a project.</span></div>
-          <div class="work-steps">
-            <section><h3>The problem</h3>
-              <p><b>No say in the work:</b> The team followed a fixed routine. A product manager sent a brief, a designer created the design, applied feedback, and shipped it. Designers rarely asked about the purpose of the work, and when a project's scope grew, they simply took on the extra work, resulting in burnout and low motivation across the team. Because the team couldn't push back on the wrong work, they had less time for the work that mattered.</p>
-              <p><b>Fear of speaking up:</b> The designers cared about quality, but they were afraid to turn down requests, speak up in meetings, or make mistakes that would make them look unprepared in front of product managers and stakeholders. Some felt they didn't know enough to share an opinion.</p></section>
-            <section><h3>What I did</h3>
-              <p>I made "saying no" part of the job by teaching it, practicing it with each designer, and doing it myself when stakeholders kept adding tasks to the team's workload. This showed the team that disagreeing is acceptable when you have a strong reason, and that I would support them when they did it.</p>
-              <p>I also made it easier for designers to share ideas in meetings. If they had data or research, they should present it. If they didn't have data yet, they could still share the idea as long as they were clear about it, for example: "I'm assuming here, and I don't know the right answer yet." I made it clear that not having every answer is fine, because we work as a team to find it together.</p>
-              <p>Lastly, I coached them on how to propose ideas and how to tell them as a story so they are memorable and believable. I also brought designers into many of the small conversations I had with stakeholders before big meetings, so they could learn how to align people early. After a few of these, they were able to do it on their own and started proposing their ideas for the roadmap.</p></section>
-            <section><h3>The outcome</h3>
-              <p>Designers now ask questions about a brief before they start designing: what the work is for, who it is for, what success looks like, and which business metric it should improve.</p>
-              <p>They bring their own proposals to roadmap planning, backed by real problems and data, and a few of those proposals are accepted every season. They also start their own initiatives. For example, one designer built a plugin that lets marketing, business, and design create illustrations from the same set of assets.</p>
-              <p>The clearest example is the cancelled project. After receiving a brief, one designer researched and interviewed users before starting any design work. He found that users had no real need for the feature and presented his findings. The project was cancelled, which saved hundreds of hours across product, engineering, and design.</p></section>
-          </div>
-        </div>
-      </section>
-
-      <section class="work-chapter" id="work-philosophy">
-        <aside><span>04 · Philosophy</span>My leadership philosophy</aside>
-        <div class="work-principles">
-          <section><h3>Lead by example.</h3><p>To influence and inspire my team, I have to be a manager they can look up to. A good design manager has to be good at three things: designing, turning complicated information into simple insights, and building trust with stakeholders, leadership, and their own team.</p></section>
-          <section><h3>No BS.</h3><p>I build trust by giving my team the transparency they need to do their best work. I give designers room to try things and make mistakes, because that is how they learn. I don't spoon-feed my team, but I do guide them. I let them swim freely, but I don't let them drown.</p></section>
-          <section><h3>AI for efficiency, not taste.</h3><p>Use AI to improve our design work and our output, but it does not replace designers. Designers still need to explore and build their design skills, because AI can't replace taste.</p></section>
-          <section><h3>Every designer gets a clear path.</h3><p>Every designer is different, so I build a career plan with each one. That way they know what the next level looks like and how to get there. I also align their personal goals with what the company can offer them.</p></section>
-        </div>
-      </section>
+        <section id="work-philosophy">
+          <h2><span>4</span>My leadership philosophy</h2>
+          <dl class="doc-list">
+            <dt>Lead by example.</dt><dd>To influence and inspire my team, I have to be a manager they can look up to. A good design manager has to be good at three things: designing, turning complicated information into simple insights, and building trust with stakeholders, leadership, and their own team.</dd>
+            <dt>No BS.</dt><dd>I build trust by giving my team the transparency they need to do their best work. I give designers room to try things and make mistakes, because that is how they learn. I don't spoon-feed my team, but I do guide them. I let them swim freely, but I don't let them drown.</dd>
+            <dt>AI for efficiency, not taste.</dt><dd>Use AI to improve our design work and our output, but it does not replace designers. Designers still need to explore and build their design skills, because AI can't replace taste.</dd>
+            <dt>Every designer gets a clear path.</dt><dd>Every designer is different, so I build a career plan with each one. That way they know what the next level looks like and how to get there. I also align their personal goals with what the company can offer them.</dd>
+          </dl>
+        </section>
+      </div>
     </article>
   </div>
 
@@ -1176,11 +1168,39 @@
     tick(); setInterval(tick, 10000);
   })();
 
-  // WORK page: the chapter buttons scroll the full-screen page to that chapter
-  for (const b of document.querySelectorAll('.work-chapters [data-go]')) {
-    b.addEventListener('click', () => document.getElementById(b.dataset.go)?.scrollIntoView({
-      behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' }));
-  }
+  // WORK page: the contents links scroll the full-screen page (no change to the address), and the link for
+  // the section being read is marked as you scroll
+  (() => {
+    const doc = document.querySelector('.doc');
+    if (!doc) return;
+    const links = [...doc.querySelectorAll('.doc-toc a[data-go]')];
+    const smooth = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+    for (const a of links) a.addEventListener('click', (e) => {
+      e.preventDefault();
+      doc.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: smooth, block: 'start' });
+    });
+    const targets = links.map((a) => doc.querySelector(a.getAttribute('href')));
+    const mark = () => {
+      if (!doc.getClientRects().length) return;
+      let at = 0;
+      targets.forEach((t, k) => { if (t && t.getBoundingClientRect().top < innerHeight * 0.3) at = k; });
+      if (links[at].hasAttribute('aria-current')) return;
+      links.forEach((a, k) => a.toggleAttribute('aria-current', k === at));
+      // on narrow screens the contents are a sideways bar: keep the current one in view
+      const bar = doc.querySelector('.doc-toc');
+      if (bar.scrollWidth > bar.clientWidth) bar.scrollTo({ left: Math.max(0, links[at].offsetLeft - 24), behavior: smooth });
+    };
+    // the page scrolls inside the shelf's reader (in its shadow DOM), whose scroll events do not reach the
+    // document: listen on that scroller each time the page is opened
+    const page = doc.closest('.tv'), hooked = new WeakSet();
+    document.getElementById('shelf').addEventListener('shelf-read', () => requestAnimationFrame(() => {
+      let el = page.assignedSlot;
+      while (el && !/(auto|scroll)/.test(getComputedStyle(el).overflowY)) el = el.parentElement;
+      if (el && !hooked.has(el)) { hooked.add(el); el.addEventListener('scroll', mark, { passive: true }); }
+      mark();
+    }));
+    mark();
+  })();
 
   // screen savers rest while the camera is in on another TV (they run in the room view and on their own TV):
   // a page gets data-idle, which pauses its CSS animations and its scripts above
