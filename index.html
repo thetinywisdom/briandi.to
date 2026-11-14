@@ -590,11 +590,11 @@
       <p class="giant-text" aria-live="polite"></p>
       <ul class="giant-asks" aria-label="Questions">
         <li><button type="button" class="giant-chain" data-chain="[{&quot;q&quot;: &quot;Who are you?&quot;, &quot;a&quot;: &quot;I&#x27;m Butler, the hologram who lives in this pager. I know my way around this room, so ask away.&quot;, &quot;mood&quot;: &quot;happy&quot;}, {&quot;q&quot;: &quot;What are you?&quot;, &quot;a&quot;: &quot;A robot made of light, with a TV for a head. Please don&#x27;t try to shake my hand.&quot;, &quot;mood&quot;: &quot;wink&quot;}, {&quot;q&quot;: &quot;Why are you?&quot;, &quot;a&quot;: &quot;Why am I?! That&#x27;s a very rude thing to ask someone made of light.&quot;, &quot;mood&quot;: &quot;angry&quot;}, {&quot;q&quot;: &quot;Sorry&quot;, &quot;a&quot;: &quot;It&#x27;s fine... *sniff* ... nobody ever asks how the hologram is doing.&quot;, &quot;mood&quot;: &quot;sad&quot;}]">Who are you?</button></li>
-        <li><button type="button" data-mood="happy" data-answer="Tap a TV and the camera moves in to it. Tap its screen to open that page full screen. The Guide TV is the exception: it stays a TV, so you can change its channels.">How do I look at a TV?</button></li>
-        <li><button type="button" data-mood="wink" data-answer="Scroll or swipe up and down, or press the arrow keys. The map on the left lights up the TV you're on.">How do I get to the next TV?</button></li>
-        <li><button type="button" data-mood="happy" data-answer="GUIDE, CREATE, GAME and WORK go straight to that TV. The arrow key, or Esc, goes back. The speaker key turns the sound on and off.">What do the pager keys do?</button></li>
-        <li><button type="button" data-mood="surprised" data-answer="It's a channel TV. Tap a channel in its Program Guide, or press a key on the set. The slider on each set sets its volume.">What's on the Guide TV?</button></li>
-        <li><button type="button" data-mood="yes" data-answer="Press the arrow key on the pager, or Esc. When a page is open, any TV key on the pager also takes you back to the room.">How do I get back?</button></li>
+        <li><button type="button" data-mood="happy" data-answer="A room of old TVs. Each one shows a different side of Brian.">What is this place?</button></li>
+        <li><button type="button" data-mood="wink" data-answer="WORK is how Brian leads design teams. CREATE is The Tiny Wisdom. GAME is the games he loves. The small TV on top is a channel TV with videos and music.">What's on each TV?</button></li>
+        <li><button type="button" data-mood="happy" data-answer="Click a TV to move in, and click its screen to read it. Scroll, or use the arrow keys, for the next TV." data-answer-touch="Tap a TV to move in, and tap its screen to read it. Swipe up or down for the next TV.">How do I get around?</button></li>
+        <li><button type="button" data-mood="yes" data-answer="Press the arrow key on the pager, or Esc." data-answer-touch="Tap the arrow key on the pager.">How do I get back?</button></li>
+        <li><button type="button" data-mood="happy" data-answer="For The Tiny Wisdom and business opportunities: brian@thetinywisdom.com. For professional design work: briandito.p@gmail.com.">How do I reach Brian?</button></li>
       </ul>
       <button type="button" class="giant-ok" hidden>GOT IT &#9656;</button>
     </div>
@@ -621,6 +621,17 @@
     const asks = [...list.querySelectorAll('button')];
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const HELLO = "I'm here to help. What's up?";
+    const touch = matchMedia('(hover: none)').matches;
+    // once an answer is written out, email addresses in it become links (shown in full, so they can be copied too)
+    const linkEmails = () => {
+      const t = text.textContent;
+      if (!/@/.test(t)) return;
+      text.textContent = '';
+      for (const part of t.split(/([\w.+-]+@[\w-]+\.[\w.]+?)(?=[.,]?(?:\s|$))/)) {
+        if (/@/.test(part)) { const a = document.createElement('a'); a.href = `mailto:${part}`; a.textContent = part; text.append(a); }
+        else text.append(part);
+      }
+    };
     let typing = 0, wait = 0, lastFocus = null;
     const say = (words, mood, then) => {
       clearInterval(typing); clearTimeout(wait);
@@ -650,7 +661,9 @@
       clearInterval(typing); clearTimeout(wait);
       text.textContent = '…';
       giant.face?.('thinking'); giant.play?.('thinking');
-      wait = setTimeout(() => say(b.dataset.answer, b.dataset.mood, () => { ok.hidden = false; ok.focus({ preventScroll: true }); }), reduced ? 0 : 700);
+      // phones get their own wording where it differs (no keyboard there)
+      const words = (touch && b.dataset.answerTouch) || b.dataset.answer;
+      wait = setTimeout(() => say(words, b.dataset.mood, () => { linkEmails(); ok.hidden = false; ok.focus({ preventScroll: true }); }), reduced ? 0 : 700);
     };
     // the stage stands right on the pager: its bottom is the top of the pager's body
     const dock = () => {
