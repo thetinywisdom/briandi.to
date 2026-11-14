@@ -36,7 +36,7 @@
   // The bar fills from real numbers: the bundle's download (to 85%), then the room being built (to 100%).
   (() => {
     const BUNDLE = 'vendor/retro-3d.js';
-    const SIZE = 911000;                                   // about the bundle's size, used when the server does not say
+    const SIZE = 1042000;                                   // about the bundle's size, used when the server does not say
     let target = 0.03, shown = 0, done = false;
     const el = () => document.getElementById('boot');
     const draw = () => {
@@ -580,40 +580,92 @@
 </retro-pager>
 
 <!-- the pager's i key opens this: how the controls work, in the Program Guide's style -->
-<dialog class="controls-dialog" aria-labelledby="controls-title">
-  <div class="tv-guide controls-panel">
-    <div class="guide-top"><span>BRIANDI.TO</span><span>INFO &#9654;</span></div>
-    <h2 id="controls-title" class="guide-title">----- CONTROLS -----</h2>
-    <dl class="controls-list">
-      <div><dt>TAP A TV</dt><dd>MOVE IN TO IT</dd></div>
-      <div><dt>TAP TV SCREEN</dt><dd>OPEN THE TV FULL SCREEN, DOES NOT APPLY TO GUIDE PAGE</dd></div>
-      <div><dt>SCROLL / SWIPE</dt><dd>NEXT TV UP OR DOWN</dd></div>
-      <div><dt>&#8593; &#8595; KEYS</dt><dd>NEXT TV UP OR DOWN</dd></div>
-      <div><dt>PAGER KEYS</dt><dd>GUIDE, CREATE, GAME OR WORK: GO STRAIGHT TO THAT TV</dd></div>
-      <div><dt>&#8592; KEY OR ESC</dt><dd>GO BACK</dd></div>
-      <div><dt><svg class="controls-icon" viewBox="0 0 24 16" role="img" aria-label="Speaker key"><path d="M2 5.5h4l5-4v13l-5-4H2z" fill="currentColor"/><path d="M14.5 5a4 4 0 0 1 0 6M17 2.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg> KEY</dt><dd>SOUND ON / OFF</dd></div>
-      <div><dt>GUIDE TV</dt><dd>TAP A CHANNEL OR ITS KEY ON THE SET</dd></div>
-      <div><dt>VOLUME</dt><dd>THE SLIDER ON EACH SET</dd></div>
-    </dl>
-    <button type="button" class="controls-close">[ CLOSE ]</button>
-    <i class="guide-mark" style="left: 6px; top: 6px"></i><i class="guide-mark" style="right: 6px; top: 6px"></i>
-    <i class="guide-mark" style="left: 6px; bottom: 6px"></i><i class="guide-mark" style="right: 6px; bottom: 6px"></i>
+<!-- Help: the pager's i key projects Giant, a hologram robot, above the pager. Giant says hello, and visitors
+     "ask" it questions by picking from the list; the answers are the site's controls. -->
+<div class="giant-overlay" role="dialog" aria-modal="true" aria-labelledby="giant-title" hidden>
+  <div class="giant-stage">
+    <div class="giant-bubble" aria-live="polite">
+      <div class="guide-top"><span>GIANT</span><span>HELP &#9654;</span></div>
+      <p class="giant-text"></p>
+    </div>
+    <retro-giant src="vendor/giant.glb" aria-label="Giant, a hologram robot"></retro-giant>
+    <div class="giant-beam" aria-hidden="true"></div>
+    <div class="giant-asks">
+      <p class="giant-asks-title" id="giant-title">ASK GIANT</p>
+      <ul>
+        <li><button type="button" data-mood="happy" data-answer="Tap a TV and the camera moves in to it. Tap its screen to open that page full screen. The Guide TV is the exception: it stays a TV, so you can change its channels.">How do I look at a TV?</button></li>
+        <li><button type="button" data-mood="wink" data-answer="Scroll or swipe up and down, or press the arrow keys. The map on the left lights up the TV you're on.">How do I get to the next TV?</button></li>
+        <li><button type="button" data-mood="happy" data-answer="GUIDE, CREATE, GAME and WORK go straight to that TV. The arrow key, or Esc, goes back. The speaker key turns the sound on and off.">What do the pager keys do?</button></li>
+        <li><button type="button" data-mood="surprised" data-answer="It's a channel TV. Tap a channel in its Program Guide, or press a key on the set. The slider on each set sets its volume.">What's on the Guide TV?</button></li>
+        <li><button type="button" data-mood="yes" data-answer="Press the arrow key on the pager, or Esc. When a page is open, any TV key on the pager also takes you back to the room.">How do I get back?</button></li>
+      </ul>
+    </div>
+    <button type="button" class="giant-close">CLOSE &#10005;</button>
   </div>
-</dialog>
+</div>
 
 <script>
-  // the pager's i key opens the controls; Esc, CLOSE, a tap outside or i again close it. While it is open
-  // the room's own keys (Esc, arrows) are left alone.
+  // the pager's i key projects Giant. It greets the visitor, then answers the question picked from the list,
+  // talking while its words appear. Esc, CLOSE, a tap on the dark backdrop, the Back key or i again put it away.
+  // While it is up the room's own keys (Esc, arrows) are left alone.
   (() => {
-    const dlg = document.querySelector('.controls-dialog');
+    const box = document.querySelector('.giant-overlay');
     const pager = document.querySelector('retro-pager');
-    if (!dlg || !pager) return;
-    const close = () => { if (dlg.open) dlg.close(); };
-    pager.addEventListener('pager-press', (e) => { if (e.detail.action !== 'info') return; dlg.open ? close() : dlg.showModal(); });
-    dlg.querySelector('.controls-close').addEventListener('click', close);
-    dlg.addEventListener('click', (e) => { if (e.target === dlg) close(); });   // the backdrop
+    if (!box || !pager) return;
+    const giant = box.querySelector('retro-giant'), text = box.querySelector('.giant-text');
+    const asks = [...box.querySelectorAll('.giant-asks button')];
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const HELLO = "Hi, I'm Giant. Pick a question below and I'll tell you how this room works.";
+    let typing = 0, wait = 0, lastFocus = null;
+    const say = (words, mood) => {
+      clearInterval(typing); clearTimeout(wait);
+      text.textContent = '';
+      giant.say?.(mood === 'yes' ? 'neutral' : mood);
+      if (mood === 'yes') giant.play?.('yes');
+      if (reduced) { text.textContent = words; return; }
+      giant.talk?.(true);
+      let n = 0;
+      typing = setInterval(() => {
+        n += 2; text.textContent = words.slice(0, n);
+        if (n >= words.length) { clearInterval(typing); giant.talk?.(false); }
+      }, 50);
+    };
+    const open = () => {
+      if (!box.hidden) return;
+      lastFocus = document.activeElement;
+      box.hidden = false;
+      document.body.classList.add('giant-on');
+      asks.forEach((b) => b.removeAttribute('aria-pressed'));
+      text.textContent = '';
+      (giant.ready || Promise.resolve()).then(() => { if (!box.hidden) say(HELLO, 'happy'); });
+      box.querySelector('.giant-close').focus({ preventScroll: true });
+    };
+    const close = () => {
+      if (box.hidden) return;
+      clearInterval(typing); clearTimeout(wait); giant.talk?.(false);
+      box.hidden = true;
+      document.body.classList.remove('giant-on');
+      lastFocus?.focus?.({ preventScroll: true });
+    };
+    for (const b of asks) b.addEventListener('click', () => {
+      asks.forEach((x) => x.toggleAttribute('aria-pressed', x === b));
+      clearInterval(typing); clearTimeout(wait);
+      text.textContent = '…';
+      giant.face?.('thinking'); giant.play?.('thinking');
+      wait = setTimeout(() => say(b.dataset.answer, b.dataset.mood), reduced ? 0 : 700);
+    });
+    pager.addEventListener('pager-press', (e) => {
+      if (e.detail.action === 'info') box.hidden ? open() : close();
+      else if (!box.hidden) close();
+    });
+    box.querySelector('.giant-close').addEventListener('click', close);
+    // the dark backdrop closes it, but only for a tap that also started there (the tap that opened it
+    // ends on the backdrop too, and used to close it again at once)
+    let downOnBackdrop = false;
+    box.addEventListener('pointerdown', (e) => { downOnBackdrop = e.target === box; });
+    box.addEventListener('click', (e) => { if (e.target === box && downOnBackdrop) close(); downOnBackdrop = false; });
     addEventListener('keydown', (e) => {
-      if (!dlg.open) return;
+      if (box.hidden) return;
       if (e.key === 'Escape') { e.preventDefault(); close(); }
       if (['Escape', 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown'].includes(e.key)) e.stopImmediatePropagation();
     }, true);

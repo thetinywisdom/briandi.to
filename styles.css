@@ -230,20 +230,45 @@ retro-shelf { height: 100vh; height: 100dvh; }
   .key-hint-ring + .key-hint-ring { display: none; }
 }
 
-/* the pager's i key: the controls, in the Program Guide's style */
-.controls-dialog { padding: 0; border: 0; background: transparent; max-width: calc(100vw - 32px); max-height: calc(100dvh - 32px); overflow: visible; }
-.controls-dialog::backdrop { background: rgba(0, 0, 0, 0.6); }
-.controls-panel { height: auto; width: min(600px, calc(100vw - 32px)); box-sizing: border-box; padding: 22px 28px 26px; gap: 12px;
-  font-size: clamp(14px, 3.4vw, 19px); border: 2px solid var(--phosphor); box-shadow: 0 0 24px rgba(141, 255, 154, 0.3); }
-.controls-panel .guide-top { font-size: 0.85em; }
-.controls-panel .guide-title { font-size: 1.5em; }
-.controls-list { margin: 0; display: grid; gap: 6px; }
-.controls-list div { display: grid; grid-template-columns: minmax(0, 11em) minmax(0, 1fr); gap: 14px; }
-.controls-list dt { color: #031208; background: var(--phosphor); text-shadow: none; padding: 1px 8px; align-self: start; }
-.controls-list dd { margin: 0; padding-top: 1px; }
-.controls-icon { width: 1.3em; height: 0.9em; vertical-align: -0.08em; }
-.controls-close { align-self: center; margin-top: 8px; font: inherit; font-size: 1.1em; color: var(--phosphor); background: transparent; border: 0; padding: 8px 14px; cursor: pointer; text-shadow: inherit; }
-.controls-close:hover, .controls-close:focus-visible { color: #031208; background: var(--phosphor); text-shadow: none; outline: none; }
+/* Help: Giant, a hologram robot projected from the pager (the i key). A dark veil over the room, Giant standing
+   on a beam of light just above the pager, its words in a guide-style box, and the questions to pick from. */
+.giant-overlay { position: fixed; inset: 0; z-index: 19; background: rgba(1, 4, 2, 0.72); backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);
+  --phosphor: #8dff9a; --phosphor-dim: #3f8f4a; --dock: calc(128px + env(safe-area-inset-bottom, 0px));
+  font: 400 18px/1.35 "DotGothic16", var(--mono); color: var(--phosphor); text-shadow: 0 0 6px rgba(141, 255, 154, 0.5); }
+.giant-overlay[hidden] { display: none; }
+.giant-stage { position: absolute; left: 0; right: 0; bottom: var(--dock); top: 0; display: grid; justify-content: center; align-content: end;
+  grid-template-columns: minmax(0, 300px) 260px minmax(0, 300px); grid-template-areas: "asks giant bubble"; gap: 0 24px; padding: 16px; }
+.giant-stage retro-giant { grid-area: giant; height: min(46vh, 380px); }
+/* the beam from the pager up to Giant's feet */
+.giant-beam { grid-area: giant; align-self: end; justify-self: center; width: 220px; height: 70px; margin-bottom: -16px; pointer-events: none;
+  background: linear-gradient(0deg, rgba(141, 255, 154, 0.28), rgba(141, 255, 154, 0)); clip-path: polygon(38% 100%, 62% 100%, 100% 0, 0 0); }
+.giant-bubble, .giant-asks { align-self: center; padding: 14px 16px 16px; background: rgba(3, 18, 8, 0.92); border: 2px solid var(--phosphor);
+  box-shadow: 0 0 18px rgba(141, 255, 154, 0.3), inset 0 0 0 4px #031208, inset 0 0 0 5px var(--phosphor-dim); }
+.giant-bubble { grid-area: bubble; position: relative; min-height: 120px; }
+.giant-bubble::before { content: ""; position: absolute; left: -12px; top: 40px; border: 10px solid transparent; border-right-color: var(--phosphor); border-left: 0; }
+.giant-bubble .guide-top { display: flex; justify-content: space-between; font-size: 12px; color: var(--phosphor-dim); margin-bottom: 8px; }
+.giant-text { margin: 0; min-height: 3em; }
+.giant-asks { grid-area: asks; }
+.giant-asks-title { margin: 0 0 8px; font-size: 13px; color: var(--phosphor-dim); letter-spacing: 0.08em; }
+.giant-asks ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.giant-asks button { all: unset; box-sizing: border-box; display: block; width: 100%; padding: 6px 8px; cursor: pointer; font-size: 15px; line-height: 1.3; }
+.giant-asks button::before { content: "\25B8  "; color: var(--phosphor-dim); }
+.giant-asks button:hover, .giant-asks button:focus-visible, .giant-asks button[aria-pressed] { background: var(--phosphor); color: #031208; text-shadow: none; }
+.giant-asks button[aria-pressed]::before, .giant-asks button:hover::before { color: #031208; }
+.giant-close { position: absolute; top: calc(12px + env(safe-area-inset-top, 0px)); right: 12px; font: inherit; font-size: 15px; color: var(--phosphor); background: transparent;
+  border: 1px solid var(--phosphor-dim); padding: 8px 12px; cursor: pointer; text-shadow: inherit; }
+.giant-close:hover, .giant-close:focus-visible { color: #031208; background: var(--phosphor); text-shadow: none; outline: none; }
+body.giant-on retro-map { visibility: hidden; }
+@media (max-width: 860px) {
+  .giant-stage { grid-template-columns: minmax(0, 420px); grid-template-areas: "asks" "bubble" "giant"; align-content: end; gap: 10px; padding-top: 60px; }
+  .giant-bubble { min-height: 0; }
+  .giant-bubble::before { left: 50%; top: auto; bottom: -12px; margin-left: -10px; border: 10px solid transparent; border-top-color: var(--phosphor); border-bottom: 0; }
+  .giant-stage retro-giant { height: min(26vh, 220px); }
+  .giant-beam { height: 50px; width: 160px; grid-area: giant; }
+  .giant-asks button { font-size: 14px; padding: 5px 6px; }
+}
+@media (max-width: 559px) { .giant-overlay { --dock: calc(176px + env(safe-area-inset-bottom, 0px)); font-size: 16px; } }
+
 
 /* channel TV, channel 2: How to use. The guide's look, one line at a time. */
 .tv-howto .howto-list { list-style: none; margin: 0; padding: 0; flex: 1; display: flex; align-items: center; }
