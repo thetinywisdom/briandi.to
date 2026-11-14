@@ -465,9 +465,9 @@
        One line at a time, like teletext pages: each stays up long enough to read, PREV / NEXT
        turn the page, and it starts from 1 whenever the channel is tuned in. Edit the lines
        below; add or remove <li>s freely. data-title is its name in the guide and on the pager. -->
-  <div class="tv tv-guide tv-howto" slot="kv-5200:ch-2" data-title="How to use" data-kind="GUIDE">
+  <div class="tv tv-guide tv-howto" slot="kv-5200:ch-2" data-title="About" data-kind="GUIDE">
     <div class="guide-top"><span>BRIANDI.TO</span><span>CH 02 &#9654;</span></div>
-    <h2 class="guide-title">------ HOW TO USE ------</h2>
+    <h2 class="guide-title">-------- ABOUT --------</h2>
     <ol class="howto-list">
       <li>You're tuned in to Briandi.to – Thanks for visiting my little corner of the internet.</li>
       <li>I built this place straight out of my head. It's the closest thing I have to a self-portrait.</li>
@@ -1161,17 +1161,6 @@
     show(0);
   })();
 
-  // 1.25 s after arriving, glide in to the channel TV and its Program Guide, unless the visitor has already
-  // started looking around themselves
-  (() => {
-    const shelf = document.getElementById('shelf');
-    let touched = false;
-    for (const t of ['pointerdown', 'keydown', 'wheel', 'touchstart']) addEventListener(t, () => { touched = true; }, { once: true, capture: true, passive: true });
-    const go = () => setTimeout(() => {
-      if (!touched && !shelf._focusKey && !shelf._reading) shelf.focusTV('kv-5200', { duration: 2200 });
-    }, 1250);
-    if (shelf._ready) go(); else shelf.addEventListener('shelf-ready', go, { once: true });
-  })();
 
   // standby screens: a logo drifting round the tube like an old DVD player's, changing colour at each edge
   // (and the screen flashing if it lands exactly in a corner). Runs only while the TV shows it.
@@ -1391,41 +1380,30 @@
     if (shelf._ready) on(); else shelf.addEventListener('shelf-ready', on, { once: true });
   })();
 
-  // a pulsing ring on the channel TV's key 2 the first time the Program Guide is on after the page loads,
-  // to show that the keys on the set can be pressed. Once it goes (channel changed, TV left) it stays gone
-  // until the next visit or refresh.
+  // a pulsing ring on the pager's HELP key from the start, to show where Butler is; it goes for good once
+  // HELP has been pressed (until the next visit or refresh), and hides while a page is open (no HELP key then)
   (() => {
-    const shelf = document.getElementById('shelf');
+    const pager = document.querySelector('retro-pager');
     const hand = document.createElement('div');
     hand.className = 'key-hint';
     hand.setAttribute('aria-hidden', 'true');
     hand.innerHTML = '<span class="key-hint-ring"></span><span class="key-hint-ring"></span>';
     document.body.append(hand);
-    let channel = 'ch-1', learned = false, raf = 0, wait = 0;
+    let learned = false, raf = 0;
     const place = () => {
-      const pt = shelf.controlPoint?.('kv-5200', 'ch-2');
-      if (pt) hand.style.transform = `translate(${pt.x.toFixed(1)}px, ${pt.y.toFixed(1)}px)`;
       raf = requestAnimationFrame(place);
-    };
-    let shown = false;
-    const show = (on) => {
-      cancelAnimationFrame(raf);
-      if (!on && shown) learned = true;                                // first time only
-      shown = shown || on;
+      const k = pager._keys?.find((x) => x.action === 'info');
+      const on = !learned && !!k && !document.body.classList.contains('reading') && !document.getElementById('boot');
       hand.classList.toggle('on', on);
-      if (on) place();
+      if (!on || !pager._camera) return;
+      const v = k.top.getWorldPosition(new k.top.position.constructor()).project(pager._camera);
+      const r = pager._canvas.getBoundingClientRect();
+      hand.style.transform = `translate(${(r.left + (v.x + 1) / 2 * r.width).toFixed(1)}px, ${(r.top + (1 - v.y) / 2 * r.height).toFixed(1)}px)`;
     };
-    const update = () => {
-      clearTimeout(wait);
-      const want = !learned && shelf._focusKey === 'kv-5200' && channel === 'ch-1' && !shelf._reading;
-      if (want) wait = setTimeout(() => show(true), 1200); else show(false);   // once the camera has settled
-    };
-    shelf.addEventListener('shelf-focus', update);
-    shelf.addEventListener('pvm-input', (e) => {
-      if (e.detail.tv !== 'kv-5200') return;
-      if (e.detail.input !== channel) learned = true;
-      channel = e.detail.input;
-      update();
+    raf = requestAnimationFrame(place);
+    pager.addEventListener('pager-press', (e) => {
+      if (e.detail.action !== 'info') return;
+      learned = true; hand.classList.remove('on'); cancelAnimationFrame(raf);
     });
   })();
 
