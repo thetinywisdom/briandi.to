@@ -218,7 +218,7 @@ retro-shelf { height: 100vh; height: 100dvh; }
   .tv-interference .static, .tv-interference .tear, .tv-interrupt .interrupt-sub { animation: none; }
 }
 
-/* a pulsing ring on the channel TV's key 2 while the Program Guide is on (placed on the key by script) */
+/* a hint over the pager's HELP key (placed on the key by script) */
 .key-hint { position: fixed; z-index: 21; left: 0; top: 0; pointer-events: none; opacity: 0; transition: opacity 0.4s ease; }
 .key-hint.on { opacity: 1; }
 /* a small arrow just above the key, bobbing gently */
@@ -226,7 +226,6 @@ retro-shelf { height: 100vh; height: 100dvh; }
   animation: key-hint-bob 1.6s ease-in-out infinite; }
 @keyframes key-hint-bob { 50% { transform: translateY(4px); } }
 @media (prefers-reduced-motion: reduce) { .key-hint-arrow { animation: none; } }
-}
 
 /* Help: the assistant (Giant, a hologram robot) projected from the pager (the i key). A dark veil over the
    room, one speech box, and the robot standing on a beam of light that starts right on the pager. */

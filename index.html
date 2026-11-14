@@ -718,7 +718,23 @@
     let pokes = 0, pokeT = 0, laugh = 0, cross = 0;
     const jiggle = (cls) => { figure.classList.remove('giggle', 'shake'); void figure.offsetWidth; if (!reduced) figure.classList.add(cls); };
     figure.style.cursor = 'pointer';
+    figure.style.touchAction = 'none';                                // a drag on him is his, not a page scroll
+    // a swipe or drag across Butler spins him round: the dizzy clip, then LOL
+    const DIZZY = ['Whoa... whoa... the room is spinning...', 'Ugh. Which one of you is the real visitor?', 'Please... no more spinning...'];
+    let downAt = null, dragged = false, dizzyN = 0;
+    figure.addEventListener('pointerdown', (e) => { downAt = { x: e.clientX, y: e.clientY }; dragged = false; });
+    figure.addEventListener('pointermove', (e) => {
+      if (!downAt || dragged || Math.hypot(e.clientX - downAt.x, e.clientY - downAt.y) < 24) return;
+      dragged = true;
+      clearTimeout(pokeT); pokes = 0;
+      list.hidden = true; ok.hidden = true;
+      figure.classList.remove('giggle', 'shake');
+      say(DIZZY[dizzyN++ % DIZZY.length], 'dizzy', () => reply('lol'));
+    });
+    addEventListener('pointerup', () => { downAt = null; });
+    addEventListener('pointercancel', () => { downAt = null; });
     figure.addEventListener('click', () => {
+      if (dragged) { dragged = false; return; }                     // the end of a drag is not a tap
       pokes += 1; clearTimeout(pokeT); pokeT = setTimeout(() => { pokes = 0; }, 1500);
       list.hidden = true; ok.hidden = true;
       if (pokes >= 3) { jiggle('shake'); say(CROSS[cross++ % CROSS.length], 'angry', () => reply('sorry')); }
