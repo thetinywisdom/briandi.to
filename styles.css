@@ -303,7 +303,8 @@ retro-shelf { height: 100vh; height: 100dvh; }
 .doc b { color: var(--doc-ink); font-weight: 600; }
 .doc-crumb { margin: 0 0 0.5rem !important; font: 500 13px/1 var(--mono); color: var(--doc-dim); }
 .tv-home[slot="reader"] .doc h1 { margin: 0 0 1.5rem; font: 600 32px/1.2 var(--body); letter-spacing: -0.01em; text-transform: none; color: var(--doc-ink); }
-.doc-head { padding-bottom: 2rem; margin-bottom: 1rem; border-bottom: 1px solid var(--doc-line); }
+.doc h1 span { margin-right: 0.6em; font: 400 0.6em/1 var(--mono); color: var(--doc-dim); vertical-align: 0.15em; }
+.doc-head { scroll-margin-top: 6rem; padding-bottom: 2rem; margin-bottom: 1rem; border-bottom: 1px solid var(--doc-line); }
 .doc section { padding-top: 2rem; scroll-margin-top: 2rem; }
 .tv-home[slot="reader"] .doc h2 { margin: 1rem 0 1rem; font: 600 21px/1.35 var(--body); letter-spacing: -0.005em; text-transform: none; color: var(--doc-ink); }
 .doc h3 { margin: 2.5rem 0 0.75rem; font: 600 17px/1.4 var(--body); color: var(--doc-ink); scroll-margin-top: 2rem; }
@@ -323,6 +324,12 @@ retro-shelf { height: 100vh; height: 100dvh; }
 .doc-toc a span { font: 400 12px/1.6 var(--mono); min-width: 1.6em; }
 .doc-toc a:hover { color: var(--doc-ink); }
 .doc-toc a[aria-current] { color: var(--doc-ink); border-left-color: var(--doc-ink); font-weight: 500; }
+.doc-toc a.on-path { color: var(--doc-ink); }
+.doc-toc ol ol ol { padding-left: 1.2em; font-size: 13px; }
+.doc-toc ol ol ol a { padding-top: 0.25em; padding-bottom: 0.25em; }
+/* only the branch you are reading is open */
+.doc-toc li > ol { display: none; }
+.doc-toc li:has(> a[aria-current]) > ol, .doc-toc li:has(> a.on-path) > ol { display: block; }
 .doc-toc a:focus-visible { outline: 2px solid var(--doc-ink); outline-offset: 2px; border-radius: 2px; }
 @media (max-width: 860px) {
   .tv-home[slot="reader"] { padding-top: 0; }
@@ -332,7 +339,8 @@ retro-shelf { height: 100vh; height: 100dvh; }
     backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom: 1px solid var(--doc-line); overflow-x: auto; scrollbar-width: none; }
   .doc-toc-title { display: none; }
   .doc-toc ol { display: flex; gap: 4px; white-space: nowrap; }
-  .doc-toc ol ol { padding-left: 0; }
+  .doc-toc ol ol { padding-left: 0; display: contents !important; }
+  .doc-toc ol ol ol { display: none !important; }
   .doc-toc li { display: contents; }
   .doc-toc a { margin: 0; padding: 6px 10px; border: 0; border-radius: 999px; }
   .doc-toc a[aria-current] { background: var(--doc-ink); color: var(--doc-bg); }
