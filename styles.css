@@ -364,13 +364,9 @@ retro-map { position: fixed; z-index: 19; width: 200px; left: max(8px, env(safe-
 }
 body.reading retro-map { display: none; }
 retro-pager { position: fixed; z-index: 20; left: 0; right: 0; bottom: env(safe-area-inset-bottom, 0px); }
-/* on a phone, while a page is open full screen, the pager shrinks to 60% (from its bottom edge) so it covers less of the text */
-retro-pager { transform-origin: 50% 100%; transition: transform 0.3s ease; }
-@media (max-width: 559px) { body.reading retro-pager { transform: scale(0.6); } }
-@media (prefers-reduced-motion: reduce) { retro-pager { transition: none; } }
 /* when the camera moves in to a TV, it is framed in the space above the pager (the pager is 128 px tall, 176 px on narrow screens) */
 retro-shelf { --focus-inset-bottom: calc(128px + env(safe-area-inset-bottom, 0px)); }
 @media (max-width: 559px) { retro-shelf { --focus-inset-bottom: calc(176px + env(safe-area-inset-bottom, 0px)); } }
 retro-shelf::part(hint), retro-shelf::part(back), retro-shelf::part(fill), retro-shelf::part(reader-close) { display: none; }
 /* leave room under the full-screen page so its end clears the dock */
-.tv[slot="reader"] { padding-bottom: calc(clamp(48px, 10vh, 96px) + 150px); }
+.tv[slot="reader"] { padding-bottom: calc(clamp(48px, 10vh, 96px) + 96px); }   /* the compact pager is 80 px tall */
