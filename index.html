@@ -586,9 +586,10 @@
 <div class="giant-overlay" role="dialog" aria-modal="true" aria-labelledby="giant-title" hidden>
   <div class="giant-stage">
     <div class="giant-bubble">
-      <div class="guide-top"><span id="giant-title">BUTLER</span><span>HELP &#9654;</span></div>
+      <div class="guide-top"><span id="giant-title">BUTLER</span></div>
       <p class="giant-text" aria-live="polite"></p>
       <ul class="giant-asks" aria-label="Questions">
+        <li><button type="button" class="giant-chain" data-chain="[{&quot;q&quot;: &quot;Who are you?&quot;, &quot;a&quot;: &quot;I&#x27;m Butler, the hologram who lives in this pager. I know my way around this room, so ask away.&quot;, &quot;mood&quot;: &quot;happy&quot;}, {&quot;q&quot;: &quot;What are you?&quot;, &quot;a&quot;: &quot;A robot made of light, with a TV for a head. Please don&#x27;t try to shake my hand.&quot;, &quot;mood&quot;: &quot;wink&quot;}, {&quot;q&quot;: &quot;Why are you?&quot;, &quot;a&quot;: &quot;Why am I?! That&#x27;s a very rude thing to ask someone made of light.&quot;, &quot;mood&quot;: &quot;angry&quot;}, {&quot;q&quot;: &quot;Sorry&quot;, &quot;a&quot;: &quot;It&#x27;s fine... *sniff* ... nobody ever asks how the hologram is doing.&quot;, &quot;mood&quot;: &quot;sad&quot;}]">Who are you?</button></li>
         <li><button type="button" data-mood="happy" data-answer="Tap a TV and the camera moves in to it. Tap its screen to open that page full screen. The Guide TV is the exception: it stays a TV, so you can change its channels.">How do I look at a TV?</button></li>
         <li><button type="button" data-mood="wink" data-answer="Scroll or swipe up and down, or press the arrow keys. The map on the left lights up the TV you're on.">How do I get to the next TV?</button></li>
         <li><button type="button" data-mood="happy" data-answer="GUIDE, CREATE, GAME and WORK go straight to that TV. The arrow key, or Esc, goes back. The speaker key turns the sound on and off.">What do the pager keys do?</button></li>
@@ -597,7 +598,10 @@
       </ul>
       <button type="button" class="giant-ok" hidden>GOT IT &#9656;</button>
     </div>
-    <retro-giant src="vendor/giant.glb" aria-label="Butler, a hologram robot"></retro-giant>
+    <div class="giant-figure">
+      <retro-giant src="vendor/giant.glb" aria-label="Butler, a hologram robot"></retro-giant>
+      <span class="giant-tear" aria-hidden="true"></span><span class="giant-tear" aria-hidden="true"></span>
+    </div>
     <div class="giant-beam" aria-hidden="true"></div>
     <button type="button" class="giant-close">CLOSE &#10005;</button>
   </div>
@@ -622,6 +626,10 @@
       clearInterval(typing); clearTimeout(wait);
       text.textContent = '';
       giant.say?.(mood === 'yes' ? 'neutral' : mood);
+      // sad: tears run down from his screen for a few seconds
+      clearTimeout(say.tears);
+      box.classList.toggle('crying', mood === 'sad' && !reduced);
+      if (mood === 'sad') say.tears = setTimeout(() => box.classList.remove('crying'), 4500);
       if (mood === 'yes') giant.play?.('yes');
       if (reduced) { text.textContent = words; then?.(); return; }
       giant.talk?.(true);
@@ -667,6 +675,18 @@
       document.body.classList.remove('giant-on');
       lastFocus?.focus?.({ preventScroll: true });
     };
+    // a little conversation in one line of the list: Who are you? -> What are you? -> Why are you? -> Sorry,
+    // each with its own answer and mood; after the last it starts again
+    for (const b of asks.filter((x) => x.dataset.chain)) {
+      const steps = JSON.parse(b.dataset.chain);
+      let step = 0;
+      b.addEventListener('click', () => {
+        const st = steps[step];
+        b.dataset.answer = st.a; b.dataset.mood = st.mood;
+        step = (step + 1) % steps.length;
+        b.textContent = steps[step].q;
+      });
+    }
     for (const b of asks) b.addEventListener('click', () => answer(b));
     ok.addEventListener('click', () => ask());
     pager.addEventListener('pager-press', (e) => {

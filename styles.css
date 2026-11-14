@@ -253,7 +253,15 @@ retro-shelf { height: 100vh; height: 100dvh; }
 .giant-ok { display: block; margin: 14px 0 0 auto; font: inherit; font-size: 15px; color: #031208; background: var(--phosphor); border: 0; padding: 8px 14px; cursor: pointer; text-shadow: none; }
 .giant-ok:hover, .giant-ok:focus-visible { outline: 2px solid var(--phosphor); outline-offset: 3px; }
 /* the robot, and the beam under it from the pager */
-.giant-stage retro-giant { position: relative; z-index: 1; flex: 0 1 auto; width: min(100%, 300px); height: min(38vh, 320px); min-height: 150px; }
+.giant-figure { position: relative; z-index: 1; flex: 0 1 auto; width: min(100%, 300px); height: min(38vh, 320px); min-height: 150px; }
+.giant-figure retro-giant { position: absolute; inset: 0; }
+/* tears when Butler is sad: drops falling from under his eyes */
+.giant-tear { position: absolute; top: 22%; width: 5px; height: 9px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; background: #d8ffe0;
+  box-shadow: 0 0 8px rgba(141, 255, 154, 0.9); opacity: 0; pointer-events: none; }
+.giant-tear:nth-of-type(1) { left: 43%; } .giant-tear:nth-of-type(2) { left: 55%; }
+.giant-overlay.crying .giant-tear { animation: giant-tear 0.9s ease-in infinite; }
+.giant-overlay.crying .giant-tear:nth-of-type(2) { animation-delay: 0.45s; }
+@keyframes giant-tear { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 1; } 100% { transform: translateY(70px); opacity: 0; } }
 .giant-beam { flex: none; width: 220px; height: 64px; margin-top: -40px; pointer-events: none;
   background: linear-gradient(0deg, rgba(141, 255, 154, 0.3), rgba(141, 255, 154, 0)); clip-path: polygon(38% 100%, 62% 100%, 100% 0, 0 0); }
 .giant-close { position: absolute; top: calc(12px + env(safe-area-inset-top, 0px)); right: 12px; font: inherit; font-size: 15px; color: var(--phosphor); background: transparent;
@@ -262,7 +270,7 @@ retro-shelf { height: 100vh; height: 100dvh; }
 body.giant-on retro-map { visibility: hidden; }
 @media (max-width: 559px) {
   .giant-overlay { --dock: calc(176px + env(safe-area-inset-bottom, 0px)); font-size: 16px; }
-  .giant-stage retro-giant { height: min(30vh, 240px); }
+  .giant-figure { height: min(30vh, 240px); }
   .giant-beam { width: 170px; height: 54px; margin-top: -34px; }
   .giant-asks button { font-size: 14px; padding: 5px 6px; }
 }
