@@ -557,7 +557,7 @@
   data-tv="..."      a TV key: moves in to that TV (closing a page open full screen first). It never opens a page full screen.
   data-label         the word printed on the key.
   data-info          what the pager's screen says when the key is pointed at.
-  data-action="back" | "sound" | "info"   the three round keys.
+  data-action="back" | "info"   the round Back key, and HELP (data-word puts a word on the key, making it a pill).
 
   When nothing is pointed at, the screen shows what to do next ("Tap a TV to look closer").
 -->
@@ -576,8 +576,7 @@
   <button type="button" data-tv="pvm-9042qm" data-label="Game" data-info="Brian, sometimes Link from Zelda, Michael De Santa from GTA V, or Joker from Persona 5.">Game</button>
   <button type="button" data-tv="pvm-20m4e" data-label="Work" data-info="Brian, currently a Design Manager at PayPay, Japan.">Work</button>
   <button type="button" data-action="back">Back</button>
-  <button type="button" data-action="sound">Sound</button>
-  <button type="button" data-action="info" data-info="How to use the controls">Controls</button>
+  <button type="button" data-action="info" data-word="Help" data-info="Ask Butler how this room works">Help</button>
 </retro-pager>
 
 <!-- the pager's i key opens this: how the controls work, in the Program Guide's style -->
