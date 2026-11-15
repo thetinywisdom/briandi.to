@@ -394,6 +394,35 @@ body.giant-on retro-map { visibility: hidden; }
   .doc-head { padding-top: 1rem; }
 }
 
+/* GAME page full screen ("Games I Love"): option A, a document grid in the WORK page's style, each game in a
+   CD jewel case (rendered to a picture by script; until then a flat stand-in) */
+.tv-latest[slot="reader"] { --doc-bg: #fbfbfa; --doc-ink: #1b1b1c; --doc-text: #3a3a3c; --doc-dim: #8a8a8e; --doc-line: #e7e7e5;
+  background: var(--doc-bg); color: var(--doc-text); font: 400 16px/1.6 var(--body);
+  padding: 96px max(24px, calc((100% - 68rem) / 2)) 0; }
+.games .doc-crumb { margin: 0 0 0.5rem; font: 500 13px/1 var(--mono); color: var(--doc-dim); }
+.tv-latest[slot="reader"] .games h1 { margin: 0 0 1rem; font: 600 32px/1.2 var(--body); letter-spacing: -0.01em; text-transform: none; color: var(--doc-ink); }
+.games-head { padding-bottom: 1.5rem; margin-bottom: 2rem; border-bottom: 1px solid var(--doc-line); }
+.games-head p { margin: 0 0 1.25rem; max-width: 60ch; }
+.game-todo { color: var(--doc-dim); font-style: italic; }
+.games-filter { display: flex; flex-wrap: wrap; gap: 6px; }
+.games-filter button { font: 500 13px/1 var(--body); padding: 7px 12px; border-radius: 999px; border: 1px solid var(--doc-line); background: #fff; color: var(--doc-text); cursor: pointer; }
+.games-filter button[aria-pressed="true"] { background: var(--doc-ink); color: var(--doc-bg); border-color: var(--doc-ink); }
+.games-filter button:focus-visible { outline: 2px solid var(--doc-ink); outline-offset: 2px; }
+.games-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 36px 24px; }
+.game[hidden] { display: none; }
+.game { display: grid; gap: 8px; align-content: start; min-width: 0; }
+.game-case { aspect-ratio: 1; display: grid; place-items: end start; padding: 14% 14% 18%; border-radius: 4px;
+  background: linear-gradient(160deg, #e9e9e6, #d6d6d2); color: #55555a; font: 600 13px/1.2 var(--body); }
+.game-case.ready { padding: 0; background: none; }
+.game-case img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 14px 14px rgba(0, 0, 0, 0.18)); transition: transform 0.25s ease; }
+.game:hover .game-case img { transform: translateY(-4px) rotate(-1deg); }
+.tv-latest[slot="reader"] .game h3 { margin: 2px 0 0; font: 600 15px/1.3 var(--body); text-transform: none; letter-spacing: 0; color: var(--doc-ink); }
+.game-plat { display: flex; flex-wrap: wrap; gap: 4px; margin: 0; }
+.game-plat span { font: 500 11px/1 var(--mono); padding: 3px 6px; border-radius: 4px; background: #f0f0ee; color: #55555a; }
+.game-about { margin: 0; font-size: 14px; line-height: 1.5; }
+@media (max-width: 560px) { .games-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 14px; } .tv-latest[slot="reader"] { padding-top: 48px; } }
+@media (prefers-reduced-motion: reduce) { .game-case img { transition: none; } }
+
 /* ---- the dock: a 3D pager at the bottom, always on screen ----
    It replaces the scene's own hint and Back / Read buttons. */
 /* the hologram map of the stack, on the left, clear of the pager */

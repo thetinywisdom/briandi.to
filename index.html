@@ -249,11 +249,157 @@
         <p class="interrupt-title">GAME OVER</p><p class="interrupt-sub">CONTINUE?</p>
       </div>
     </div>
-    <div class="page-body">
-    <h2>Latest strip</h2>
-    <div class="panels"><i></i><i></i><i></i><i></i></div>
-    <p class="note">Put your newest strip here.</p>
-    </div>
+    <!-- the page opened full screen: "Games I Love" (layout: option A, a document grid like the WORK page).
+         Each game shows in a CD jewel case (the owner's 3D model, vendor/cd-case.obj), rendered to a picture
+         the first time the page opens. data-cover is the cover art (empty: a placeholder with the name). -->
+    <article class="page-body games">
+      <header class="games-head">
+        <p class="doc-crumb">Game</p>
+        <h1>Games I Love</h1>
+        <p class="game-todo">A short intro in your words.</p>
+        <div class="games-filter" role="group" aria-label="Platform"></div>
+      </header>
+      <ul class="games-grid">
+          <li class="game" data-platforms="PSP">
+            <div class="game-case" data-cover=""><span class="game-case-title">Persona 3 Portable</span></div>
+            <h3>Persona 3 Portable</h3>
+            <p class="game-plat"><span>PSP</span></p>
+            <p class="game-about game-todo">About the game, and why I love it.</p>
+          </li>
+          <li class="game" data-platforms="PSP">
+            <div class="game-case" data-cover=""><span class="game-case-title">Persona 4 Golden</span></div>
+            <h3>Persona 4 Golden</h3>
+            <p class="game-plat"><span>PSP</span></p>
+            <p class="game-about game-todo">About the game, and why I love it.</p>
+          </li>
+          <li class="game" data-platforms="Steam">
+            <div class="game-case" data-cover=""><span class="game-case-title">Persona 5 Royal</span></div>
+            <h3>Persona 5 Royal</h3>
+            <p class="game-plat"><span>Steam</span></p>
+            <p class="game-about game-todo">About the game, and why I love it.</p>
+          </li>
+          <li class="game" data-platforms="PSP, PS1">
+            <div class="game-case" data-cover=""><span class="game-case-title">Boku no Natsuyasumi</span></div>
+            <h3>Boku no Natsuyasumi</h3>
+            <p class="game-plat"><span>PSP</span><span>PS1</span></p>
+            <p class="game-about game-todo">About the game, and why I love it.</p>
+          </li>
+          <li class="game" data-platforms="PSP, PS1">
+            <div class="game-case" data-cover=""><span class="game-case-title">Boku no Natsuyasumi 2: Umi no Bouken-hen</span></div>
+            <h3>Boku no Natsuyasumi 2: Umi no Bouken-hen</h3>
+            <p class="game-plat"><span>PSP</span><span>PS1</span></p>
+            <p class="game-about game-todo">About the game, and why I love it.</p>
+          </li>
+          <li class="game" data-platforms="PSP, PS1">
+            <div class="game-case" data-cover=""><span class="game-case-title">Boku no Natsuyasumi 4</span></div>
+            <h3>Boku no Natsuyasumi 4</h3>
+            <p class="game-plat"><span>PSP</span><span>PS1</span></p>
+            <p class="game-about game-todo">About the game, and why I love it.</p>
+          </li>
+          <li class="game" data-platforms="PS2">
+            <div class="game-case" data-cover=""><span class="game-case-title">Bokura no Kazoku</span></div>
+            <h3>Bokura no Kazoku</h3>
+            <p class="game-plat"><span>PS2</span></p>
+            <p class="game-about game-todo">About the game, and why I love it.</p>
+          </li>
+          <li class="game" data-platforms="PC">
+            <div class="game-case" data-cover=""><span class="game-case-title">The Sims 4</span></div>
+            <h3>The Sims 4</h3>
+            <p class="game-plat"><span>PC</span></p>
+            <p class="game-about game-todo">About the game, and why I love it.</p>
+          </li>
+          <li class="game" data-platforms="Steam">
+            <div class="game-case" data-cover=""><span class="game-case-title">Dispatch</span></div>
+            <h3>Dispatch</h3>
+            <p class="game-plat"><span>Steam</span></p>
+            <p class="game-about game-todo">About the game, and why I love it.</p>
+          </li>
+          <li class="game" data-platforms="PSP, Steam">
+            <div class="game-case" data-cover=""><span class="game-case-title">The Walking Dead</span></div>
+            <h3>The Walking Dead</h3>
+            <p class="game-plat"><span>PSP</span><span>Steam</span></p>
+            <p class="game-about game-todo">About the game, and why I love it.</p>
+          </li>
+          <li class="game" data-platforms="Steam">
+            <div class="game-case" data-cover=""><span class="game-case-title">The Walking Dead: Season Two</span></div>
+            <h3>The Walking Dead: Season Two</h3>
+            <p class="game-plat"><span>Steam</span></p>
+            <p class="game-about game-todo">About the game, and why I love it.</p>
+          </li>
+          <li class="game" data-platforms="Steam">
+            <div class="game-case" data-cover=""><span class="game-case-title">The Walking Dead: A New Frontier</span></div>
+            <h3>The Walking Dead: A New Frontier</h3>
+            <p class="game-plat"><span>Steam</span></p>
+            <p class="game-about game-todo">About the game, and why I love it.</p>
+          </li>
+          <li class="game" data-platforms="Steam">
+            <div class="game-case" data-cover=""><span class="game-case-title">The Walking Dead: The Final Season</span></div>
+            <h3>The Walking Dead: The Final Season</h3>
+            <p class="game-plat"><span>Steam</span></p>
+            <p class="game-about game-todo">About the game, and why I love it.</p>
+          </li>
+          <li class="game" data-platforms="PS4">
+            <div class="game-case" data-cover=""><span class="game-case-title">FIFA 19</span></div>
+            <h3>FIFA 19</h3>
+            <p class="game-plat"><span>PS4</span></p>
+            <p class="game-about game-todo">About the game, and why I love it.</p>
+          </li>
+          <li class="game" data-platforms="PS4">
+            <div class="game-case" data-cover=""><span class="game-case-title">FIFA 20</span></div>
+            <h3>FIFA 20</h3>
+            <p class="game-plat"><span>PS4</span></p>
+            <p class="game-about game-todo">About the game, and why I love it.</p>
+          </li>
+          <li class="game" data-platforms="PS5">
+            <div class="game-case" data-cover=""><span class="game-case-title">The Quarry</span></div>
+            <h3>The Quarry</h3>
+            <p class="game-plat"><span>PS5</span></p>
+            <p class="game-about game-todo">About the game, and why I love it.</p>
+          </li>
+          <li class="game" data-platforms="Steam">
+            <div class="game-case" data-cover=""><span class="game-case-title">Dota 2</span></div>
+            <h3>Dota 2</h3>
+            <p class="game-plat"><span>Steam</span></p>
+            <p class="game-about game-todo">About the game, and why I love it.</p>
+          </li>
+          <li class="game" data-platforms="SNES">
+            <div class="game-case" data-cover=""><span class="game-case-title">Super Mario World</span></div>
+            <h3>Super Mario World</h3>
+            <p class="game-plat"><span>SNES</span></p>
+            <p class="game-about game-todo">About the game, and why I love it.</p>
+          </li>
+          <li class="game" data-platforms="PS1">
+            <div class="game-case" data-cover=""><span class="game-case-title">Pepsiman</span></div>
+            <h3>Pepsiman</h3>
+            <p class="game-plat"><span>PS1</span></p>
+            <p class="game-about game-todo">About the game, and why I love it.</p>
+          </li>
+          <li class="game" data-platforms="GBA">
+            <div class="game-case" data-cover=""><span class="game-case-title">Pokémon Ruby</span></div>
+            <h3>Pokémon Ruby</h3>
+            <p class="game-plat"><span>GBA</span></p>
+            <p class="game-about game-todo">About the game, and why I love it.</p>
+          </li>
+          <li class="game" data-platforms="GBC">
+            <div class="game-case" data-cover=""><span class="game-case-title">Mario Tennis</span></div>
+            <h3>Mario Tennis</h3>
+            <p class="game-plat"><span>GBC</span></p>
+            <p class="game-about game-todo">About the game, and why I love it.</p>
+          </li>
+          <li class="game" data-platforms="PC">
+            <div class="game-case" data-cover=""><span class="game-case-title">The Elder Scrolls V: Skyrim</span></div>
+            <h3>The Elder Scrolls V: Skyrim</h3>
+            <p class="game-plat"><span>PC</span></p>
+            <p class="game-about game-todo">About the game, and why I love it.</p>
+          </li>
+          <li class="game" data-platforms="Steam">
+            <div class="game-case" data-cover=""><span class="game-case-title">Baldur&#x27;s Gate 3</span></div>
+            <h3>Baldur&#x27;s Gate 3</h3>
+            <p class="game-plat"><span>Steam</span></p>
+            <p class="game-about game-todo">About the game, and why I love it.</p>
+          </li>
+      </ul>
+    </article>
   </div>
 
   <!-- 9-inch orange TV: the CREATE TV -->
@@ -1313,6 +1459,50 @@
     // the page scrolls inside the shelf's reader (in its shadow DOM), whose scroll events do not reach the
     // document, so check a few times a second while the page is open
     setInterval(mark, 200);
+  })();
+
+  // GAME page: platform filters, and the CD cases rendered the first time the page is opened full screen
+  (() => {
+    const page = document.querySelector('.games');
+    if (!page) return;
+    const cards = [...page.querySelectorAll('.game')];
+    // the filter row, from the platforms in the list (in the order they first appear)
+    const plats = [...new Set(cards.flatMap((c) => c.dataset.platforms.split(',').map((x) => x.trim())))];
+    const bar = page.querySelector('.games-filter');
+    for (const name of ['All', ...plats]) {
+      const b = document.createElement('button');
+      b.type = 'button'; b.textContent = name; b.setAttribute('aria-pressed', String(name === 'All'));
+      b.addEventListener('click', () => {
+        for (const x of bar.children) x.setAttribute('aria-pressed', String(x === b));
+        for (const c of cards) c.hidden = name !== 'All' && !c.dataset.platforms.split(',').map((x) => x.trim()).includes(name);
+      });
+      bar.append(b);
+    }
+    // a stand-in cover until the real art is in: the name on a colour picked from it
+    const placeholder = (name) => {
+      const c = document.createElement('canvas'); c.width = c.height = 512;
+      const g = c.getContext('2d');
+      let h = 0; for (const ch of name) h = (h * 31 + ch.charCodeAt(0)) % 360;
+      const gr = g.createLinearGradient(0, 0, 512, 512);
+      gr.addColorStop(0, `hsl(${h} 55% 52%)`); gr.addColorStop(1, `hsl(${(h + 40) % 360} 45% 18%)`);
+      g.fillStyle = gr; g.fillRect(0, 0, 512, 512);
+      g.fillStyle = '#fff'; g.font = '700 44px "Barlow Semi Condensed", sans-serif'; g.textBaseline = 'bottom';
+      const words = name.toUpperCase().split(' '); let line = '', y = 480; const lines = [];
+      for (const w of words) { if (g.measureText(line + w).width > 440 && line) { lines.push(line.trim()); line = ''; } line += w + ' '; }
+      lines.push(line.trim());
+      lines.reverse().forEach((l) => { g.fillText(l, 36, y); y -= 46; });
+      return c;
+    };
+    let done = false;
+    const render = async () => {
+      if (done || !window.retro3d?.renderCases) return;
+      done = true;
+      const boxes = cards.map((c) => c.querySelector('.game-case'));
+      const covers = boxes.map((b) => b.dataset.cover || placeholder(b.textContent.trim()));
+      const urls = await window.retro3d.renderCases('vendor/cd-case.obj', covers, { size: 420 });
+      urls.forEach((u, i) => { if (!u) return; const img = new Image(); img.src = u; img.alt = ''; boxes[i].replaceChildren(img); boxes[i].classList.add('ready'); });
+    };
+    document.getElementById('shelf').addEventListener('shelf-read', (e) => { if (e.detail.open && e.detail.tv === 'pvm-9042qm') render(); });
   })();
 
   // screen savers rest while the camera is in on another TV (they run in the room view and on their own TV):
