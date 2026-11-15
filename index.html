@@ -251,7 +251,8 @@
     </div>
     <!-- the page opened full screen: "Games I Love" (layout: option A, a document grid like the WORK page).
          Each game shows in a CD jewel case (the owner's 3D model, vendor/cd-case.obj), rendered to a picture
-         the first time the page opens. data-cover is the cover art (empty: a placeholder with the name). -->
+         the first time the page opens. data-cover is the cover art (empty: a placeholder with the name); art that
+         is not square fills the width and is cropped, keeping the middle unless data-align says top or bottom. -->
     <article class="page-body games">
       <header class="games-head">
         <p class="doc-crumb">Game</p>
@@ -297,7 +298,7 @@
             <p class="game-about game-todo">About the game, and why I love it.</p>
           </li>
           <li class="game" data-platforms="PS2">
-            <div class="game-case" data-cover="covers/bokura-no-kazoku.jpg"><span class="game-case-title">Bokura no Kazoku</span></div>
+            <div class="game-case" data-cover="covers/bokura-no-kazoku.jpg" data-align="bottom"><span class="game-case-title">Bokura no Kazoku</span></div>
             <h3>Bokura no Kazoku</h3>
             <p class="game-plat"><span>PS2</span></p>
             <p class="game-about game-todo">About the game, and why I love it.</p>
@@ -1498,7 +1499,8 @@
       if (done) return;
       done = true;
       const boxes = cards.map((c) => c.querySelector('.game-case'));
-      const covers = boxes.map((b) => b.dataset.cover || placeholder(b.textContent.trim()));
+      // art that is not square fills the case's width and is cropped; data-align says which part to keep (default: the middle)
+      const covers = boxes.map((b) => (b.dataset.cover ? { src: b.dataset.cover, align: b.dataset.align || 'center' } : placeholder(b.textContent.trim())));
       let urls = [];
       try { if (!window.retro3d?.renderCases) throw new Error('no 3D'); urls = await window.retro3d.renderCases('vendor/cd-case.obj', covers, { size: 420 }); }
       catch (err) { console.warn('GAME page: could not draw the CD cases', err); }
@@ -1506,7 +1508,7 @@
       boxes.forEach((b, i) => {
         const img = new Image(); img.alt = '';
         if (urls[i]) { img.src = urls[i]; b.classList.add('ready'); }
-        else { img.src = typeof covers[i] === 'string' ? covers[i] : covers[i].toDataURL(); b.classList.add('flat'); }
+        else { img.src = covers[i].src || covers[i].toDataURL(); if (b.dataset.align) img.style.objectPosition = b.dataset.align; b.classList.add('flat'); }
         b.replaceChildren(img);
       });
     };

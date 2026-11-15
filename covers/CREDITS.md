@@ -1,6 +1,6 @@
 # Cover art
 
-Grid images from [SteamGridDB](https://www.steamgriddb.com), made by its community, resized to web copies (512 px). They are shown inside CD jewel cases on the GAME page. To change one, replace its file here (square art fits the case best).
+Grid images from [SteamGridDB](https://www.steamgriddb.com), made by its community, resized to web copies (512 px). They are shown inside CD jewel cases on the GAME page. To change one, replace its file here (square art fits the case best; art that is not square fills the case's width and is cropped, keeping the middle, or the part named by `data-align="top"` or `"bottom"` on its case in `index.html`).
 
 | Game | SteamGridDB artist |
 | --- | --- |
