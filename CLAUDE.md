@@ -44,6 +44,7 @@ Any static server works. Opening `index.html` from the file system does not, bec
 - Navigation is the `<retro-pager>` after the shelf: one `<button>` per key (`data-tv`, `data-label`, `data-info`, or `data-action="back|info"`). `styles.css` fixes it to the bottom and hides the shelf's own hint and Back / Read buttons.
 - `<retro-map for="shelf">` (after the shelf) is the hologram map of the stack on the left; its child buttons name and number the TVs. `styles.css` places it.
 - The pager's HELP key (`data-action="info" data-word="Help"`) opens the help overlay (`.giant-overlay`): `<retro-giant src="vendor/giant.glb">` and a fixed list of questions whose answers are in each button's `data-answer` (and `data-mood` for Giant's face).
+- When `vendor/retro-3d.js` changes, update the `?v=` on `BUNDLE` in the loading-screen script (the file's first 8 hex of `sha1sum`), so browsers never pair a new page with an old 3D file.
 - The loading screen (`#boot`, styled and scripted in `<head>`) downloads `vendor/retro-3d.js` itself to show progress; there is no `<script src>` tag for the bundle.
 - `body.reading` is set while the reader is open (see the small script at the end of `index.html`).
 

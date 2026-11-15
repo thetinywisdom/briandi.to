@@ -35,7 +35,8 @@
 <script>
   // The bar fills from real numbers: the bundle's download (to 85%), then the room being built (to 100%).
   (() => {
-    const BUNDLE = 'vendor/retro-3d.js';
+    // ?v= changes with each new bundle, so a browser never pairs this page with an old copy it kept
+    const BUNDLE = 'vendor/retro-3d.js?v=c4cae96b';
     const SIZE = 1042000;                                   // about the bundle's size, used when the server does not say
     let target = 0.03, shown = 0, done = false;
     const el = () => document.getElementById('boot');
@@ -1502,6 +1503,8 @@
       // art that is not square fills the case's width and is cropped; data-align says which part to keep (default: the middle)
       const covers = boxes.map((b) => (b.dataset.cover ? { src: b.dataset.cover, align: b.dataset.align || 'center' } : placeholder(b.textContent.trim())));
       let urls = [];
+      // (the 3D file may still be on its way: wait for it a little before giving up)
+      for (let n = 0; n < 50 && !window.retro3d?.renderCases; n++) await new Promise((r) => setTimeout(r, 200));
       try { if (!window.retro3d?.renderCases) throw new Error('no 3D'); urls = await window.retro3d.renderCases('vendor/cd-case.obj', covers, { size: 420 }); }
       catch (err) { console.warn('GAME page: could not draw the CD cases', err); }
       // where a case could not be drawn (no 3D on this device, or it ran out), show the cover flat instead
