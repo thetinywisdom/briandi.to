@@ -411,16 +411,15 @@ body.giant-on retro-map { visibility: hidden; }
 .games-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 36px 24px; }
 .game[hidden] { display: none; }
 .game { display: grid; gap: 8px; align-content: start; min-width: 0; }
-.game-case { position: relative; aspect-ratio: 1; }
-.game-case img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
-  filter: drop-shadow(0 14px 14px rgba(0, 0, 0, 0.18)); transition: transform 0.25s ease; }
-.game:hover .game-case img { transform: translateY(-4px) rotate(-1deg); }
+.game-cover { aspect-ratio: 1; border-radius: 6px; overflow: hidden; background: #ececea; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08); }
+.game-cover img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 0.25s ease; }
+.game:hover .game-cover img { transform: scale(1.03); }
 .tv-latest[slot="reader"] .game h3 { margin: 2px 0 0; font: 600 15px/1.3 var(--body); text-transform: none; letter-spacing: 0; color: var(--doc-ink); }
 .game-plat { display: flex; flex-wrap: wrap; gap: 4px; margin: 0; }
 .game-plat span { font: 500 11px/1 var(--mono); padding: 3px 6px; border-radius: 4px; background: #f0f0ee; color: #55555a; }
 .game-about { margin: 0; font-size: 14px; line-height: 1.5; }
 @media (max-width: 560px) { .games-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 14px; } .tv-latest[slot="reader"] { padding-top: 48px; } }
-@media (prefers-reduced-motion: reduce) { .game-case img { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .game-cover img { transition: none; } }
 
 /* ---- the dock: a 3D pager at the bottom, always on screen ----
    It replaces the scene's own hint and Back / Read buttons. */

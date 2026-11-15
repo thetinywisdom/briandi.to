@@ -14,8 +14,7 @@ Read `PLAN.md` first: it records what is done, what the owner has decided, and w
 | `styles.css` | Page shell, the TV pages at tube size, the channel guide and channels, the same pages at full-screen reading size, and the dock |
 | `vendor/retro-3d.js` | Built bundle from `retro-3d-assets`. Never edit by hand |
 | `README.md` | Editing guide written for the owner |
-| `covers/` | GAME page cover art (`CREDITS.md` lists the artists) and `covers/cases/`, the game cases pre-rendered to PNG |
-| `tools/render-cases.cjs` | Re-renders `covers/cases/` with Playwright while the site is served on port 5055 (`node tools/render-cases.cjs`). Run it after changing a cover, a game's platform or the case look |
+| `covers/` | GAME page cover art, square web copies (`CREDITS.md` lists the artists) |
 
 ## Run it
 
