@@ -139,8 +139,6 @@ retro-shelf { height: 100vh; height: 100dvh; }
 /* each square stays 2.3 s from when it comes on, so they go in the same order: top left to bottom right */
 @keyframes ident-pop { 0% { opacity: 0; } 0.1% { opacity: 1; } 99.9% { opacity: 1; } 100% { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .ident-air, .ident-art.on, .ident-grid.on, .ident-grid.on i { animation: none; } .ident-grid.on i { opacity: 1; } }
-.tv-contact { background: #ff7a59; font-size: 34px; }
-.tv-contact h2 { font-size: 84px; }
 /* channel TV, channel 2: the guide. Green phosphor on black, a dashed grid, pixel lettering. */
 .tv-guide {
   --phosphor: #8dff9a; --phosphor-dim: #3f8f4a;
@@ -329,7 +327,6 @@ body.giant-on retro-map { visibility: hidden; }
 .tv[slot="reader"] h1 { font-size: clamp(44px, 9vw, 88px); }
 .tv[slot="reader"] h2 { font-size: clamp(38px, 7vw, 72px); }
 .tv[slot="reader"] .note { font-size: 15px; }
-.tv-contact[slot="reader"] { font-size: clamp(22px, 3vw, 30px); }
 
 
 /* WORK page full screen ("How I Lead"): a plain document, like a manual for a tech product. One narrow

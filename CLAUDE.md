@@ -10,7 +10,7 @@ Read `PLAN.md` first: it records what is done, what the owner has decided, and w
 
 | File | What it is |
 | --- | --- |
-| `index.html` | The whole site: the `<retro-shelf>` element, one block per TV page, the channel TV's guide, the shelf items (unused in the current look), the `<retro-pager>` dock, and a small script that loads the channel list, turns it into players and fills in the guide |
+| `index.html` | The whole site: the `<retro-shelf>` element, one block per TV page, the channel TV's guide, the `<retro-pager>` dock, and a small script that loads the channel list, turns it into players and fills in the guide |
 | `styles.css` | Page shell, the TV pages at tube size, the channel guide and channels, the same pages at full-screen reading size, and the dock |
 | `vendor/retro-3d.js` | Built bundle from `retro-3d-assets`. Never edit by hand |
 | `README.md` | Editing guide written for the owner |
