@@ -1495,12 +1495,20 @@
     };
     let done = false;
     const render = async () => {
-      if (done || !window.retro3d?.renderCases) return;
+      if (done) return;
       done = true;
       const boxes = cards.map((c) => c.querySelector('.game-case'));
       const covers = boxes.map((b) => b.dataset.cover || placeholder(b.textContent.trim()));
-      const urls = await window.retro3d.renderCases('vendor/cd-case.obj', covers, { size: 420 });
-      urls.forEach((u, i) => { if (!u) return; const img = new Image(); img.src = u; img.alt = ''; boxes[i].replaceChildren(img); boxes[i].classList.add('ready'); });
+      let urls = [];
+      try { if (!window.retro3d?.renderCases) throw new Error('no 3D'); urls = await window.retro3d.renderCases('vendor/cd-case.obj', covers, { size: 420 }); }
+      catch (err) { console.warn('GAME page: could not draw the CD cases', err); }
+      // where a case could not be drawn (no 3D on this device, or it ran out), show the cover flat instead
+      boxes.forEach((b, i) => {
+        const img = new Image(); img.alt = '';
+        if (urls[i]) { img.src = urls[i]; b.classList.add('ready'); }
+        else { img.src = typeof covers[i] === 'string' ? covers[i] : covers[i].toDataURL(); b.classList.add('flat'); }
+        b.replaceChildren(img);
+      });
     };
     document.getElementById('shelf').addEventListener('shelf-read', (e) => { if (e.detail.open && e.detail.tv === 'pvm-9042qm') render(); });
   })();
