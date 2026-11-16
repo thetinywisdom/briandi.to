@@ -1539,7 +1539,10 @@
   (() => {
     const page = document.querySelector('.games');
     if (!page) return;
-    const cards = [...page.querySelectorAll('.game')];
+    // games are listed A to Z by name, whatever order they are written in above
+    const byName = (c) => c.querySelector('h3').textContent.trim();
+    const cards = [...page.querySelectorAll('.game')].sort((a, b) => byName(a).localeCompare(byName(b), 'en', { sensitivity: 'base', numeric: true }));
+    page.querySelector('.games-grid').append(...cards);
     const stage = page.querySelector('.games-stage'), count = page.querySelector('.games-count');
     const pad = (n) => String(n).padStart(2, '0');
     // title: each letter cut out in its own face, colour and angle (fixed, so it looks the same every visit)
@@ -1573,7 +1576,9 @@
       const about = c.querySelector('.game-about').cloneNode(true); about.className = 'stage-about';
       const why = c.querySelector('.game-why').cloneNode(true); why.classList.replace('game-why', 'stage-why');
       stage.replaceChildren(pic, name, tags, about, why);
-      count.replaceChildren(pad(i + 1), Object.assign(document.createElement('small'), { textContent: ' / ' + cards.length }));
+      // the counter: this game's place among the games shown (all, or those of the chosen platform)
+      const vis = cards.filter((x) => !x.hidden);
+      count.replaceChildren(pad(vis.indexOf(c) + 1), Object.assign(document.createElement('small'), { textContent: ' / ' + pad(vis.length) }));
       if (scroll && window.matchMedia('(max-width: 760px)').matches) stage.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
     };
     cards.forEach((c, i) => {
@@ -1596,7 +1601,7 @@
       b.addEventListener('click', () => {
         for (const x of bar.children) x.setAttribute('aria-pressed', String(x === b));
         for (const c of cards) c.hidden = name !== 'All' && !c.dataset.platforms.split(',').map((x) => x.trim()).includes(name);
-        if (cards[current].hidden) show(cards.findIndex((c) => !c.hidden), false);
+        show(cards[current].hidden ? cards.findIndex((c) => !c.hidden) : current, false);
       });
       bar.append(b);
     }
