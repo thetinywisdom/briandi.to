@@ -418,6 +418,10 @@ body.giant-on retro-map { visibility: hidden; }
 .game-plat { display: flex; flex-wrap: wrap; gap: 4px; margin: 0; }
 .game-plat span { font: 500 11px/1 var(--mono); padding: 3px 6px; border-radius: 4px; background: #f0f0ee; color: #55555a; }
 .game-about { margin: 0; font-size: 14px; line-height: 1.5; }
+.game-why { margin: 0; font-size: 13px; line-height: 1.5; }
+.games-intro { margin: 0; font-size: 17px; line-height: 1.5; color: var(--doc-ink); max-width: 46ch; }
+.games-credit { margin: 40px 0 0; padding-top: 16px; border-top: 1px solid var(--doc-line, #e7e7e5); font-size: 12px; line-height: 1.5; color: var(--doc-dim); }
+.games-credit a { color: inherit; }
 @media (max-width: 560px) { .games-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 14px; } .tv-latest[slot="reader"] { padding-top: 48px; } }
 @media (prefers-reduced-motion: reduce) { .game-cover img { transition: none; } }
 

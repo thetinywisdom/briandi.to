@@ -24,6 +24,6 @@ Grid images from [SteamGridDB](https://www.steamgriddb.com), made by its communi
 | Super Mario World | xdyoshi7 |
 | Pepsiman | StaticMachina |
 | Pokémon Ruby | TheMentallyGaming |
-| Mario Tennis | Sous-Titré |
+| Mario Tennis | generalrose (Game Boy Color art, cropped to its top) |
 | The Elder Scrolls V: Skyrim | Maxine |
 | Baldur's Gate 3 | Moneyman Dan |
