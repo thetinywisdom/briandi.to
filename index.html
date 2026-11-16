@@ -2,6 +2,18 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<!-- every relative path (styles, covers, vendor/) is from the site's root, also while the address shows a
+     page such as work/ (see "page addresses" at the end of the body) -->
+<base href="./">
+<script>
+  // arriving from a page address (work/index.html sends visitors here as ?to=work): show that address again
+  (() => {
+    const to = new URLSearchParams(location.search).get('to');
+    if (!/^(work|game|create|guide)$/.test(to || '')) return;
+    window.__startPage = to;
+    history.replaceState(null, '', new URL(to, document.baseURI).href + location.hash);
+  })();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>briandi.to</title>
 <meta name="description" content="Comics and drawings, shown on a stack of old TVs in a dark room.">
@@ -1639,6 +1651,51 @@
       if (e.detail.action !== 'info') return;
       learned = true; hand.classList.remove('on'); cancelAnimationFrame(raf);
     });
+  })();
+
+  // page addresses: each TV has its own (work, game, create, guide), so a page can be linked and reloaded.
+  // Opening a page full screen shows its address, closing it goes back to the room's; the browser's Back and
+  // Forward keys move between them. work/, game/, create/ and guide/ are small pages that send visitors here.
+  // The owner's preview turns this off (it cannot change its address).
+  (() => {
+    const PAGE_ADDRESSES = true;
+    if (!PAGE_ADDRESSES) return;
+    const shelf = document.getElementById('shelf');
+    const PAGES = { work: 'pvm-20m4e', game: 'pvm-9042qm', create: 'kv-9pr1', guide: 'kv-5200' };
+    const NAMES = { work: 'Work', game: 'Game', create: 'Create', guide: 'Guide' };
+    const root = new URL('./', document.baseURI);
+    const TITLE = document.title;
+    const pageAt = () => { const rest = location.pathname.slice(root.pathname.length).replace(/\/$/, ''); return PAGES[rest] ? rest : null; };
+    // which address the room is at now: a page open full screen, or the channel TV zoomed in on
+    const pageNow = () => {
+      const id = shelf._reading?.id || (shelf._focusKey === PAGES.guide ? PAGES.guide : null);
+      return Object.keys(PAGES).find((k) => PAGES[k] === id) || null;
+    };
+    const title = (k) => { document.title = k ? `${NAMES[k]} · ${TITLE}` : TITLE; };
+    let applying = false;
+    const sync = () => {
+      if (applying) return;
+      const k = pageNow();
+      title(k);
+      if (k === pageAt()) return;
+      history.pushState(null, '', k ? new URL(k, root).href : root.href);
+    };
+    // go to the page an address names (on arrival, and on Back / Forward)
+    const go = (k) => {
+      applying = true;
+      try {
+        if (k === 'guide') { if (shelf._reading) shelf.closeReader(); shelf.focusTV(PAGES.guide); }
+        else if (k) { if (shelf._focusKey !== PAGES[k] && !shelf._reading) shelf.focusTV(PAGES[k], { duration: 0 }); shelf.openReader(PAGES[k]); }
+        else if (shelf._reading) shelf.closeReader();
+        else if (shelf._focusKey === PAGES.guide) shelf.unfocus();
+      } finally { applying = false; }
+      title(k);
+    };
+    shelf.addEventListener('shelf-read', () => setTimeout(sync));
+    shelf.addEventListener('shelf-focus', () => setTimeout(sync));
+    addEventListener('popstate', () => go(pageAt()));
+    const start = () => { const k = window.__startPage || pageAt(); if (k) go(k); };
+    if (shelf._ready) start(); else shelf.addEventListener('shelf-ready', start, { once: true });
   })();
 
   // body.reading is set while a page is open full screen (for styling)

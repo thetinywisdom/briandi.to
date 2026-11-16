@@ -56,6 +56,10 @@ The shelf has two long levels. If it is full, extra items are skipped and a warn
 
 **Badge.** `brand="YOUR NAME"` on `<retro-shelf>` replaces the SONY badge on every TV; `brand=""` removes it.
 
+## Page addresses
+
+Each TV has its own address you can share: `…/work`, `…/game`, `…/create` open that page full screen, and `…/guide` zooms in on the channel TV. On GitHub Pages that is https://thetinywisdom.github.io/briandi.to/work and so on. The folders `work/`, `game/`, `create/` and `guide/` hold them; the title and description in each `index.html` are what shows when the link is shared.
+
 ## The 3D code
 
 `vendor/retro-3d.js` is the built file from [thetinywisdom/retro-3d-assets](https://github.com/thetinywisdom/retro-3d-assets). To update it, build that repository and copy `dist/retro-3d.js` here.

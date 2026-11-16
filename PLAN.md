@@ -108,6 +108,10 @@ Do not reopen these without the owner asking.
 - Pictures or links on the handheld screens.
 - Mixing shelf arrangements (for example "browsed" with one pile).
 
+## Page addresses
+
+Owner, 2026-11-16: each inner page has its own address, like briandi.to/work. `work/`, `game/` and `create/` open that page full screen; `guide/` zooms in on the channel TV. GitHub Pages has no server-side routing, so each address is a small folder page that sends the visitor to the site with `?to=<page>`; the site puts the address back and opens the page once the room is built. Moving around updates the address and Back / Forward work. On GitHub Pages the addresses are https://thetinywisdom.github.io/briandi.to/work and so on; with the briandi.to domain connected they become briandi.to/work.
+
 ## Working notes
 
 - The bundle in `vendor/retro-3d.js` must be rebuilt and copied from `retro-3d-assets` after any 3D change; see `CLAUDE.md` in each repository.
