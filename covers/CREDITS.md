@@ -27,3 +27,6 @@ Grid images from [SteamGridDB](https://www.steamgriddb.com), made by its communi
 | Mario Tennis | DrawnByAJ |
 | The Elder Scrolls V: Skyrim | Maxine |
 | Baldur's Gate 3 | Moneyman Dan |
+| Goof Troop | Shiios42 |
+| Herc's Adventures | ItsFreakinJesus |
+| State of Decay 2 | nexhasunleashed |
