@@ -15,6 +15,7 @@ Read `PLAN.md` first: it records what is done, what the owner has decided, and w
 | `vendor/retro-3d.js` | Built bundle from `retro-3d-assets`. Never edit by hand |
 | `README.md` | Editing guide written for the owner |
 | `covers/` | GAME page cover art, square web copies (`CREDITS.md` lists the artists) |
+| `design/` | Design options kept for reference (`game-page-options.html`: the five GAME page directions; E is built, D is kept for later) |
 
 ## Run it
 
@@ -62,6 +63,6 @@ There are no tests. Serve the folder, open it in a browser at desktop and phone 
 - Plain HTML and CSS, no framework, no build. Keep it that way unless the owner asks.
 - Copy in `index.html` is placeholder except the WORK page ("How I Lead", the owner's text) and the owner's lines on channels 1–2. Do not invent biography, contact details, comic titles or channel media; ask the owner.
 - When the owner asks for help with Japanese text, they want the hiragana reading, an English translation and the grammar points explained alongside any correction.
-- Fonts come from Google Fonts (Barlow Semi Condensed, IBM Plex Sans, IBM Plex Mono, and DotGothic16 for the pager screen).
+- Fonts come from Google Fonts (Barlow Semi Condensed, IBM Plex Sans, IBM Plex Mono, DotGothic16 for the pager screen, and Anton, Archivo Black and Playfair Display for the GAME page's ransom-note look).
 - Work is committed straight to `main` and pushed (or merged into `main` from a session branch). The site is published by GitHub Pages from `main` at https://thetinywisdom.github.io/briandi.to/, so a push to `main` goes live. Keep every path relative (no leading `/`), because the site lives under `/briandi.to/`.
 - **After every change, publish a preview for the owner** (single-file build, see `PLAN.md` → Working notes). The owner asked for this to happen every time.

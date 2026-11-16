@@ -7,7 +7,7 @@
 <meta name="description" content="Comics and drawings, shown on a stack of old TVs in a dark room.">
 <meta name="theme-color" content="#030403">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:ital,wght@0,500;0,600;0,700;1,700;1,800&family=DotGothic16&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Playfair+Display:ital,wght@1,900&family=Barlow+Semi+Condensed:ital,wght@0,500;0,600;0,700;1,700;1,800&family=DotGothic16&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="styles.css">
 <!-- Loading screen. Its styles are here, not in styles.css, so it is the first thing a visitor sees.
      The 3D bundle is downloaded by the script below (so the bar can show real progress) and then started;
@@ -250,16 +250,20 @@
         <p class="interrupt-title">GAME OVER</p><p class="interrupt-sub">CONTINUE?</p>
       </div>
     </div>
-    <!-- the page opened full screen: "Games I Love" (layout: option A, a document grid like the WORK page).
-         Each game shows its square cover art from covers/ (credits in covers/CREDITS.md); art that is not
-         square is cropped to the middle, or to the part named by object-position on its <img>. -->
+    <!-- the page opened full screen: "Games I Love" (option E: brutalist red / black / white menu).
+         Each <li class="game"> is one game: its square cover from covers/ (credits in covers/CREDITS.md),
+         name, platforms (data-platforms and the tags), a description and a "why I love it" line. The script
+         at the end turns the list into the slanted menu and shows the picked game on the stage. -->
     <article class="page-body games">
+      <div class="games-slash" aria-hidden="true"></div><div class="games-slash thin" aria-hidden="true"></div>
+      <p class="games-count" aria-hidden="true"></p>
       <header class="games-head">
         <p class="doc-crumb">Game</p>
         <h1>Games I Love</h1>
         <p class="games-intro">Games that stayed with me long after the credits.</p>
         <div class="games-filter" role="group" aria-label="Platform"></div>
       </header>
+      <div class="games-body">
       <ul class="games-grid">
           <li class="game" data-platforms="PSP">
             <div class="game-cover"><img src="covers/persona-3-portable.jpg" alt="" loading="lazy" decoding="async" width="512" height="512"></div>
@@ -465,6 +469,8 @@
             <p class="game-why game-todo">Why I love it: in your words.</p>
           </li>
       </ul>
+      <section class="games-stage" aria-live="polite"></section>
+      </div>
       <p class="games-credit">Game descriptions adapted from <a href="https://en.wikipedia.org/" target="_blank" rel="noopener">Wikipedia</a> (CC BY-SA 4.0). Cover art from <a href="https://www.steamgriddb.com/" target="_blank" rel="noopener">SteamGridDB</a>, made by its community.</p>
     </article>
   </div>
@@ -1528,11 +1534,59 @@
     setInterval(mark, 200);
   })();
 
-  // GAME page: platform filters, and the case pictures fading in
+  // GAME page (option E): the ransom-note title, the slanted menu built from the list, the platform
+  // filters, and the stage that shows the picked game
   (() => {
     const page = document.querySelector('.games');
     if (!page) return;
     const cards = [...page.querySelectorAll('.game')];
+    const stage = page.querySelector('.games-stage'), count = page.querySelector('.games-count');
+    const pad = (n) => String(n).padStart(2, '0');
+    // title: each letter cut out in its own face, colour and angle (fixed, so it looks the same every visit)
+    const h1 = page.querySelector('h1'), words = h1.textContent.trim().split(/\s+/);
+    const STYLE = [['#fff', '#0a0a0a', 'Anton', 1], ['#e3001b', '#fff', 'Archivo Black', 0], ['#0a0a0a', '#fff', 'Playfair Display', 1],
+      ['#fff', '#e3001b', 'Anton', 0], ['#0a0a0a', '#fff', 'DotGothic16', 1], ['#e3001b', '#0a0a0a', 'Archivo Black', 1]];
+    h1.setAttribute('aria-label', words.join(' '));
+    h1.replaceChildren(...words.map((w, wi) => {
+      const word = document.createElement('span'); word.className = 'ransom-word'; word.setAttribute('aria-hidden', 'true');
+      [...w.toUpperCase()].forEach((ch, ci) => {
+        const i = wi * 7 + ci, [bg, fg, face, box] = STYLE[(i * 5 + 2) % STYLE.length], sp = document.createElement('span');
+        sp.textContent = ch;
+        Object.assign(sp.style, { background: bg, color: fg, fontFamily: `"${face}", sans-serif`, fontStyle: face === 'Playfair Display' ? 'italic' : 'normal',
+          fontWeight: face === 'Playfair Display' ? '900' : '400', transform: `rotate(${((i * 37) % 15) - 7}deg) translateY(${((i * 13) % 9) - 4}px)`,
+          border: box ? `2px solid ${bg === '#0a0a0a' ? '#fff' : '#0a0a0a'}` : 'none', fontSize: `calc(var(--rs) + ${((i * 7) % 12) * 0.6}px)` });
+        word.append(sp);
+      });
+      return word;
+    }));
+    // the menu: each game's name becomes a button
+    let current = 0;
+    const show = (i, scroll) => {
+      current = i;
+      const c = cards[i];
+      cards.forEach((x, k) => x.querySelector('.game-pick').setAttribute('aria-current', String(k === i)));
+      const pic = document.createElement('div'); pic.className = 'stage-pic';
+      const im = document.createElement('img'); im.src = c.querySelector('.game-cover img').getAttribute('src'); im.alt = ''; im.decoding = 'async'; pic.append(im);
+      const name = document.createElement('h2'); name.className = 'stage-name'; name.textContent = c.querySelector('h3').textContent;
+      const tags = document.createElement('div'); tags.className = 'stage-tags';
+      for (const t of c.querySelectorAll('.game-plat span')) { const s = document.createElement('span'); s.textContent = t.textContent; tags.append(s); }
+      const about = c.querySelector('.game-about').cloneNode(true); about.className = 'stage-about';
+      const why = c.querySelector('.game-why').cloneNode(true); why.classList.replace('game-why', 'stage-why');
+      stage.replaceChildren(pic, name, tags, about, why);
+      count.replaceChildren(pad(i + 1), Object.assign(document.createElement('small'), { textContent: ' / ' + cards.length }));
+      if (scroll && window.matchMedia('(max-width: 760px)').matches) stage.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    };
+    cards.forEach((c, i) => {
+      const h3 = c.querySelector('h3'), b = document.createElement('button');
+      b.type = 'button'; b.className = 'game-pick'; b.textContent = h3.textContent;
+      b.addEventListener('click', () => show(i, true));
+      b.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+        const vis = cards.filter((x) => !x.hidden), at = vis.indexOf(c), next = vis[at + (e.key === 'ArrowDown' ? 1 : -1)];
+        if (next) { e.preventDefault(); next.querySelector('.game-pick').focus(); show(cards.indexOf(next), false); }
+      });
+      h3.replaceChildren(b);
+    });
     // the filter row, from the platforms in the list (in the order they first appear)
     const plats = [...new Set(cards.flatMap((c) => c.dataset.platforms.split(',').map((x) => x.trim())))];
     const bar = page.querySelector('.games-filter');
@@ -1542,9 +1596,11 @@
       b.addEventListener('click', () => {
         for (const x of bar.children) x.setAttribute('aria-pressed', String(x === b));
         for (const c of cards) c.hidden = name !== 'All' && !c.dataset.platforms.split(',').map((x) => x.trim()).includes(name);
+        if (cards[current].hidden) show(cards.findIndex((c) => !c.hidden), false);
       });
       bar.append(b);
     }
+    show(0, false);
   })();
 
   // screen savers rest while the camera is in on another TV (they run in the room view and on their own TV):
