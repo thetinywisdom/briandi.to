@@ -1,0 +1,100 @@
+<!doctype html>
+<!-- Starter for a screen in the briandi.to "phosphor guide" style (see SKILL.md next to this file).
+     A list on the left, a "now showing" panel on the right, header, legend and blinking prompt.
+     Replace the ITEMS with real content; keep the tokens and parts. Open it in a browser to see it. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phosphor guide template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DotGothic16&family=IBM+Plex+Mono:wght@400&display=swap">
+<style>
+  :root {
+    --phosphor: #8dff9a; --phosphor-dim: #3f8f4a; --ground: #031208;
+    --glow: rgba(141, 255, 154, 0.55); --grid: rgba(141, 255, 154, 0.13);
+    --dot: "DotGothic16", "IBM Plex Mono", ui-monospace, monospace;
+    --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; background-color: var(--ground); color: var(--phosphor);
+    background-image:
+      repeating-linear-gradient(90deg, var(--grid) 0 1px, transparent 1px 40px),
+      repeating-linear-gradient(0deg, var(--grid) 0 1px, transparent 1px 40px);
+    font: 400 15px/1.35 var(--dot); text-shadow: 0 0 6px var(--glow); }
+  .screen { position: relative; max-width: 1080px; margin: 0 auto; padding: 26px max(16px, 3vw) 40px; display: flex; flex-direction: column; gap: 14px; min-height: 100vh; }
+  .top { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; }
+  .title { margin: 0; text-align: center; font: inherit; font-size: 24px; letter-spacing: 0.04em; }
+  .body { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 26px; flex: 1; align-items: start; }
+  .list { list-style: none; margin: 0; padding: 0; }
+  .row { all: unset; box-sizing: border-box; width: 100%; cursor: pointer; display: grid; grid-template-columns: 3.2em minmax(0, 1fr) auto; gap: 10px; padding: 7px 8px; }
+  .row span:nth-child(2) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .row span:last-child { opacity: 0.7; }
+  .row:hover, .row:focus-visible, .row[aria-pressed="true"] { background: var(--phosphor); color: var(--ground); text-shadow: none; box-shadow: 0 0 10px rgba(141, 255, 154, 0.5); }
+  .row[aria-pressed="true"] span:last-child { opacity: 1; }
+  .row.empty { color: var(--phosphor-dim); text-shadow: none; }
+  .now { position: sticky; top: 16px; display: grid; gap: 12px; align-content: start; padding: 14px; border: 2px solid var(--phosphor);
+    box-shadow: 0 0 18px rgba(141, 255, 154, 0.3), inset 0 0 0 4px var(--ground), inset 0 0 0 5px var(--phosphor-dim); }
+  .tag { background: var(--phosphor); color: var(--ground); text-shadow: none; padding: 1px 6px; }
+  .pic { position: relative; aspect-ratio: 4 / 3; max-width: 320px; overflow: hidden; border: 1px solid var(--phosphor-dim); }
+  .pic img { width: 100%; height: 100%; object-fit: cover; display: block; filter: sepia(1) hue-rotate(70deg) saturate(2.4) brightness(0.9) contrast(1.1); }
+  .pic::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.35) 0 1px, transparent 1px 3px); }
+  .now h2 { margin: 0; font: inherit; font-size: 20px; }
+  .now p { margin: 0; font: 400 14px/1.6 var(--mono); color: #c8f5cf; text-shadow: none; }
+  .keys { margin: 0; padding-top: 8px; border-top: 2px solid var(--phosphor); display: grid; font-size: 14px; }
+  .keys div { display: flex; } .keys dt { width: 5.5em; } .keys dd { margin: 0; }
+  .blink { margin: 0; text-align: center; font-size: 18px; animation: blink 1.1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .mark { position: absolute; width: 14px; height: 14px; border: 2px solid var(--phosphor); box-shadow: inset 0 0 0 3px var(--ground), inset 0 0 0 5px var(--phosphor); }
+  @media (max-width: 720px) { .body { grid-template-columns: 1fr; } .now { order: -1; position: static; grid-template-columns: 100px 1fr; } .pic { grid-row: span 3; aspect-ratio: 1; } .now .lbl { grid-column: 1 / -1; } }
+  @media (prefers-reduced-motion: reduce) { .blink { animation: none; } }
+</style>
+</head>
+<body>
+<main class="screen">
+  <div class="top"><span>BRIANDI.TO</span><span id="pos"></span></div>
+  <h1 class="title">---- PROGRAM GUIDE ----</h1>
+  <div class="body">
+    <ol class="list" id="list" aria-label="Programs"></ol>
+    <section class="now" id="now" aria-live="polite"></section>
+  </div>
+  <dl class="keys">
+    <div><dt>SELECT</dt><dd>: TAP A LINE, OR ▲ ▼</dd></div>
+    <div><dt>BACK</dt><dd>: BACK KEY OR ESC</dd></div>
+  </dl>
+  <p class="blink">[ PICK A PROGRAM ]</p>
+  <i class="mark" style="left: 6px; top: 6px"></i><i class="mark" style="right: 6px; top: 6px"></i>
+  <i class="mark" style="left: 6px; bottom: 6px"></i><i class="mark" style="right: 6px; bottom: 6px"></i>
+</main>
+<script>
+  // Example rows only: replace with real content (from index.html or the owner).
+  const ITEMS = [
+    { name: 'Example program one', meta: 'PSP', text: 'One or two sentences about it.', img: '' },
+    { name: 'Example program two', meta: 'PC', text: 'Another short description.', img: '' },
+    { name: 'No signal', meta: '--', text: '', img: '', empty: true },
+  ];
+  const pad = (n) => String(n).padStart(2, '0');
+  const list = document.getElementById('list'), now = document.getElementById('now'), pos = document.getElementById('pos');
+  const el = (t, c, txt) => { const e = document.createElement(t); if (c) e.className = c; if (txt != null) e.textContent = txt; return e; };
+  const show = (i) => {
+    const it = ITEMS[i];
+    [...list.children].forEach((li, k) => li.firstChild.setAttribute('aria-pressed', String(k === i)));
+    const lbl = el('span', 'lbl'); lbl.append(el('span', 'tag', 'NOW'), ` CH ${pad(i + 1)} · ${it.meta}`);
+    const pic = el('div', 'pic'); if (it.img) { const im = new Image(); im.src = it.img; im.alt = ''; pic.append(im); }
+    now.replaceChildren(lbl, pic, el('h2', null, it.name.toUpperCase()), el('p', null, it.text));
+    pos.textContent = `CH ${pad(i + 1)} ▶`;
+  };
+  ITEMS.forEach((it, i) => {
+    const li = el('li'), b = el('button', 'row' + (it.empty ? ' empty' : '')); b.type = 'button';
+    b.append(el('span', null, pad(i + 1)), el('span', null, it.name.toUpperCase()), el('span', null, it.meta));
+    b.addEventListener('click', () => show(i));
+    b.addEventListener('keydown', (e) => {
+      const d = e.key === 'ArrowDown' ? 1 : e.key === 'ArrowUp' ? -1 : 0, n = list.children[i + d];
+      if (d && n) { e.preventDefault(); n.firstChild.focus(); show(i + d); }
+    });
+    li.append(b); list.append(li);
+  });
+  show(0);
+</script>
+</body>
+</html>
