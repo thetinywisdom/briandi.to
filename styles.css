@@ -477,4 +477,5 @@ retro-shelf { --focus-inset-bottom: calc(128px + env(safe-area-inset-bottom, 0px
 @media (max-width: 559px) { retro-shelf { --focus-inset-bottom: calc(176px + env(safe-area-inset-bottom, 0px)); } }
 retro-shelf::part(hint), retro-shelf::part(back), retro-shelf::part(fill), retro-shelf::part(reader-close) { display: none; }
 /* leave room under the full-screen page so its end clears the dock */
-.tv[slot="reader"] { padding-bottom: calc(clamp(48px, 10vh, 96px) + 96px); }   /* the compact pager is 80 px tall */
+.tv[slot="reader"] { padding-bottom: calc(clamp(48px, 10vh, 96px) + 96px); }   /* the compact pager is 80 px tall on phones */
+@media (min-width: 560px) { .tv[slot="reader"] { padding-bottom: calc(clamp(48px, 10vh, 96px) + 144px); } }   /* and 128 px, the homepage size, on wider windows */
