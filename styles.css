@@ -81,7 +81,7 @@ retro-shelf { height: 100vh; height: 100dvh; }
 .standby.corner { animation: standby-corner 0.6s ease-out; }
 @keyframes standby-corner { 0% { background: rgba(255, 255, 255, 0.35); } 100% { background: transparent; } }
 .tv-latest .note { color: #b9c6d6; }
-.tv-about { background: #e9e7e1; }
+.tv-about { background: #e9e7e1; }   /* the paper grey the e-ink filter turns white into */
 /* CREATE TV: a standby screen on the tube like an old station ident, in black and white (the owner's two
    ASCII pictures taking turns, ON AIR and a clock); the page itself when it is opened full screen */
 .tv-about:not([slot="reader"]) { padding: 0; height: 100%; background: #050505; }
@@ -395,63 +395,58 @@ body.giant-on retro-map { visibility: hidden; }
 }
 
 
-/* CREATE page full screen: an e-ink reader (owner, 2026-11-17). Grey paper with a faint grain, black ink, Literata
-   (a typeface made for reading on screens), an e-reader status bar, and pictures dithered to three greys by the
-   script "CREATE page" (2 CSS px per dot, drawn pixelated). Placeholders are in [brackets] and in grey italics. */
-.tv-about[slot="reader"] { --paper: #e9e7e1; --ink: #1b1b1a; --grey: #78776f; --rule: #b9b7b0;
-  padding: 0 max(20px, calc((100% - 42rem) / 2)); background-color: var(--paper); color: var(--ink);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
-  font: 400 18px/1.65 "Literata", Georgia, serif; }
-.eink { position: relative; }
-.eink.flash { filter: invert(1); }
-.eink-status { position: sticky; top: 0; z-index: 2; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 12px 0 10px; margin-bottom: 28px;
-  background: var(--paper); border-bottom: 1px solid var(--rule); font: 500 12px/1 var(--mono); letter-spacing: 0.08em; color: var(--ink); }
-.eink-clock { text-align: center; font-variant-numeric: tabular-nums; }
-.eink-batt { justify-self: end; position: relative; width: 26px; height: 12px; border: 1.5px solid var(--ink); border-radius: 2px; }
-.eink-batt::after { content: ""; position: absolute; right: -4px; top: 3px; width: 2px; height: 4px; background: var(--ink); }
-.eink-batt i { position: absolute; inset: 2px; right: 30%; background: var(--ink); }
-canvas.eink-art { display: block; width: 100%; height: auto; image-rendering: pixelated; image-rendering: crisp-edges; background: var(--paper); }
-.eink-cover { display: grid; justify-items: center; text-align: center; gap: 6px; padding: 8px 0 40px; border-bottom: 1px solid var(--rule); }
-.eink-logo { border: 1px solid var(--ink); margin-bottom: 18px; }
-.eink-kicker { margin: 0; font: 500 12px/1 var(--mono); letter-spacing: 0.24em; text-transform: uppercase; color: var(--grey); }
-.tv-about[slot="reader"] .eink h1 { margin: 0; font: 600 clamp(34px, 6vw, 52px)/1.1 "Literata", Georgia, serif; letter-spacing: -0.01em; text-transform: none; color: var(--ink); text-wrap: balance; }
-.eink-by { margin: 0; font-style: italic; color: var(--grey); }
-.eink-sr { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-.eink-figures { border: 1px solid var(--ink); margin: 0 0 22px; }
-.eink-toc { padding: 32px 0; border-bottom: 1px solid var(--rule); }
-.tv-about[slot="reader"] .eink h2 { margin: 0 0 18px; font: 600 26px/1.2 "Literata", Georgia, serif; text-transform: none; letter-spacing: 0; color: var(--ink); }
-.eink-toc h2 { font-size: 15px !important; font-family: var(--mono) !important; font-weight: 500 !important; letter-spacing: 0.2em !important; text-transform: uppercase !important; }
-.eink-toc ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
-.eink-toc a { display: flex; align-items: baseline; gap: 8px; padding: 6px 0; color: var(--ink); text-decoration: none; }
-.eink-toc a i { flex: 1; border-bottom: 2px dotted var(--grey); transform: translateY(-4px); }
-.eink-toc a b { font: 500 14px/1 var(--mono); }
-.eink-toc a:hover span, .eink-toc a:focus-visible span { text-decoration: underline; text-underline-offset: 4px; }
-.eink-toc a:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
-.eink-ch { padding: 40px 0 8px; scroll-margin-top: 56px; }
-.eink-chno { margin: 0 0 6px; font: 500 12px/1 var(--mono); letter-spacing: 0.2em; text-transform: uppercase; color: var(--grey); }
-.eink-ch p { margin: 0 0 1em; }
-.eink-todo { color: var(--grey); font-style: italic; }
-.eink-strip { margin: 0 0 34px; }
-.eink-strip canvas { border: 1px solid var(--ink); }
-.eink-strip figcaption { display: flex; justify-content: space-between; gap: 12px; margin-top: 8px; font-size: 15px; }
-.eink-strip figcaption b { font-weight: 600; }
-.eink-products { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
-.eink-product canvas { border: 1px solid var(--ink); margin-bottom: 10px; }
-.tv-about[slot="reader"] .eink-product h3 { margin: 0 0 4px; font: 600 16px/1.3 "Literata", Georgia, serif; text-transform: none; letter-spacing: 0; }
-.eink-product p { margin: 0 0 4px !important; font-size: 14px; line-height: 1.45; }
-.eink-links { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
-.eink-links li { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--rule); }
-.eink-links li span:last-child { font: 400 14px/1.6 var(--mono); }
-.eink-progress { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; margin: 48px 0 0; padding: 12px 0; border-top: 1px solid var(--rule);
-  font: 500 12px/1 var(--mono); letter-spacing: 0.08em; font-variant-numeric: tabular-nums; }
-.eink-progress i { height: 4px; border: 1px solid var(--ink); }
-.eink-progress b { display: block; height: 100%; width: 0; background: var(--ink); }
-@media (max-width: 640px) {
-  .tv-about[slot="reader"] { font-size: 17px; }
-  .eink-products { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-  .eink-strip figcaption { flex-direction: column; gap: 2px; }
-  .eink-links li { flex-direction: column; gap: 2px; }
+/* CREATE page full screen: a big dotted sketchbook canvas on an e-ink screen (owner, 2026-11-17). The page is
+   drawn in plain greys on white; the #eink filter (top of <body>) turns white into the paper, black into the ink and
+   the greys in between into dots, text included. Handwritten headings (Caveat), pieces taped to the canvas, a pen. */
+.tv-about[slot="reader"] { --ink: #000; --grey: #6f6f6f; padding: 0; min-height: 100%; background: #fff; color: var(--ink); filter: url(#eink);
+  font: 500 22px/1.25 "Caveat", "Comic Sans MS", cursive; }
+.sketch { position: relative; min-height: 100vh; box-sizing: border-box; padding: 64px max(24px, calc((100% - 74rem) / 2)) calc(clamp(48px, 10vh, 96px) + 144px) max(80px, calc((100% - 74rem) / 2));
+  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.42) 1.1px, transparent 1.5px); background-size: 22px 22px; background-position: 11px 11px; }
+.sketch.flash { filter: invert(1); }
+.sk-tools { position: sticky; top: 24px; z-index: 6; height: 0; }
+.sk-tools button { position: relative; left: calc(-1 * max(56px, calc((100vw - 74rem) / 2 - 24px))); display: grid; place-items: center; width: 40px; height: 40px; margin-bottom: 8px;
+  border: 2px solid var(--ink); border-radius: 6px; background: #fff; color: var(--ink); cursor: pointer; }
+.sk-tools button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.sk-tools button:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+.sk-tools svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.sk-ink { position: absolute; left: 0; top: 0; z-index: 5; touch-action: none; cursor: crosshair; }
+.sk-ink.off { pointer-events: none; }
+.sk-hint { position: relative; left: calc(-1 * max(56px, calc((100vw - 74rem) / 2 - 24px))); width: 64px; margin: 2px 0 0; padding: 5px 6px; background: #fff; border: 2px solid var(--ink);
+  font: 500 10px/1.3 var(--mono); visibility: hidden; }
+.sketch.drawing .sk-hint { visibility: visible; }
+.sk-board { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 44px 28px; align-items: start; }
+.sk-piece { margin: 0; min-width: 0; }
+.tv-about[slot="reader"] .sketch h1, .tv-about[slot="reader"] .sketch h2 { margin: 0; font: 700 clamp(44px, 6vw, 76px)/0.95 "Caveat", cursive; text-transform: none; letter-spacing: 0; color: var(--ink); }
+.tv-about[slot="reader"] .sketch h2 { font-size: clamp(36px, 4vw, 52px); }
+.sk-note { margin: 6px 0 0; color: var(--grey); font: 500 clamp(20px, 1.8vw, 24px)/1.25 "Caveat", cursive; }
+.sk-art { display: block; width: 100%; height: auto; border: 2px solid var(--ink); background: #fff; }
+.sk-logo, .sk-figures, .sk-strip, .sk-product { position: relative; padding: 10px; background: #fff; box-shadow: 3px 4px 0 rgba(0, 0, 0, 0.18); }
+.sk-tape { position: absolute; top: -12px; left: 38%; width: 84px; height: 24px; background: rgba(120, 120, 120, 0.45); transform: rotate(3deg); }
+.sk-strip .sk-note, .sk-product .sk-note { padding: 4px 2px 0; }
+/* where each piece sits on the canvas (wide screens), each a little crooked as if pinned by hand */
+.sk-title { grid-column: 1 / span 5; align-self: center; transform: rotate(-2deg); }
+.sk-logo { grid-column: 6 / span 7; transform: rotate(1.5deg); }
+.sk-about { grid-column: 1 / span 4; margin-top: 30px; }
+.sk-figures { grid-column: 5 / span 6; transform: rotate(-1.2deg); }
+.sk-h-strips { grid-column: 2 / span 6; margin-top: 20px !important; transform: rotate(-1deg); }
+.sk-s1 { grid-column: 1 / span 9; transform: rotate(-0.8deg); }
+.sk-s2 { grid-column: 4 / span 9; transform: rotate(0.9deg); }
+.sk-s3 { grid-column: 2 / span 9; transform: rotate(-0.5deg); }
+.sk-h-products { grid-column: 1 / span 6; margin-top: 20px !important; transform: rotate(1deg); }
+.sk-p1 { grid-column: 1 / span 3; transform: rotate(-2deg); }
+.sk-p2 { grid-column: 5 / span 3; transform: rotate(1.5deg); margin-top: 40px; }
+.sk-p3 { grid-column: 9 / span 3; transform: rotate(-1deg); }
+.sk-links { grid-column: 3 / span 7; transform: rotate(-1deg); }
+.sk-links ul { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 4px; color: var(--grey); font-size: clamp(22px, 2vw, 28px); }
+@media (max-width: 760px) {
+  .sketch { padding: 48px 18px calc(clamp(48px, 10vh, 96px) + 96px) 70px; background-size: 18px 18px; background-position: 9px 9px; }
+  .sk-tools button { left: -56px; width: 36px; height: 36px; }
+  .sk-board { grid-template-columns: 1fr; gap: 34px; }
+  .sk-board > * { grid-column: 1 / -1 !important; }
+  .sk-p2 { margin-top: 0; }
+  .sk-hint { left: -56px; width: 44px; font-size: 9px; padding: 4px; }
 }
+@media (prefers-reduced-motion: reduce) { .sketch.flash { filter: none; } }
 
 /* GAME page full screen ("Games I Love"): option E of five (owner, 2026-11-16), brutalist red / black / white
    in the spirit of a stylish JRPG menu. A ransom-note title, a slanted menu of game names on the left, and
