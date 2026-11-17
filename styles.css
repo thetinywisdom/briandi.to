@@ -409,7 +409,7 @@ body.giant-on retro-map { visibility: hidden; }
 .games-slash { position: absolute; top: -80px; bottom: 0; right: calc(-1 * max(20px, (100vw - 72rem) / 2) - 14vw); width: 46vw; background: var(--red); transform: skewX(-18deg); pointer-events: none; }
 .games-slash.thin { right: calc(-1 * max(20px, (100vw - 72rem) / 2) + 34vw); width: 4vw; background: var(--paper); opacity: 0.9; }
 .games > :not(.games-slash) { position: relative; }
-.games-count { position: absolute !important; top: clamp(40px, 8vh, 72px); right: 0; margin: 0; font: 400 clamp(40px, 6vw, 64px)/1 "Anton", var(--legend); color: var(--ink); }
+.games-count { position: absolute !important; top: clamp(40px, 8vh, 72px); right: 0; margin: 0; font: 400 clamp(40px, 6vw, 64px)/1 "Anton", var(--legend); color: var(--paper); }
 .games-count small { font-size: 0.38em; }
 .games-head { display: grid; justify-items: start; gap: 14px; padding-right: 120px; }
 .games-head .doc-crumb { display: none; }
