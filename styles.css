@@ -402,7 +402,14 @@ body.giant-on retro-map { visibility: hidden; }
 .tv-latest[slot="reader"] { --red: #e3001b; --paper: #ffffff; --ink: #0a0a0a;
   position: relative; overflow-x: clip; background: var(--ink); color: var(--paper); font: 400 16px/1.6 var(--body);
   padding: 0 max(20px, calc((100% - 72rem) / 2)) 0; }
-.games { position: relative; padding-top: clamp(40px, 8vh, 72px); }
+.games { position: relative; padding-top: clamp(40px, 8vh, 72px); padding-bottom: 96px; }
+/* the room left for the pager is inside the page, so the slash and the dots run down to the bottom; the
+   credit line sits in the list's column, so the stage stays centred down to the end of the page */
+.tv.tv-latest[slot="reader"] { padding-bottom: 0; }
+@media (min-width: 560px) { .games { padding-bottom: 144px; } }
+.games-grid { grid-column: 1; grid-row: 1; }
+.games-stage { grid-column: 2; grid-row: 1 / span 2; }
+.games-credit { grid-column: 1; grid-row: 2; align-self: end; margin-bottom: clamp(48px, 10vh, 96px) !important; }
 .games::before { content: ""; position: absolute; inset: 0 auto 0 calc(-1 * max(20px, (100vw - 72rem) / 2)); width: 70%; pointer-events: none;
   background: radial-gradient(circle, rgba(227, 0, 27, 0.5) 1.2px, transparent 1.6px) 0 0 / 9px 9px;
   -webkit-mask: linear-gradient(115deg, #000 0 20%, transparent 55%); mask: linear-gradient(115deg, #000 0 20%, transparent 55%); }
@@ -457,6 +464,7 @@ body.giant-on retro-map { visibility: hidden; }
   .games-slash { width: 60vw; right: -50vw; } .games-slash.thin { display: none; }
   /* phones: no stage and no counter; every game is shown open in the list, one after another (owner, 2026-11-17) */
   .games-count, .games-stage { display: none; }
+  .games-grid, .games-credit { grid-column: 1; grid-row: auto; }
   .games-body { grid-template-columns: 1fr; }
   .games-grid { padding: 0 4px; gap: 44px; }
   .game:nth-child(n) { margin-left: 0; }
