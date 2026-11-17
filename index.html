@@ -1585,7 +1585,8 @@
       // an optional <p class="game-why"> (why I love it) shows on a red strip under the description
       const whyEl = c.querySelector('.game-why'), why = whyEl ? whyEl.cloneNode(true) : null;
       if (why) why.classList.replace('game-why', 'stage-why');
-      stage.replaceChildren(...[pic, name, tags, about, why].filter(Boolean));
+      // the counter rides in the stage, so it stays on screen with the picked game
+      stage.replaceChildren(count, ...[pic, name, tags, about, why].filter(Boolean));
       // the counter: this game's place among the games shown (all, or those of the chosen platform)
       const vis = cards.filter((x) => !x.hidden);
       count.replaceChildren(pad(vis.indexOf(c) + 1), Object.assign(document.createElement('small'), { textContent: ' / ' + pad(vis.length) }));
