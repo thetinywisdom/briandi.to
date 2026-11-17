@@ -19,7 +19,7 @@
 <meta name="description" content="Comics and drawings, shown on a stack of old TVs in a dark room.">
 <meta name="theme-color" content="#030403">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Playfair+Display:ital,wght@1,900&family=Barlow+Semi+Condensed:ital,wght@0,500;0,600;0,700;1,700;1,800&family=DotGothic16&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Anton&family=Literata:ital,wght@0,400;0,600;1,400&family=Archivo+Black&family=Playfair+Display:ital,wght@1,900&family=Barlow+Semi+Condensed:ital,wght@0,500;0,600;0,700;1,700;1,800&family=DotGothic16&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="styles.css">
 <!-- Loading screen. Its styles are here, not in styles.css, so it is the first thing a visitor sees.
      The 3D bundle is downloaded by the script below (so the bar can show real progress) and then started;
@@ -662,9 +662,66 @@
       <div class="ident-grid"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
       <div class="ident-bar ident-more" data-click="&#9654; CLICK TO SEE MORE" data-tap="&#9654; TAP TO SEE MORE">&#9654; CLICK TO SEE MORE</div>
     </div>
-    <div class="page-body">
-      <h2>About</h2>
-      <p>A few lines about you.</p>
+    <!-- the page opened full screen: an e-ink reader (owner, 2026-11-17). Grey paper, black ink, a book serif,
+         an e-reader status bar, and every picture dithered to the few greys an e-ink screen has (the script
+         "CREATE page" at the end draws and dithers each <canvas class="eink-art">; a real picture goes in as
+         <img class="eink-dither" src="..." alt="...">, dithered the same way). Text in [brackets] is a placeholder
+         for the owner's own words, comics, products and links. -->
+    <div class="page-body eink">
+      <div class="eink-status" aria-hidden="true"><span>THE TINY WISDOM</span><span class="eink-clock">00:00</span><span class="eink-batt"><i></i></span></div>
+      <header class="eink-cover">
+        <canvas class="eink-art eink-logo" data-art="logo" aria-hidden="true"></canvas>
+        <p class="eink-kicker">Create</p>
+        <h1 class="eink-sr">The Tiny Wisdom</h1>
+        <p class="eink-by">Brian, also known as The Tiny Wisdom.</p>
+      </header>
+      <nav class="eink-toc" aria-label="Contents">
+        <h2>Contents</h2>
+        <ol>
+          <li><a href="#create-about" data-go><span>About</span><i></i><b>1</b></a></li>
+          <li><a href="#create-strips" data-go><span>Comic strips</span><i></i><b>2</b></a></li>
+          <li><a href="#create-products" data-go><span>Products</span><i></i><b>3</b></a></li>
+          <li><a href="#create-links" data-go><span>Links</span><i></i><b>4</b></a></li>
+        </ol>
+      </nav>
+      <section class="eink-ch" id="create-about">
+        <p class="eink-chno">Chapter 1</p>
+        <h2>About</h2>
+        <canvas class="eink-art eink-figures" data-art="figures" aria-hidden="true"></canvas>
+        <p class="eink-todo">[About The Tiny Wisdom: two or three sentences in your words. What it is, what the comics are about, and who they are for.]</p>
+      </section>
+      <section class="eink-ch" id="create-strips">
+        <p class="eink-chno">Chapter 2</p>
+        <h2>Comic strips</h2>
+        <figure class="eink-strip"><canvas class="eink-art" data-art="strip" data-seed="1" data-label="STRIP 01"></canvas>
+          <figcaption><b class="eink-todo">[Strip title]</b><span class="eink-todo">[Date]</span></figcaption></figure>
+        <figure class="eink-strip"><canvas class="eink-art" data-art="strip" data-seed="2" data-label="STRIP 02"></canvas>
+          <figcaption><b class="eink-todo">[Strip title]</b><span class="eink-todo">[Date]</span></figcaption></figure>
+        <figure class="eink-strip"><canvas class="eink-art" data-art="strip" data-seed="3" data-label="STRIP 03"></canvas>
+          <figcaption><b class="eink-todo">[Strip title]</b><span class="eink-todo">[Date]</span></figcaption></figure>
+      </section>
+      <section class="eink-ch" id="create-products">
+        <p class="eink-chno">Chapter 3</p>
+        <h2>Products</h2>
+        <div class="eink-products">
+          <article class="eink-product"><canvas class="eink-art" data-art="product" data-seed="1" data-label="PRODUCT 1"></canvas>
+            <h3 class="eink-todo">[Product name]</h3><p class="eink-todo">[One line: what it is]</p><p class="eink-todo eink-more">[Link] &rarr;</p></article>
+          <article class="eink-product"><canvas class="eink-art" data-art="product" data-seed="2" data-label="PRODUCT 2"></canvas>
+            <h3 class="eink-todo">[Product name]</h3><p class="eink-todo">[One line: what it is]</p><p class="eink-todo eink-more">[Link] &rarr;</p></article>
+          <article class="eink-product"><canvas class="eink-art" data-art="product" data-seed="3" data-label="PRODUCT 3"></canvas>
+            <h3 class="eink-todo">[Product name]</h3><p class="eink-todo">[One line: what it is]</p><p class="eink-todo eink-more">[Link] &rarr;</p></article>
+        </div>
+      </section>
+      <section class="eink-ch" id="create-links">
+        <p class="eink-chno">Chapter 4</p>
+        <h2>Links</h2>
+        <ul class="eink-links">
+          <li><span class="eink-todo">[Link name]</span><span class="eink-todo">[address]</span></li>
+          <li><span class="eink-todo">[Link name]</span><span class="eink-todo">[address]</span></li>
+          <li><span class="eink-todo">[Link name]</span><span class="eink-todo">[address]</span></li>
+        </ul>
+      </section>
+      <footer class="eink-progress" aria-hidden="true"><span class="eink-pct">0%</span><i><b></b></i><span>THE END</span></footer>
     </div>
   </div>
 
@@ -1540,6 +1597,141 @@
     // the page scrolls inside the shelf's reader (in its shadow DOM), whose scroll events do not reach the
     // document, so check a few times a second while the page is open
     setInterval(mark, 200);
+  })();
+
+  // CREATE page: an e-ink reader. Draws the placeholder pictures (and any <img class="eink-dither">) into
+  // canvases and dithers them (Atkinson) to three e-ink greys at 2 CSS px per dot; keeps the clock and the
+  // reading progress up to date; and blinks the screen like an e-ink refresh when a contents line is used.
+  (() => {
+    const page = document.querySelector('.eink');
+    if (!page) return;
+    const INK = [[27, 27, 26], [120, 119, 114], [233, 231, 225]];      // ink, grey, paper
+    const LV = INK.map((c) => 0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2]);
+    const SCALE = 2;                                                     // CSS px per dot
+    const dither = (ctx, w, h) => {
+      const im = ctx.getImageData(0, 0, w, h), d = im.data, g = new Float32Array(w * h);
+      for (let i = 0; i < w * h; i++) g[i] = 0.299 * d[i * 4] + 0.587 * d[i * 4 + 1] + 0.114 * d[i * 4 + 2];
+      const add = (x, y, e) => { if (x >= 0 && x < w && y < h) g[y * w + x] += e; };
+      for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+        const i = y * w + x, v = g[i];
+        let k = 0; for (let j = 1; j < LV.length; j++) if (Math.abs(LV[j] - v) < Math.abs(LV[k] - v)) k = j;
+        const e = (v - LV[k]) / 8;
+        add(x + 1, y, e); add(x + 2, y, e); add(x - 1, y + 1, e); add(x, y + 1, e); add(x + 1, y + 1, e); add(x, y + 2, e);
+        d[i * 4] = INK[k][0]; d[i * 4 + 1] = INK[k][1]; d[i * 4 + 2] = INK[k][2]; d[i * 4 + 3] = 255;
+      }
+      ctx.putImageData(im, 0, 0);
+    };
+    let n = 7;
+    const rnd = () => ((n = (n * 1664525 + 1013904223) >>> 0) / 4294967296);
+    const shade = (g, x, y, r, a, b) => { const gr = g.createRadialGradient(x - r * 0.35, y - r * 0.4, r * 0.1, x, y, r); gr.addColorStop(0, a); gr.addColorStop(1, b); return gr; };
+    // a stand-in figure: a head and a body, softly lit, so the dithering has greys to work on
+    const figure = (g, x, y, s, tone) => {
+      g.fillStyle = shade(g, x, y + s * 1.25, s * 1.1, `hsl(0 0% ${tone + 25}%)`, `hsl(0 0% ${tone - 20}%)`);
+      g.beginPath(); g.ellipse(x, y + s * 1.35, s * 0.85, s * 1.0, 0, Math.PI, 0); g.fill();
+      g.fillStyle = shade(g, x, y, s * 0.6, `hsl(0 0% ${tone + 35}%)`, `hsl(0 0% ${tone - 10}%)`);
+      g.beginPath(); g.arc(x, y, s * 0.55, 0, Math.PI * 2); g.fill();
+    };
+    const label = (g, text, w, h, size) => {
+      g.font = `600 ${size}px "IBM Plex Mono", monospace`; const tw = g.measureText(text).width;
+      g.fillStyle = '#fff'; g.fillRect(w - tw - size * 1.6, h - size * 2.2, tw + size, size * 1.6);
+      g.fillStyle = '#000'; g.fillText(text, w - tw - size * 1.1, h - size * 1.0);
+    };
+    const ART = {
+      strip(g, w, h, el) {
+        n = 7 + Number(el.dataset.seed || 1) * 101;
+        g.fillStyle = '#fff'; g.fillRect(0, 0, w, h);
+        const gap = Math.max(3, w * 0.012), pw = (w - gap * 5) / 4, ph = h - gap * 2;
+        for (let i = 0; i < 4; i++) {
+          const x = gap + i * (pw + gap), y = gap;
+          g.save(); g.beginPath(); g.rect(x, y, pw, ph); g.clip();
+          const bg = g.createLinearGradient(x, y, x + pw * 0.3, y + ph);
+          const t = 70 + rnd() * 25; bg.addColorStop(0, `hsl(0 0% ${t}%)`); bg.addColorStop(1, `hsl(0 0% ${t - 30 - rnd() * 15}%)`);
+          g.fillStyle = bg; g.fillRect(x, y, pw, ph);
+          g.fillStyle = 'rgba(0,0,0,0.35)'; g.fillRect(x, y + ph * 0.78, pw, ph * 0.22);
+          const s = ph * (0.17 + rnd() * 0.05);
+          figure(g, x + pw * (0.3 + rnd() * 0.1), y + ph * 0.45, s, 45 + rnd() * 20);
+          if (i % 2 === 0) figure(g, x + pw * (0.72 + rnd() * 0.05), y + ph * 0.5, s * 0.8, 30 + rnd() * 20);
+          if (i !== 3) { g.fillStyle = '#fff'; g.strokeStyle = '#000'; g.lineWidth = Math.max(1, w * 0.002);
+            g.beginPath(); g.ellipse(x + pw * 0.62, y + ph * 0.17, pw * 0.27, ph * 0.1, 0, 0, Math.PI * 2); g.fill(); g.stroke(); }
+          g.restore();
+          g.strokeStyle = '#000'; g.lineWidth = Math.max(1.5, w * 0.004); g.strokeRect(x, y, pw, ph);
+        }
+        label(g, (el.dataset.label || 'STRIP') + ' · PLACEHOLDER', w - gap, h - gap, Math.max(7, h * 0.07));
+      },
+      product(g, w, h, el) {
+        n = 31 + Number(el.dataset.seed || 1) * 53;
+        const bg = g.createLinearGradient(0, 0, 0, h); bg.addColorStop(0, '#f2f2f2'); bg.addColorStop(1, '#8a8a8a');
+        g.fillStyle = bg; g.fillRect(0, 0, w, h);
+        g.fillStyle = 'rgba(0,0,0,0.3)'; g.beginPath(); g.ellipse(w / 2, h * 0.8, w * 0.32, h * 0.06, 0, 0, Math.PI * 2); g.fill();
+        const k = Number(el.dataset.seed || 1) % 3;
+        if (k === 1) { g.fillStyle = shade(g, w / 2, h * 0.48, w * 0.3, '#fafafa', '#3a3a3a'); g.beginPath(); g.arc(w / 2, h * 0.5, w * 0.27, 0, Math.PI * 2); g.fill(); }
+        else if (k === 2) { const gr = g.createLinearGradient(w * 0.25, 0, w * 0.75, 0); gr.addColorStop(0, '#2c2c2c'); gr.addColorStop(0.5, '#d8d8d8'); gr.addColorStop(1, '#4a4a4a'); g.fillStyle = gr; g.fillRect(w * 0.3, h * 0.2, w * 0.4, h * 0.58); }
+        else { const gr = g.createLinearGradient(0, h * 0.25, 0, h * 0.8); gr.addColorStop(0, '#ececec'); gr.addColorStop(1, '#333'); g.fillStyle = gr;
+          g.beginPath(); g.moveTo(w * 0.22, h * 0.3); g.lineTo(w * 0.78, h * 0.24); g.lineTo(w * 0.76, h * 0.78); g.lineTo(w * 0.24, h * 0.8); g.closePath(); g.fill(); }
+        label(g, el.dataset.label || 'PRODUCT', w - 2, h - 2, Math.max(7, h * 0.06));
+      },
+      logo(g, w, h, el) {
+        // the owner's Tiny Wisdom ASCII logo from the TV's standby screen, each character read as a shade of grey
+        // (a space is paper, * is nearly black), one dot wide and two tall like a character cell, lit like a cover
+        const pre = document.querySelector(el.dataset.art === 'figures' ? '.ident-figures' : '.ident-logo'); if (!pre) return;
+        const lines = pre.textContent.replace(/^\n|\n$/g, '').split('\n'), cols = Math.max(...lines.map((l) => l.length));
+        const INKS = { ' ': 0, '.': 0.15, ':': 0.25, '-': 0.35, '=': 0.55, '+': 0.65, '*': 0.85, '#': 0.95 };
+        const off = document.createElement('canvas'); off.width = cols; off.height = lines.length * 2;
+        const o = off.getContext('2d'), im = o.createImageData(off.width, off.height);
+        lines.forEach((l, y) => { for (let x = 0; x < cols; x++) { const v = 255 - Math.round((INKS[l[x]] ?? 0) * 255);
+          for (const yy of [y * 2, y * 2 + 1]) { const k = (yy * cols + x) * 4; im.data[k] = im.data[k + 1] = im.data[k + 2] = v; im.data[k + 3] = 255; } } });
+        o.putImageData(im, 0, 0);
+        const vg = g.createRadialGradient(w / 2, h / 2, h * 0.2, w / 2, h / 2, w * 0.75); vg.addColorStop(0, '#ffffff'); vg.addColorStop(1, '#a8a8a8');
+        g.fillStyle = vg; g.fillRect(0, 0, w, h);
+        const sc = Math.min((w * 0.88) / off.width, (h * 0.84) / off.height);
+        g.imageSmoothingEnabled = true; g.globalCompositeOperation = 'multiply';
+        g.drawImage(off, (w - off.width * sc) / 2, (h - off.height * sc) / 2, off.width * sc, off.height * sc);
+        g.globalCompositeOperation = 'source-over';
+      },
+    };
+    ART.figures = ART.logo;
+    const draw = (el) => {
+      const cw = el.clientWidth; if (!cw) return;
+      const isImg = el.tagName === 'IMG';
+      if (isImg && !el.complete) { el.addEventListener('load', () => draw(el), { once: true }); return; }
+      const ratio = isImg ? el.naturalHeight / el.naturalWidth : el.dataset.art === 'strip' ? 0.3 : el.dataset.art === 'logo' ? 0.42 : el.dataset.art === 'figures' ? 0.56 : 1;
+      const w = Math.max(40, Math.round(cw / SCALE)), h = Math.round(w * ratio);
+      if (el._w === w) return;
+      const c = isImg ? (el._c || (el._c = Object.assign(document.createElement('canvas'), { className: 'eink-art', role: 'img', ariaLabel: el.alt || '' }))) : el;
+      if (isImg && !c.isConnected) { el.after(c); el.hidden = true; }
+      el._w = w; c.width = w; c.height = h;
+      const g = c.getContext('2d', { willReadFrequently: true });
+      if (isImg) { g.fillStyle = '#fff'; g.fillRect(0, 0, w, h); g.drawImage(el, 0, 0, w, h); } else ART[el.dataset.art]?.(g, w, h, el);
+      dither(g, w, h);
+    };
+    const all = () => page.querySelectorAll('canvas.eink-art[data-art], img.eink-dither').forEach(draw);
+    const shelf = document.getElementById('shelf');
+    shelf.addEventListener('shelf-read', (e) => { if (e.detail.open && e.detail.tv === 'kv-9pr1') setTimeout(all, 320); });
+    let rt = 0; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(all, 200); });
+    document.fonts?.ready.then(() => { page.querySelectorAll('canvas.eink-art').forEach((c) => { c._w = 0; }); all(); });
+    // the status bar's clock
+    const clock = page.querySelector('.eink-clock');
+    const tick = () => { const d = new Date(); clock.textContent = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`; };
+    tick(); setInterval(tick, 20000);
+    // reading progress, like an e-reader's footer (the reader's scroll events stay in its shadow DOM, so poll)
+    const pct = page.querySelector('.eink-pct'), bar = page.querySelector('.eink-progress b');
+    setInterval(() => {
+      if (!page.getClientRects().length) return;
+      const r = page.getBoundingClientRect(), span = Math.max(1, r.height - innerHeight);
+      const v = Math.round(Math.min(1, Math.max(0, -r.top / span)) * 100);
+      pct.textContent = v + '%'; bar.style.width = v + '%';
+    }, 250);
+    // contents: jump to a chapter with an e-ink refresh blink (the page inverts twice)
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    for (const a of page.querySelectorAll('.eink-toc a[data-go]')) a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = page.querySelector(a.getAttribute('href'));
+      if (reduced) { target?.scrollIntoView(); return; }
+      page.classList.add('flash');
+      setTimeout(() => { target?.scrollIntoView(); page.classList.remove('flash'); }, 110);
+      setTimeout(() => page.classList.add('flash'), 190);
+      setTimeout(() => page.classList.remove('flash'), 280);
+    });
   })();
 
   // GAME page (option E): the ransom-note title, the slanted menu built from the list, the platform
