@@ -1611,7 +1611,8 @@
       b.addEventListener('click', () => {
         for (const x of bar.children) x.setAttribute('aria-pressed', String(x === b));
         for (const c of cards) c.hidden = name !== 'All' && !c.dataset.platforms.split(',').map((x) => x.trim()).includes(name);
-        show(cards[current].hidden ? cards.findIndex((c) => !c.hidden) : current, false);
+        // every filter, All included, starts again from its first game (A to Z)
+        show(cards.findIndex((c) => !c.hidden), false);
       });
       bar.append(b);
     }
