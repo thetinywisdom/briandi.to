@@ -1589,7 +1589,6 @@
       // the counter: this game's place among the games shown (all, or those of the chosen platform)
       const vis = cards.filter((x) => !x.hidden);
       count.replaceChildren(pad(vis.indexOf(c) + 1), Object.assign(document.createElement('small'), { textContent: ' / ' + pad(vis.length) }));
-      if (scroll && window.matchMedia('(max-width: 760px)').matches) stage.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
     };
     cards.forEach((c, i) => {
       const h3 = c.querySelector('h3'), b = document.createElement('button');
