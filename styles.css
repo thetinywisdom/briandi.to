@@ -400,7 +400,7 @@ body.giant-on retro-map { visibility: hidden; }
    strips. The list items in the markup are the data; the script builds the title, the menu buttons and
    the stage from them. All shapes and type are original; no game logos or menu art are copied. */
 .tv-latest[slot="reader"] { --red: #e3001b; --paper: #ffffff; --ink: #0a0a0a;
-  position: relative; overflow-x: hidden; background: var(--ink); color: var(--paper); font: 400 16px/1.6 var(--body);
+  position: relative; overflow-x: clip; background: var(--ink); color: var(--paper); font: 400 16px/1.6 var(--body);
   padding: 0 max(20px, calc((100% - 72rem) / 2)) 0; }
 .games { position: relative; padding-top: clamp(40px, 8vh, 72px); }
 .games::before { content: ""; position: absolute; inset: 0 auto 0 calc(-1 * max(20px, (100vw - 72rem) / 2)); width: 70%; pointer-events: none;
