@@ -102,7 +102,8 @@
      dither at one dot per CSS px and snapped to four greys (white becomes the paper, black the ink) -->
 <svg width="0" height="0" style="position: absolute" aria-hidden="true" focusable="false">
   <filter id="eink" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
-    <feColorMatrix type="saturate" values="0" result="grey"/>
+    <feColorMatrix type="saturate" values="0"/>
+    <feComponentTransfer result="grey"><feFuncR type="linear" slope="1.12" intercept="-0.06"/><feFuncG type="linear" slope="1.12" intercept="-0.06"/><feFuncB type="linear" slope="1.12" intercept="-0.06"/></feComponentTransfer>
     <feImage href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%274%27%20height%3D%274%27%20shape-rendering%3D%27crispEdges%27%3E%3Crect%20x%3D%270%27%20y%3D%270%27%20width%3D%271%27%20height%3D%271%27%20fill%3D%27rgb%288%2C8%2C8%29%27/%3E%3Crect%20x%3D%271%27%20y%3D%270%27%20width%3D%271%27%20height%3D%271%27%20fill%3D%27rgb%28135%2C135%2C135%29%27/%3E%3Crect%20x%3D%272%27%20y%3D%270%27%20width%3D%271%27%20height%3D%271%27%20fill%3D%27rgb%2840%2C40%2C40%29%27/%3E%3Crect%20x%3D%273%27%20y%3D%270%27%20width%3D%271%27%20height%3D%271%27%20fill%3D%27rgb%28167%2C167%2C167%29%27/%3E%3Crect%20x%3D%270%27%20y%3D%271%27%20width%3D%271%27%20height%3D%271%27%20fill%3D%27rgb%28199%2C199%2C199%29%27/%3E%3Crect%20x%3D%271%27%20y%3D%271%27%20width%3D%271%27%20height%3D%271%27%20fill%3D%27rgb%2872%2C72%2C72%29%27/%3E%3Crect%20x%3D%272%27%20y%3D%271%27%20width%3D%271%27%20height%3D%271%27%20fill%3D%27rgb%28231%2C231%2C231%29%27/%3E%3Crect%20x%3D%273%27%20y%3D%271%27%20width%3D%271%27%20height%3D%271%27%20fill%3D%27rgb%28104%2C104%2C104%29%27/%3E%3Crect%20x%3D%270%27%20y%3D%272%27%20width%3D%271%27%20height%3D%271%27%20fill%3D%27rgb%2856%2C56%2C56%29%27/%3E%3Crect%20x%3D%271%27%20y%3D%272%27%20width%3D%271%27%20height%3D%271%27%20fill%3D%27rgb%28183%2C183%2C183%29%27/%3E%3Crect%20x%3D%272%27%20y%3D%272%27%20width%3D%271%27%20height%3D%271%27%20fill%3D%27rgb%2824%2C24%2C24%29%27/%3E%3Crect%20x%3D%273%27%20y%3D%272%27%20width%3D%271%27%20height%3D%271%27%20fill%3D%27rgb%28151%2C151%2C151%29%27/%3E%3Crect%20x%3D%270%27%20y%3D%273%27%20width%3D%271%27%20height%3D%271%27%20fill%3D%27rgb%28247%2C247%2C247%29%27/%3E%3Crect%20x%3D%271%27%20y%3D%273%27%20width%3D%271%27%20height%3D%271%27%20fill%3D%27rgb%28120%2C120%2C120%29%27/%3E%3Crect%20x%3D%272%27%20y%3D%273%27%20width%3D%271%27%20height%3D%271%27%20fill%3D%27rgb%28215%2C215%2C215%29%27/%3E%3Crect%20x%3D%273%27%20y%3D%273%27%20width%3D%271%27%20height%3D%271%27%20fill%3D%27rgb%2888%2C88%2C88%29%27/%3E%3C/svg%3E" x="0" y="0" width="4" height="4" preserveAspectRatio="none" result="cell"/>
     <feTile in="cell" result="bayer"/>
     <feComposite in="grey" in2="bayer" operator="arithmetic" k1="0" k2="1" k3="0.333" k4="-0.1665"/>
@@ -678,7 +679,8 @@
     </div>
     <!-- the page opened full screen: a big dotted sketchbook canvas on an e-ink screen (owner, 2026-11-17, option D
          of the e-ink mockups, without the tablet frame). The whole page goes through the #eink filter (top of
-         <body>): four greys, the shades between them dotted. Pieces are pinned around the canvas on wide
+         <body>): four greys, the shades between them dotted. The Tiny Wisdom logo and the three figures (art/, the
+         owner's own pictures) sit straight on the paper; the other pieces are pinned around the canvas on wide
          screens and stacked on phones. A visitor can pick the pen and draw on the page (the eraser clears it).
          Placeholders are in [brackets]; a real picture goes in as a plain <img> (the screen filter dithers it). -->
     <div class="page-body sketch">
@@ -690,15 +692,14 @@
       </div>
       <div class="sk-board">
         <header class="sk-piece sk-title">
-          <h1>The Tiny Wisdom</h1>
+          <h1><img src="art/ttw-logo.webp" alt="The Tiny Wisdom" width="1200" height="521" decoding="async"></h1>
           <p class="sk-note">Brian, also known as The Tiny Wisdom.</p>
         </header>
-        <figure class="sk-piece sk-logo"><div class="sk-tape"></div><canvas class="sk-art" data-art="logo" aria-hidden="true"></canvas></figure>
         <section class="sk-piece sk-about">
           <h2>About</h2>
           <p class="sk-note">[About The Tiny Wisdom: two or three sentences in your words. What it is, what the comics are about, and who they are for.]</p>
         </section>
-        <figure class="sk-piece sk-figures"><div class="sk-tape"></div><canvas class="sk-art" data-art="figures" aria-hidden="true"></canvas></figure>
+        <figure class="sk-piece sk-figures"><img src="art/ttw-figures.webp" alt="" width="1100" height="930" loading="lazy" decoding="async"></figure>
         <h2 class="sk-piece sk-h-strips">Comic strips</h2>
           <figure class="sk-piece sk-strip sk-s1"><div class="sk-tape"></div><canvas class="sk-art" data-art="strip" data-seed="1" aria-hidden="true"></canvas>
             <figcaption class="sk-note">[Strip title] · [Date]</figcaption></figure>
@@ -1616,23 +1617,7 @@
     };
     const tag = (g, text, x, y, size) => { g.font = `600 ${size}px "IBM Plex Mono", monospace`; const tw = g.measureText(text).width;
       g.fillStyle = '#fff'; g.fillRect(x - tw - size, y - size * 1.5, tw + size * 0.8, size * 1.5); g.fillStyle = '#000'; g.fillText(text, x - tw - size * 0.6, y - size * 0.4); };
-    const ASCII = (which, g, w, h) => {
-      const pre = document.querySelector(which === 'figures' ? '.ident-figures' : '.ident-logo'); if (!pre) return;
-      const lines = pre.textContent.replace(/^\n|\n$/g, '').split('\n'), cols = Math.max(...lines.map((l) => l.length));
-      const INK = { ' ': 0, '.': 0.15, ':': 0.25, '-': 0.35, '=': 0.55, '+': 0.65, '*': 0.85, '#': 0.95 };
-      const off = document.createElement('canvas'); off.width = cols; off.height = lines.length * 2;
-      const o = off.getContext('2d'), im = o.createImageData(off.width, off.height);
-      lines.forEach((l, y) => { for (let x = 0; x < cols; x++) { const v = 255 - Math.round((INK[l[x]] ?? 0) * 255);
-        for (const yy of [y * 2, y * 2 + 1]) { const k = (yy * cols + x) * 4; im.data[k] = im.data[k + 1] = im.data[k + 2] = v; im.data[k + 3] = 255; } } });
-      o.putImageData(im, 0, 0);
-      const vg = g.createRadialGradient(w / 2, h / 2, h * 0.2, w / 2, h / 2, w * 0.75); vg.addColorStop(0, '#fff'); vg.addColorStop(1, '#a8a8a8');
-      g.fillStyle = vg; g.fillRect(0, 0, w, h);
-      const sc = Math.min((w * 0.88) / off.width, (h * 0.84) / off.height);
-      g.globalCompositeOperation = 'multiply'; g.drawImage(off, (w - off.width * sc) / 2, (h - off.height * sc) / 2, off.width * sc, off.height * sc); g.globalCompositeOperation = 'source-over';
-    };
     const ART = {
-      logo: { ratio: 0.42, draw: (g, w, h) => ASCII('logo', g, w, h) },
-      figures: { ratio: 0.56, draw: (g, w, h) => ASCII('figures', g, w, h) },
       strip: { ratio: 0.32, draw(g, w, h, seed) {
         n = 7 + seed * 101; g.fillStyle = '#fff'; g.fillRect(0, 0, w, h);
         const gap = Math.max(3, w * 0.012), pw = (w - gap * 5) / 4, ph = h - gap * 2;

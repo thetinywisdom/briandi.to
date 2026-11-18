@@ -15,6 +15,7 @@ Read `PLAN.md` first: it records what is done, what the owner has decided, and w
 | `vendor/retro-3d.js` | Built bundle from `retro-3d-assets`. Never edit by hand |
 | `README.md` | Editing guide written for the owner |
 | `work/`, `game/`, `create/`, `guide/` | Page addresses. Each `index.html` is a tiny page (title, description) that sends the visitor to `../?to=<page>`; the site shows the address again and opens that page (see "Page addresses" below) |
+| `art/` | The owner's pictures for the CREATE page (The Tiny Wisdom logo, the three figures), web copies with transparent backgrounds |
 | `covers/` | GAME page cover art, square web copies (`CREDITS.md` lists the artists) |
 | `.claude/skills/phosphor-guide/` | Skill for the green "phosphor guide" look (channel TV guide, GAME option D): tokens, parts, copy voice, how to build a new screen, and a starter `template.html` |
 | `design/` | Design options kept for reference (`game-page-options.html`: the five GAME page directions; E is built, D is kept for later) |

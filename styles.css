@@ -420,14 +420,16 @@ body.giant-on retro-map { visibility: hidden; }
 .tv-about[slot="reader"] .sketch h2 { font-size: clamp(36px, 4vw, 52px); }
 .sk-note { margin: 6px 0 0; color: var(--grey); font: 500 clamp(20px, 1.8vw, 24px)/1.25 "Caveat", cursive; }
 .sk-art { display: block; width: 100%; height: auto; border: 2px solid var(--ink); background: #fff; }
-.sk-logo, .sk-figures, .sk-strip, .sk-product { position: relative; padding: 10px; background: #fff; box-shadow: 3px 4px 0 rgba(0, 0, 0, 0.18); }
+.sk-strip, .sk-product { position: relative; padding: 10px; background: #fff; box-shadow: 3px 4px 0 rgba(0, 0, 0, 0.18); }
 .sk-tape { position: absolute; top: -12px; left: 38%; width: 84px; height: 24px; background: rgba(120, 120, 120, 0.45); transform: rotate(3deg); }
 .sk-strip .sk-note, .sk-product .sk-note { padding: 4px 2px 0; }
 /* where each piece sits on the canvas (wide screens), each a little crooked as if pinned by hand */
-.sk-title { grid-column: 1 / span 5; align-self: center; transform: rotate(-2deg); }
-.sk-logo { grid-column: 6 / span 7; transform: rotate(1.5deg); }
+.sk-title { grid-column: 1 / span 8; }
+.sk-title h1 img { display: block; width: 100%; height: auto; }
+.sk-title .sk-note { margin-top: 14px; }
+.sk-figures img { display: block; width: 100%; height: auto; }
 .sk-about { grid-column: 1 / span 4; margin-top: 30px; }
-.sk-figures { grid-column: 5 / span 6; transform: rotate(-1.2deg); }
+.sk-figures { grid-column: 6 / span 6; margin-top: -20px; }
 .sk-h-strips { grid-column: 2 / span 6; margin-top: 20px !important; transform: rotate(-1deg); }
 .sk-s1 { grid-column: 1 / span 9; transform: rotate(-0.8deg); }
 .sk-s2 { grid-column: 4 / span 9; transform: rotate(0.9deg); }
