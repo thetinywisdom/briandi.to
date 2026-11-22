@@ -586,7 +586,7 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
       const sprite = (rows, x0, y0, k) => rows.forEach((r, y) => [...r].forEach((ch, x) => { if (ch === ' ') return; g.fillStyle = ch === '#' ? ink : paper; g.fillRect(x0 + x * k, y0 + y * k, k, k); }));
       const ENV = ['#########', '##ooooo##', '#o#ooo#o#', '#oo#o#oo#', '#ooo#ooo#', '#########'];
       const land = (lon, lat) => Math.sin(lon * 2 + 1.3) * Math.cos(lat * 2.2) + 0.5 * Math.sin(lon * 4.3 + lat * 3.1) + 0.35 * Math.cos(lon * 7 - lat * 5) > 0.2 || Math.abs(lat) > 1.25;
-      const globe = (phase) => { const cx = 30, cy = 30, r = 22, at3 = (x, y) => { const nx = (x + 0.5 - cx) / r, ny = (y + 0.5 - cy) / r, d = nx * nx + ny * ny; if (d > 1) return null; const nz = Math.sqrt(1 - d); return { nx, ny, nz, d, lat: Math.asin(-ny), lon: Math.atan2(nx, nz) + phase }; };
+      const globe = (phase) => { const cx = 130, cy = 30, r = 22, at3 = (x, y) => { const nx = (x + 0.5 - cx) / r, ny = (y + 0.5 - cy) / r, d = nx * nx + ny * ny; if (d > 1) return null; const nz = Math.sqrt(1 - d); return { nx, ny, nz, d, lat: Math.asin(-ny), lon: Math.atan2(nx, nz) + phase }; };
         for (let y = cy - r; y <= cy + r; y++) for (let x = cx - r; x <= cx + r; x++) { const q = at3(x, y); if (!q) continue;
           const light = Math.max(0, -0.45 * q.nx - 0.35 * q.ny + 0.82 * q.nz), th = (B[y & 3][x & 3] + 0.5) / 16; // lit from the upper left
           const L = land(q.lon, q.lat), nb = at3(x + 1, y), nd = at3(x, y + 1);
@@ -607,7 +607,7 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
         return null; };
       const TONE = { front: 0.1, top: 0.28, side: 0.5, bezel: 0.2, screen: 0.7, slot: 1, keys: 0.12 };
       const computer = (t) => { const blink = Math.floor(t / 400) % 2 === 0;
-        for (let y = 2; y <= 55; y++) for (let x = 100; x <= 158; x++) { const P = part(x, y); if (!P) continue;
+        for (let y = 2; y <= 55; y++) for (let x = 100; x <= 158; x++) { const P = part(x, y); if (!P) continue; const px = x - 100; // drawn at the left
           const th = (B[y & 3][x & 3] + 0.5) / 16;
           const edge = P !== 'screen' && [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => { const n = part(x + dx, y + dy); return n !== P && n !== 'shadow'; });
           let on = edge || th < TONE[P] * (P === 'front' ? 0.6 + 0.8 * ((x - 112) / 30) * ((y - 9) / 36) : 1);
@@ -617,15 +617,15 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
             if ((y === 16 && x >= 121 && x <= 124) || (x === 120 && y >= 17 && y <= 19)) on = false; // a glint at the upper left
             if (blink && x >= 121 && x <= 123 && y >= 24 && y <= 25) on = true; } // a blinking cursor
           if (P === 'keys' && !edge) on = (y === 49 || y === 51) && (x + (y - 48)) % 3 === 0;
-          if (on) { g.fillStyle = ink; g.fillRect(x, y, 1, 1); } } };
+          if (on) { g.fillStyle = ink; g.fillRect(px, y, 1, 1); } } };
       const t0 = performance.now(), DIAL = 1000, FLY = 1700, DONE = DIAL + FLY * 2;
       let ok = true; post(title, body).catch(() => { ok = false; });
       const frame = (now) => { const t = reduced ? DONE : now - t0;
         g.fillStyle = paper; g.fillRect(0, 0, 160, 60);
         globe(reduced ? 0 : t / 900);
         computer(t); g.fillStyle = ink;
-        for (let x = 58; x <= 108; x += 4) { const lit = t < DIAL ? (108 - x) < (t / DIAL) * 50 : true; if (lit) g.fillRect(x, 30, 1, 1); } // the wire, dialing out
-        if (t >= DIAL && t < DONE) { const k = ((t - DIAL) % FLY) / FLY, ex = 108 - k * 50, ey = 30 - Math.sin(k * Math.PI) * 9 - 3;
+        for (let x = 54; x <= 104; x += 4) { const lit = t < DIAL ? (x - 54) < (t / DIAL) * 50 : true; if (lit) g.fillRect(x, 30, 1, 1); } // the wire, dialing out from the computer
+        if (t >= DIAL && t < DONE) { const k = ((t - DIAL) % FLY) / FLY, ex = 54 + k * 50, ey = 30 - Math.sin(k * Math.PI) * 9 - 3;
           sprite(ENV, Math.round(ex) - 4, Math.round(ey), 1); }
         msg.textContent = t < DIAL ? 'Dialing The Tiny Wisdom…' : t < DONE ? 'Sending your note…' : ok ? 'Delivered.' : 'No connection. Your note is still in the window.';
         fill.style.width = Math.min(100, t / DONE * 100) + '%';
