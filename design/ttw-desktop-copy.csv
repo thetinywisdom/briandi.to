@@ -41,10 +41,9 @@ Website window,Booklet: Strip heading,Label,The pattern,Introduces the story by 
 Website window,Booklet: Strip hint,Label,4 panels · scroll →,Tells readers to scroll sideways,,,Claude
 Website window,Booklet: Strip buttons,Label,← prev / next →,Move through panels,,,Claude
 Website window,Booklet: Strip counter,Label,panel 1 of 4,Position,,,Claude
-Website window,Booklet: Margin label,Label,the point,Section marker,,,Claude
+Website window,Booklet: Margin label,Label,the pattern,Section marker,,,Claude
 Website window,Booklet: Footnote label,Label,Follow,Links section,,Address bar changes at the strip and at Follow,Claude
 Website window,Booklet: Footnotes,Label,1. Instagram: instagram.com/thetinywisdom / 2. Website: www.thetinywisdom.com,Where to follow,Links open in a new tab,,Claude
-Website window,Booklet: Colophon,Label,colophon: drawn by Brian,Credit under the figures drawing,,,Claude
 Website window,Booklet: body text,Body,"About text, mantra, story by age (23, 25, 26, 29), closing",The story,,Story by age shows as comic panels,Owner (pasted text)
 Website window,Booklet: mantra,Headline,"“It’s not gonna be easy, but it’s not impossible.”","Core message, between double rules",,"Same text as the Mantra alert, Restart screen and Butler",Owner
 Mantra alert,Message,Dialog text,"It’s not gonna be easy, but it’s not impossible. / The sentence The Tiny Wisdom started with.",Show the mantra,,,Owner + Claude (second line)

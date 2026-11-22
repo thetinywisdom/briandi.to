@@ -821,9 +821,9 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
       e.preventDefault(); sc.scrollTop += e.deltaY * (e.deltaMode === 1 ? 16 : 1);
     }, { passive: false });
     strip.append(sh, row, nav); bk.append(strip);
-    M('', 'the point'); CLOSE.forEach((t, i) => { if (i) bk.append(el('div', 'bk-m')); P(t); });
+    M('', 'the pattern'); CLOSE.forEach((t, i) => { if (i) bk.append(el('div', 'bk-m')); P(t); });
     const fn = el('div', 'bk-fn'); fn.append(el('div', 'z-label', 'Follow')); LINKS.forEach((l, i) => { const p = el('p'); p.append(`${i + 1}. ${l[0]}: `, linkA(l)); fn.append(p); }); bk.append(fn);
-    const co = el('div', 'bk-colo'); const fig = pix(); co.append(fig, el('div', 'z-label', 'colophon: drawn by Brian')); bk.append(co);
+    const co = el('div', 'bk-colo'); const fig = pix(); co.append(fig); bk.append(co);
     const draw = () => { const w = bk.querySelector('.bk-t').clientWidth; if (!w) return; onebit(lg, 'logo', Math.min(460, w), 1, INK, PAPER); onebit(fig, 'figures', Math.min(320, w), 2, INK, PAPER); };
     return { scroller: sc, draw };
   }
