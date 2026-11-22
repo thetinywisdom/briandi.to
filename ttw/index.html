@@ -783,7 +783,7 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
     const M = (k, t) => { const m = el('div', 'bk-m'); if (k) m.append(el('b', null, k)); m.append(el('span', 'z-label', t)); bk.append(m); };
     M('', 'today'); P(ABOUT[0], 'bk-t bk-drop'); P(ABOUT[1]);
     const mm = el('div', 'bk-mantra'); mm.append(el('div', 'z-mantra', '“' + MANTRA + '”')); bk.append(mm);
-    M('', 'the compass'); P(ABOUT[3]); P(ABOUT[4]); P(ABOUT[5]); P(ABOUT[6]);
+    M('', 'the compass'); P(ABOUT[3]); P(ABOUT[4]); P(ABOUT[5]); P(ABOUT[6]); P('Here’s how I’ve seen that pattern play out in my own life:');
     // the story by age, as a strip of comic panels (B3's style) across the page
     const strip = el('div', 'bk-strip'); const sh = el('div', 'bk-strip-head'); sh.append(el('span', 'z-label', 'The pattern, by age'), el('span', 'z-label', '4 panels · scroll →'));
     const row = el('div', 'st-row'); row.setAttribute('tabindex', '0'); row.setAttribute('aria-label', 'The story by age');
