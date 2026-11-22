@@ -5,9 +5,9 @@ Desktop,Desktop icon: Comics,Icon label,Comics,Show the owner’s comics,Opens t
 Desktop,Desktop icon: Articles,Icon label,Articles,Show the owner’s writing,Opens the Articles folder window (3 .txt files),Mentioned in Butler’s “Where do I start?” and “Can I read some comics?” answers,Claude
 Desktop,Desktop icon: Links,Icon label,Links,Where to follow,"Opens the Links folder (Instagram, Website)",Same folder as Butler’s “Open Links” button,Claude
 Desktop,Desktop icon: Butler,Icon label,Butler,On-page assistant,Click: opens Butler’s balloon with questions. Click again while open: tickle; 3 quick clicks: poke (angry),His face on the icon changes with mood; balloon follows the icon when dragged; greets on page load,Claude
-Desktop,Desktop icon: Trash,Icon label,Trash,A playful list of things to let go of,Opens the Trash window,Icon shows full/empty; emptying it lowers “Disk space used by doubts” in About This Computer; Restart refills it,Claude
+Desktop,Desktop icon: Trash,Icon label,Trash,A playful list of things to let go of,Opens the Trash window,Icon shows full/empty; Restart refills it,Claude
 Menu bar,Logo menu,Menu,(The Tiny Wisdom logo),Brand menu,Opens: About This Computer… / Butler / Note to self,,Claude
-Menu bar,Logo menu › About This Computer…,Menu item,About This Computer…,,Opens a window with the logo and “system specs” of The Tiny Wisdom,Doubts meter reads 72% or 3% depending on the Trash,Claude
+Menu bar,Logo menu › About This Computer…,Menu item,About This Computer…,,Opens a window with the logo and “system specs” of The Tiny Wisdom,Meter reads 2%,Claude
 Menu bar,Logo menu › Butler,Menu item,Butler,,Opens Butler’s question balloon,Same as clicking the Butler icon,Claude
 Menu bar,Logo menu › Note to self,Menu item,Note to self,,Opens the Note to self window,Same as File › New Note,Claude
 Menu bar,File › New Note ⌘N,Menu item,New Note ⌘N,,Opens the Note to self window and focuses it,,Claude
@@ -20,7 +20,7 @@ Menu bar,Edit › Select All ⌘A,Menu item,Select All ⌘A,,Highlights all desk
 Menu bar,View › by Icon,Menu item,by Icon,,Shows desktop icons as big icons,Checked state in menu,Claude
 Menu bar,View › by Name,Menu item,by Name,,Shows desktop icons as a list with small icons,Trash moves into the list,Claude
 Menu bar,View › Clean Up Windows,Menu item,Clean Up Windows,,Stacks all open windows from the top left,,Claude
-Menu bar,Special › Empty Trash…,Menu item,Empty Trash…,,Opens the Empty Trash dialog (disabled when empty),"Empties the Trash list, icon, doubts meter",Claude
+Menu bar,Special › Empty Trash…,Menu item,Empty Trash…,,Opens the Empty Trash dialog (disabled when empty),"Empties the Trash list and icon",Claude
 Menu bar,Special › Restart,Menu item,Restart,,"Black screen, then a boot screen with logo, “Welcome to The Tiny Wisdom” and the mantra, then a fresh desktop","Closes all windows, refills the Trash, resets icon view, reopens the website",Claude
 Menu bar,Special › Shut Down,Menu item,Shut Down,,Same as File › Shut Down,,Claude
 Menu bar,Clock,Label,(current time HH:MM),Desktop realism,Updates every 20 s,,Claude
@@ -66,10 +66,10 @@ Trash window,Info line,Label,9 items · worth letting go,Frames the list,Count u
 Trash window,Items,List,self-comparison · greed · envy · self-doubt · fear of failure · procrastination · giving up · people-pleasing · prabowo (each “1K”),Things worth letting go of,,Removed by Empty Trash; refilled by Restart,"Owner (self-comparison, greed, prabowo) + Claude (rest)"
 Trash window,Empty state,List text,Empty. Lighter already.,Reward after emptying,,,Claude
 Empty Trash dialog,Message,Dialog text,The Trash holds 9 things you don’t need. / Let go of them for good?,Confirm,,,Claude
-Empty Trash dialog,Buttons,Buttons,Cancel / Let go,,Let go empties the Trash and shows the toast,Trash icon becomes empty; doubts meter drops to 3%,Claude
+Empty Trash dialog,Buttons,Buttons,Cancel / Let go,,Let go empties the Trash and shows the toast,Trash icon becomes empty,Claude
 Toast,Trash emptied,Toast,Trash emptied. Lighter already.,Feedback,,,Claude
-About This Computer,Specs,Window text,"System: The Tiny Wisdom · Built: in a bedroom, at 26 · Followers: 100k by 28 · Location: Japan, since 31 · Runs on: not giving up",Playful summary of the story,,Facts taken from the owner’s story; please confirm,"Claude, from owner’s story"
-About This Computer,Doubts meter,Window text,"Disk space used by doubts: 72% / 3%, since you emptied the Trash",Joke that rewards emptying the Trash,,Depends on the Trash,Claude
+About This Computer,Specs,Window text,"System: The Tiny OS · Built: July 19, 2021 · Location: Jakarta, Indonesia & Tokyo, Japan · Runs on: Coffee & Consistency",Playful summary of the story,,,Owner
+About This Computer,Doubts meter,Window text,"Disk space used by doubters: 2%",Joke: the doubters barely register,,Fixed value; no longer changes with the Trash,Owner
 Note to self,Window,Window text,Note to self · untitled · Write your own tiny wisdom here…,Let visitors write,Typing area; not saved,,Claude
 Undo dialog,Message,Dialog text,Can’t undo the past. / You can only keep going. · OK,Gimmick with a message,,,Claude
 Restart screen,Boot text,Screen text,"Welcome to The Tiny Wisdom · It’s not gonna be easy, but it’s not impossible.",Gimmick; resets the desktop,,See Special › Restart,Claude + Owner (mantra)

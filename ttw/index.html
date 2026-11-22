@@ -743,9 +743,9 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
       if (what === 'Mantra') dialog(I.bulb, [MANTRA, 'The sentence The Tiny Wisdom started with.'], [['Copy', () => act('Copy')], ['OK', null, true]]);
       if (what === 'About This Computer') {
         const W = win('About This Computer', 380); const b = el('div', 'a-body'); const lg = pix(); b.append(lg);
-        const dl = el('dl', 'a-specs'); [['System', 'The Tiny Wisdom'], ['Built', 'in a bedroom, at 26'], ['Followers', '100k by 28'], ['Location', 'Japan, since 31'], ['Runs on', 'not giving up']].forEach(([k, v]) => dl.append(el('dt', null, k), el('dd', null, v)));
-        const meter = el('div', 'a-meter'), fill = el('i'); fill.style.width = trashItems.length ? '72%' : '3%'; meter.append(fill);
-        b.append(dl, el('p', null, ''), el('p', 'lead', `Disk space used by doubts: ${trashItems.length ? '72%' : '3%, since you emptied the Trash'}`), meter); W.append(b); show(W); at(W, dw / 2 - 190, 50);
+        const dl = el('dl', 'a-specs'); [['System', 'The Tiny OS'], ['Built', 'July 19, 2021'], ['Location', 'Jakarta, Indonesia & Tokyo, Japan'], ['Runs on', 'Coffee & Consistency']].forEach(([k, v]) => dl.append(el('dt', null, k), el('dd', null, v)));
+        const meter = el('div', 'a-meter'), fill = el('i'); fill.style.width = '2%'; meter.append(fill);
+        b.append(dl, el('p', null, ''), el('p', 'lead', 'Disk space used by doubters: 2%'), meter); W.append(b); show(W); at(W, dw / 2 - 190, 50);
         onebit(lg, 'logo', 180, 1, [0, 0, 0], [255, 255, 255]); lg.style.marginBottom = '12px';
       }
       if (what === 'New Note') { show(note); at(note, dw / 2 - 180, 90); ta.focus(); }
