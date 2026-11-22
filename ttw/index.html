@@ -526,7 +526,7 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
     // on a narrow screen windows leave the icon column on the right free
     const at = (W, x, y, h) => { const dw = desk.clientWidth, dh = desk.clientHeight, narrow = dw < 600; const w = Math.min(parseInt(W.style.width), dw - (narrow ? 84 : 16));
       if (narrow) x = 6;
-      W.style.width = w + 'px'; W.style.left = Math.max(8, Math.min(x, dw - w - 8)) + 'px'; W.style.top = Math.max(8, Math.min(y, dh - 80)) + 'px'; if (h) W.style.height = Math.min(h, dh - Math.max(8, y) - 10) + 'px'; };
+      W.style.width = w + 'px'; W.style.left = Math.max(8, Math.min(x, dw - w - 8)) + 'px'; W.style.top = Math.max(8, Math.min(y, dh - 80)) + 'px'; if (h && dh > 120) W.style.height = Math.min(h, dh - Math.max(8, y) - 10) + 'px'; };
     const scroller = (W) => { const s = el('div', 'a-scroller'), body = el('div', 'a-body'), bar = el('div', 'a-bar'), knob = el('i'); bar.append(knob); s.append(body, bar); W.append(s);
       body.addEventListener('scroll', () => { const f = body.scrollTop / Math.max(1, body.scrollHeight - body.clientHeight); knob.style.top = (f * (bar.clientHeight - 22)) + 'px'; }); return body; };
     const text = (title, paras, w = 420, lead = []) => { const W = win(title, w, [`${paras.length} paragraphs`, 'SimpleText']); const b = scroller(W); paras.forEach((p, i) => b.append(el('p', lead.includes(i) ? 'lead' : null, p))); return W; };
@@ -688,7 +688,12 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
     };
 
     /* ---- desktop icons ---- */
-    const openAbout = () => { show(about); about.style.width = Math.min(720, Math.max(320, desk.clientWidth * 0.64)) + 'px'; at(about, 24, 18, desk.clientHeight - 40); ab.scrollTop = 0; requestAnimationFrame(site.draw); };
+    // the website window is sized to the desktop; it is sized again whenever the desktop changes size, because the
+    // page can load inside the site before its frame has a height (then the window would collapse to its toolbars)
+    const fitAbout = () => { const dw = desk.clientWidth, dh = desk.clientHeight; if (dh < 120 || dw < 120) return false;
+      about.style.width = Math.min(720, Math.max(320, dw * 0.64)) + 'px'; at(about, dw < 600 ? 6 : Math.min(about.offsetLeft || 24, 24), 18, dh - 40); return true; };
+    const openAbout = () => { show(about); fitAbout(); ab.scrollTop = 0; requestAnimationFrame(site.draw); };
+    new ResizeObserver(() => { if (!about.hidden && fitAbout()) site.draw(); placeBalloon(); arrange(); }).observe(desk);
     const openTrash = () => { show(trash); at(trash, desk.clientWidth - 470, desk.clientHeight - 330); };
     // on arrival he only says hello; clicking him opens the questions
     const greet = () => { balloon.hidden = false; greeting = true; setMood('happy'); say.replaceChildren(el('p', null, 'Hi, I’m Butler. Need anything? Click me.')); placeBalloon(); };
@@ -789,8 +794,8 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
     // the story by age, as a strip of comic panels (B3's style) across the page
     const strip = el('div', 'bk-strip'); const sh = el('div', 'bk-strip-head'); sh.append(el('span', 'z-label', 'The pattern'), el('span', 'z-label', '4 panels · scroll →'));
     const row = el('div', 'st-row'); row.setAttribute('tabindex', '0'); row.setAttribute('aria-label', 'The story by age');
-    STORY.forEach(([a, t], k) => { const pn = el('div', 'st-p'); const l = el('div', 'z-label'); l.append(el('span', null, `Panel ${String(k + 1).padStart(2, '0')}`), el('span', null, 'age ' + a));
-      const i = el('div', 'in'); i.append(el('div', 'age', a), el('p', null, t)); pn.append(l, i); row.append(pn); });
+    STORY.forEach(([a, t]) => { const pn = el('div', 'st-p');
+      const i = el('div', 'in'); i.append(el('div', 'age', a), el('p', null, t)); pn.append(i); row.append(pn); });
     const nav = el('div', 'st-nav'); const prev = el('button', null, '← prev'), next = el('button', null, 'next →'); prev.type = next.type = 'button';
     const pos = el('span', 'z-label'); nav.append(prev, pos, next);
     const go = (d) => row.scrollBy({ left: d * (row.firstChild.offsetWidth + 14), behavior: reduced ? 'auto' : 'smooth' });
