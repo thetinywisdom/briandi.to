@@ -726,7 +726,7 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
       { q: 'What’s the mantra?', a: MANTRA + ' It’s the sentence The Tiny Wisdom started with.', mood: 'wink', act: ['Show it', () => act('Mantra')] },
       { q: 'Where do I start?', a: 'Open The Tiny Wisdom on the desktop. It’s the website, with the whole story. Then try the Comics and Articles folders.', mood: 'happy', act: ['Open the website', () => openAbout()] },
       { q: 'How does this computer work?', a: 'Double-click an icon to open it (one tap on a phone). Drag a window by its striped bar, close it with the X. The menus at the top all work.', mood: 'neutral' },
-      { q: 'What’s in the Trash?', a: 'Things worth letting go of. Have a look, then choose Special › Empty Trash.', mood: 'wink', act: ['Open Trash', () => openTrash()] },
+      { q: 'What’s in the Trash?', a: 'Things worth letting go of. Have a look.', mood: 'wink', act: ['Open Trash', () => openTrash()] },
       { q: 'Can I read some comics?', a: 'Open the Comics folder: each comic plays as a slideshow. The Articles folder has a few essays as plain text files.', mood: 'happy', act: ['Open Comics', () => { show(comics); at(comics, desk.clientWidth - 520, 60); }] },
       { q: 'Where can I follow it?', a: 'On Instagram at instagram.com/thetinywisdom, and at www.thetinywisdom.com. Both are in the Links folder.', mood: 'happy', act: ['Open Links', () => { show(links); at(links, desk.clientWidth - 440, 40); }] },
     ];
@@ -803,11 +803,10 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
     /* ---- menus ---- */
     const drop = el('div', 'a-drop'); drop.hidden = true; root.append(drop);
     const MENUS = {
-      ttw: () => [['About This Computer…', () => act('About This Computer')], '-', ['Butler', openButler], [NOTE_TITLE, () => act('New Note')]],
+      ttw: () => [['About This Computer…', () => act('About This Computer')], '-', ['Restart', () => act('Restart')], ['Shut Down', () => act('Shut Down')]],
       File: () => [['New Note', () => act('New Note'), '⌘N'], ['Open The Tiny Wisdom', openAbout, '⌘O'], '-', ['Close Window', () => act('Close'), '⌘W'], '-', ['Shut Down', () => act('Shut Down')]],
       Edit: () => [['Undo', () => act('Undo'), '⌘Z'], '-', ['Copy the Mantra', () => act('Copy'), '⌘C'], ['Select All', () => act('Select All'), '⌘A']],
       View: () => [['by Icon', () => { view = 'icon'; arrange(); }, null, view === 'icon'], ['by Name', () => { view = 'name'; arrange(); }, null, view === 'name'], '-', ['Clean Up Windows', () => act('Clean Up')]],
-      Special: () => [['Empty Trash…', () => act('Empty Trash'), null, false, !trashItems.length], '-', ['Restart', () => act('Restart')], ['Shut Down', () => act('Shut Down')]],
     };
     const closeMenus = () => { drop.hidden = true; menu.querySelectorAll(':scope > button').forEach((b) => b.setAttribute('aria-expanded', 'false')); };
     const openMenu = (btn, key) => {
@@ -819,7 +818,7 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
       drop.style.left = Math.min(btn.offsetLeft, root.clientWidth - 240) + 'px'; drop.hidden = false; drop.querySelector('button:not(:disabled)')?.focus();
     };
     const ttwBtn = el('button', 'logo'); ttwBtn.type = 'button'; ttwBtn.setAttribute('aria-label', 'The Tiny Wisdom menu'); ttwBtn.append(icon(I.ttw)); ttwBtn.onclick = () => openMenu(ttwBtn, 'ttw'); menu.append(ttwBtn);
-    ['File', 'Edit', 'View', 'Special'].forEach((n) => { const b = el('button', null, n); b.type = 'button'; b.setAttribute('aria-haspopup', 'true'); b.onclick = () => openMenu(b, n); menu.append(b); });
+    ['File', 'Edit', 'View'].forEach((n) => { const b = el('button', null, n); b.type = 'button'; b.setAttribute('aria-haspopup', 'true'); b.onclick = () => openMenu(b, n); menu.append(b); });
     const clock = el('span', 'clock', now()); menu.append(clock); setInterval(() => { clock.textContent = now(); }, 20000);
     desk.addEventListener('pointerdown', (e) => { closeMenus(); if (e.target === desk || e.target === iconsLayer) document.querySelectorAll('#a .a-icon.sel').forEach((x) => x.classList.remove('sel')); });
     root.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenus(); });
@@ -841,7 +840,6 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
       if (what === 'Copy') { navigator.clipboard?.writeText(MANTRA).then(() => toast('Mantra copied'), () => toast(MANTRA)); }
       if (what === 'Select All') deskIcons.forEach((b) => b.classList.add('sel'));
       if (what === 'Clean Up') { const open = [...desk.querySelectorAll('.a-win:not([hidden])')]; open.forEach((W, i) => { W.style.left = (20 + i * 24) + 'px'; W.style.top = (14 + i * 24) + 'px'; front(W); }); }
-      if (what === 'Empty Trash') dialog(I.warn, [`The Trash holds ${trashItems.length} things you don’t need.`, 'Let go of them for good?'], [['Cancel'], ['Let go', () => { trashItems = []; drawTrash(); toast('Trash emptied. Lighter already.'); }, true]]);
       if (what === 'Restart') { boot.hidden = false; boot.classList.add('black'); boot.firstChild.replaceChildren();
         setTimeout(() => { boot.classList.remove('black'); const c = pix(); boot.firstChild.append(c, el('span', null, 'Welcome to The Tiny Wisdom'), el('span', null, MANTRA)); onebit(c, 'logo', 240, 1, [0, 0, 0], [255, 255, 255]); }, reduced ? 0 : 500);
         setTimeout(() => { boot.hidden = true; trashItems = ['self-comparison', 'greed', 'envy', 'self-doubt', 'fear of failure', 'procrastination', 'giving up', 'people-pleasing', 'prabowo']; drawTrash();
@@ -963,9 +961,9 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
   /* ---------- tabs and notes ---------- */
   const NOTES = {
     a: [['What changed', 'A and B are one now. The Tiny Wisdom icon opens the website: a window with the booklet inside and a status bar that shows where links go, the ages as a comic strip. The Comics folder (three comics, each a slideshow, with a nudge to follow on Instagram instead of links to X), the Articles folder (three essays as plain .txt). The other icons: Mantra (an alert you can copy from), Links (Instagram and the website), Butler, and the Trash.'],
-        ['The menus', 'The logo menu: About This Computer (the system specs of The Tiny Wisdom), Butler, Note to self. File: New Note, Open, Close Window, Shut Down. Edit: Undo ("can’t undo the past"), Copy the Mantra, Select All. View: by Icon / by Name, Clean Up Windows. Special: Empty Trash, Restart, Shut Down.'],
+        ['The menus', 'The logo menu: About This Computer (the system specs of The Tiny Wisdom), Restart, Shut Down. File: New Note, Open, Close Window, Shut Down. Edit: Undo ("can’t undo the past"), Copy the Mantra, Select All. View: by Icon / by Name, Clean Up Windows.'],
         ['Butler', 'He sits on the desktop as his own icon, no window: click him and his chat opens in a balloon beside him, with his face on the icon\'s little TV screen changing with his mood. His questions are about this page: what The Tiny Wisdom is, the mantra, where to start, how the computer works, the Trash, where to follow. Answers have a button that does it. With the balloon open, click him again to tickle him (LOL); poke him three times quickly and he gets cross (Sorry). The X closes the balloon; dragging his icon takes the balloon with him. "Who are you?" still leads to the little chain.'],
-        ['Try', 'Click Butler, ask “What’s in the Trash?”, press Open Trash, then Special › Empty Trash. Click Butler a few times quickly.']],
+        ['Try', 'Click Butler, ask “What’s in the Trash?”, press Open Trash. Click Butler a few times quickly.']],
     b1: [['Booklet', 'One column like a small printed book: a running head, a drop cap, the mantra between double rules, the links as numbered footnotes, and the figures as a colophon at the end. The story by age is now a strip of comic panels across the page (B3’s style): one panel per age with a big blackletter number, scrolled sideways with prev / next.'],
          ['Good for', 'The best for reading a long story; quiet and literary.']],
     b2: [['Index cards', 'Your story cut into numbered cards (No. 01 to 11) on a grid: the logo and the figures as cards, the mantra as one wide black card, each age a card with a huge numeral.'],
