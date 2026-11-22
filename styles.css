@@ -395,60 +395,10 @@ body.giant-on retro-map { visibility: hidden; }
 }
 
 
-/* CREATE page full screen: a big dotted sketchbook canvas on an e-ink screen (owner, 2026-11-17). The page is
-   drawn in plain greys on white; the #eink filter (top of <body>) turns white into the paper, black into the ink and
-   the greys in between into dots, text included. Handwritten headings (Caveat), pieces taped to the canvas, a pen. */
-.tv-about[slot="reader"] { --ink: #000; --grey: #6f6f6f; padding: 0; min-height: 100%; background: #fff; color: var(--ink); filter: url(#eink);
-  font: 500 22px/1.25 "Caveat", "Comic Sans MS", cursive; }
-.sketch { position: relative; min-height: 100vh; box-sizing: border-box; padding: 64px max(24px, calc((100% - 74rem) / 2)) calc(clamp(48px, 10vh, 96px) + 144px) max(80px, calc((100% - 74rem) / 2));
-  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.42) 1.1px, transparent 1.5px); background-size: 22px 22px; background-position: 11px 11px; }
-.sketch.flash { filter: invert(1); }
-.sk-tools { position: sticky; top: 24px; z-index: 6; height: 0; }
-.sk-tools button { position: relative; left: calc(-1 * max(56px, calc((100vw - 74rem) / 2 - 24px))); display: grid; place-items: center; width: 40px; height: 40px; margin-bottom: 8px;
-  border: 2px solid var(--ink); border-radius: 6px; background: #fff; color: var(--ink); cursor: pointer; }
-.sk-tools button[aria-pressed="true"] { background: var(--ink); color: #fff; }
-.sk-tools button:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
-.sk-tools svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
-.sk-ink { position: absolute; left: 0; top: 0; z-index: 5; touch-action: none; cursor: crosshair; }
-.sk-ink.off { pointer-events: none; }
-.sk-hint { position: relative; left: calc(-1 * max(56px, calc((100vw - 74rem) / 2 - 24px))); width: 64px; margin: 2px 0 0; padding: 5px 6px; background: #fff; border: 2px solid var(--ink);
-  font: 500 10px/1.3 var(--mono); visibility: hidden; }
-.sketch.drawing .sk-hint { visibility: visible; }
-.sk-board { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 44px 28px; align-items: start; }
-.sk-piece { margin: 0; min-width: 0; }
-.tv-about[slot="reader"] .sketch h1, .tv-about[slot="reader"] .sketch h2 { margin: 0; font: 700 clamp(44px, 6vw, 76px)/0.95 "Caveat", cursive; text-transform: none; letter-spacing: 0; color: var(--ink); }
-.tv-about[slot="reader"] .sketch h2 { font-size: clamp(36px, 4vw, 52px); }
-.sk-note { margin: 6px 0 0; color: var(--grey); font: 500 clamp(20px, 1.8vw, 24px)/1.25 "Caveat", cursive; }
-.sk-art { display: block; width: 100%; height: auto; border: 2px solid var(--ink); background: #fff; }
-.sk-strip, .sk-product { position: relative; padding: 10px; background: #fff; box-shadow: 3px 4px 0 rgba(0, 0, 0, 0.18); }
-.sk-tape { position: absolute; top: -12px; left: 38%; width: 84px; height: 24px; background: rgba(120, 120, 120, 0.45); transform: rotate(3deg); }
-.sk-strip .sk-note, .sk-product .sk-note { padding: 4px 2px 0; }
-/* where each piece sits on the canvas (wide screens), each a little crooked as if pinned by hand */
-.sk-title { grid-column: 1 / span 8; }
-.sk-title h1 img { display: block; width: 100%; height: auto; }
-.sk-title .sk-note { margin-top: 14px; }
-.sk-figures img { display: block; width: 100%; height: auto; }
-.sk-about { grid-column: 1 / span 4; margin-top: 30px; }
-.sk-figures { grid-column: 6 / span 6; margin-top: -20px; }
-.sk-h-strips { grid-column: 2 / span 6; margin-top: 20px !important; transform: rotate(-1deg); }
-.sk-s1 { grid-column: 1 / span 9; transform: rotate(-0.8deg); }
-.sk-s2 { grid-column: 4 / span 9; transform: rotate(0.9deg); }
-.sk-s3 { grid-column: 2 / span 9; transform: rotate(-0.5deg); }
-.sk-h-products { grid-column: 1 / span 6; margin-top: 20px !important; transform: rotate(1deg); }
-.sk-p1 { grid-column: 1 / span 3; transform: rotate(-2deg); }
-.sk-p2 { grid-column: 5 / span 3; transform: rotate(1.5deg); margin-top: 40px; }
-.sk-p3 { grid-column: 9 / span 3; transform: rotate(-1deg); }
-.sk-links { grid-column: 3 / span 7; transform: rotate(-1deg); }
-.sk-links ul { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 4px; color: var(--grey); font-size: clamp(22px, 2vw, 28px); }
-@media (max-width: 760px) {
-  .sketch { padding: 48px 18px calc(clamp(48px, 10vh, 96px) + 96px) 70px; background-size: 18px 18px; background-position: 9px 9px; }
-  .sk-tools button { left: -56px; width: 36px; height: 36px; }
-  .sk-board { grid-template-columns: 1fr; gap: 34px; }
-  .sk-board > * { grid-column: 1 / -1 !important; }
-  .sk-p2 { margin-top: 0; }
-  .sk-hint { left: -56px; width: 44px; font-size: 9px; padding: 4px; }
-}
-@media (prefers-reduced-motion: reduce) { .sketch.flash { filter: none; } }
+/* CREATE page full screen: The Tiny Wisdom desktop (ttw/index.html) in a frame that fills the window above the pager */
+.tv-about[slot="reader"] { padding: 0 !important; background: #000; overflow: hidden; }
+.ttw-frame iframe { display: block; width: 100%; height: calc(100vh - 96px); height: calc(100dvh - 96px); border: 0; background: #000; }
+@media (min-width: 560px) { .ttw-frame iframe { height: calc(100vh - 144px); height: calc(100dvh - 144px); } }
 
 /* GAME page full screen ("Games I Love"): option E of five (owner, 2026-11-16), brutalist red / black / white
    in the spirit of a stylish JRPG menu. A ransom-note title, a slanted menu of game names on the left, and

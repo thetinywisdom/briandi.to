@@ -15,6 +15,7 @@ Read `PLAN.md` first: it records what is done, what the owner has decided, and w
 | `vendor/retro-3d.js` | Built bundle from `retro-3d-assets`. Never edit by hand |
 | `README.md` | Editing guide written for the owner |
 | `work/`, `game/`, `create/`, `guide/` | Page addresses. Each `index.html` is a tiny page (title, description) that sends the visitor to `../?to=<page>`; the site shows the address again and opens that page (see "Page addresses" below) |
+| `ttw/` | The CREATE page: The Tiny Wisdom as an old 1-bit desktop (`ttw/index.html`, its own page, shown full screen in a frame on the CREATE TV and also at `/ttw/`), with the comic slideshow images in `ttw/comics/`. Its text, Butler's questions and the articles are in that file; `design/ttw-desktop-copy.csv` lists every line |
 | `art/` | The owner's pictures for the CREATE page (The Tiny Wisdom logo, the three figures), web copies with transparent backgrounds |
 | `covers/` | GAME page cover art, square web copies (`CREDITS.md` lists the artists) |
 | `.claude/skills/phosphor-guide/` | Skill for the green "phosphor guide" look (channel TV guide, GAME option D): tokens, parts, copy voice, how to build a new screen, and a starter `template.html` |
@@ -51,6 +52,7 @@ Any static server works. Opening `index.html` from the file system does not, bec
 - The pager's HELP key (`data-action="info" data-word="Help"`) opens the help overlay (`.giant-overlay`): `<retro-giant src="vendor/giant.glb">` and a fixed list of questions whose answers are in each button's `data-answer` (and `data-mood` for Giant's face).
 - When `vendor/retro-3d.js` changes, update the `?v=` on `BUNDLE` in the loading-screen script (the file's first 8 hex of `sha1sum`), so browsers never pair a new page with an old 3D file.
 - The loading screen (`#boot`, styled and scripted in `<head>`) downloads `vendor/retro-3d.js` itself to show progress; there is no `<script src>` tag for the bundle.
+- The CREATE page is a frame showing `ttw/`. Its File › Shut Down posts `{ ttw: 'shutdown' }` to the site, which closes the page (script "CREATE page" in `index.html`). The preview build puts `ttw/` into the frame as `srcdoc`.
 - `body.reading` is set while the reader is open (see the small script at the end of `index.html`).
 - **Page addresses.** Each TV has an address: `work`, `game`, `create` open that page full screen, `guide` zooms in on the channel TV. The script "page addresses" at the end of `index.html` shows the address as the visitor moves (`history.pushState`; closing a page or leaving the channel TV goes back to the root) and follows Back / Forward. `<base href="./">` at the top of `<head>` keeps every relative path pointing at the site root while the address shows a page, so keep it first in `<head>` and keep paths relative. A new page address needs a folder like `work/` and an entry in `PAGES` in that script and in the `?to=` check in `<head>`. The preview build turns addresses off (`PAGE_ADDRESSES`).
 
@@ -67,6 +69,6 @@ There are no tests. Serve the folder, open it in a browser at desktop and phone 
 - Plain HTML and CSS, no framework, no build. Keep it that way unless the owner asks.
 - Copy in `index.html` is placeholder except the WORK page ("How I Lead", the owner's text) and the owner's lines on channels 1–2. Do not invent biography, contact details, comic titles or channel media; ask the owner.
 - When the owner asks for help with Japanese text, they want the hiragana reading, an English translation and the grammar points explained alongside any correction.
-- Fonts come from Google Fonts (Barlow Semi Condensed, IBM Plex Sans, IBM Plex Mono, DotGothic16 for the pager screen, Anton, Archivo Black and Playfair Display for the GAME page's ransom-note look, and Caveat for the CREATE page's handwritten sketchbook).
+- Fonts come from Google Fonts (Barlow Semi Condensed, IBM Plex Sans, IBM Plex Mono, DotGothic16 for the pager screen, Anton, Archivo Black and Playfair Display for the GAME page's ransom-note look, ; the CREATE desktop in `ttw/` loads Grenze, Grenze Gotisch, Pixelify Sans and Silkscreen itself).
 - Work is committed straight to `main` and pushed (or merged into `main` from a session branch). The site is published by GitHub Pages from `main` at https://thetinywisdom.github.io/briandi.to/, so a push to `main` goes live. Keep every path relative (no leading `/`), because the site lives under `/briandi.to/`.
 - **After every change, publish a preview for the owner** (single-file build, see `PLAN.md` → Working notes). The owner asked for this to happen every time.

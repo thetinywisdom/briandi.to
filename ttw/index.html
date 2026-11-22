@@ -1,0 +1,890 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Tiny Wisdom</title>
+<!-- The CREATE page of briandi.to: The Tiny Wisdom as an old 1-bit desktop. Shown full screen inside the CREATE TV's
+     page (an iframe in ../index.html), and works on its own at /ttw/. Built from the owner's mockup
+     (https://claude.ai/artifact/VqFC4Atqy9j9yb9ZJkRjd5). Comic images are in comics/; the logo and figures in ../art/.
+     The article text is in the "articles" data below; the About text, story and mantra are in the script. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@500;700&family=Grenze:ital,wght@0,400;0,600;1,400&family=Pixelify+Sans:wght@400;600&family=Silkscreen&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: an olive studio wall (from the reference) with one old-computer screen at a time; tabs on top, notes beside. */
+:root {
+  --wall: #3c4a2a; --wall-ink: #ecebe2; --wall-dim: #b9bba8; --card: #2f3a21; --line: #56653f; --accent: #ecebe2;
+  --sans: "IBM Plex Sans", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --pix: "Pixelify Sans", ui-monospace, monospace; --tiny: "Silkscreen", ui-monospace, monospace;
+  --grenze: "Grenze", Georgia, serif; --gotisch: "Grenze Gotisch", "Grenze", Georgia, serif;
+  color-scheme: dark;
+}
+body { background: var(--wall); color: var(--wall-ink); font: 15px/1.5 var(--sans);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.shell { max-width: 1240px; margin: 0 auto; padding-block: 28px 56px; display: grid; gap: 18px; }
+h1 { margin: 0; font: 600 28px/1.15 var(--sans); text-wrap: balance; }
+.intro p { margin: 6px 0 0; color: var(--wall-dim); max-width: 80ch; font-size: 14px; }
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.tabs button { font: 500 13px/1 var(--mono); color: var(--wall-dim); background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 10px 12px; cursor: pointer; display: flex; gap: 8px; }
+.tabs button[aria-selected="true"] { color: #1d2414; background: var(--accent); border-color: var(--accent); }
+.tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.stage { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 270px); gap: 26px; align-items: start; }
+.notes { display: grid; gap: 14px; font-size: 14px; color: var(--wall-dim); position: sticky; top: 16px; }
+.notes b { display: block; color: var(--wall-ink); font: 500 12px/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px; }
+.notes .try { padding: 12px 14px; background: var(--card); border: 1px solid var(--line); border-radius: 6px; color: var(--wall-ink); }
+@media (max-width: 960px) { .stage { grid-template-columns: 1fr; } .notes { position: static; order: -1; } }
+.mock[hidden] { display: none; }
+.crt { position: relative; height: min(80vh, 740px); min-height: 580px; border-radius: 14px; overflow: hidden; box-shadow: 0 0 0 10px #1b1f15, 0 24px 60px rgba(0,0,0,.5); }
+.dith { display: block; image-rendering: pixelated; image-rendering: crisp-edges; max-width: 100%; }
+a { color: inherit; }
+
+/* ================= A. Desktop ================= */
+.a { --b: #000; --w: #fff; background: var(--w); color: var(--b); font: 400 15px/1.35 var(--pix); user-select: none; }
+.a-desk { position: absolute; inset: 22px 0 0; background: repeating-conic-gradient(#000 0 25%, #fff 0 50%) 0 0 / 2px 2px; overflow: hidden; }
+.a-menu { position: absolute; inset: 0 0 auto; height: 22px; display: flex; align-items: center; gap: 2px; padding: 0 8px; background: var(--w); border-bottom: 1px solid var(--b); z-index: 900; font: 600 15px/1 var(--pix); }
+.a-menu > button { all: unset; padding: 3px 10px; cursor: pointer; }
+.a-menu > button:hover, .a-menu > button[aria-expanded="true"] { background: var(--b); color: var(--w); }
+.a-menu > button:hover svg, .a-menu > button[aria-expanded="true"] svg { filter: invert(1); }
+.a-menu .logo { display: grid; place-items: center; padding: 3px 7px; }
+.a-menu .logo svg { width: 14px; height: 14px; }
+.a-menu .clock { margin-left: auto; font-weight: 400; }
+.a-drop { position: absolute; top: 22px; z-index: 950; min-width: 230px; background: var(--w); border: 1px solid var(--b); box-shadow: 2px 2px 0 var(--b); padding: 2px 0; }
+.a-drop[hidden] { display: none; }
+.a-drop button { all: unset; display: flex; justify-content: space-between; gap: 18px; width: 100%; box-sizing: border-box; padding: 3px 14px; cursor: pointer; }
+.a-drop button:hover:not(:disabled), .a-drop button:focus-visible { background: var(--b); color: var(--w); }
+.a-drop button:disabled { color: #8a8a8a; cursor: default; }
+.a-drop button kbd { font: inherit; opacity: .75; }
+.a-drop button[aria-checked="true"]::before { content: "✓"; position: absolute; margin-left: -11px; }
+.a-drop hr { border: 0; border-top: 1px dotted var(--b); margin: 3px 0; }
+.a-icons { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.a-icon { all: unset; position: absolute; display: grid; justify-items: center; gap: 4px; width: 96px; cursor: default; text-align: center; pointer-events: auto; touch-action: none; }
+.a-icon svg { width: 40px; height: 40px; shape-rendering: crispEdges; }
+.a-icon span { padding: 0 4px; background: var(--w); font-size: 14px; line-height: 1.2; }
+.a-icon.sel span { background: var(--b); color: var(--w); }
+.a-icon.sel svg { filter: invert(1); }
+.a-icon:focus-visible span { outline: 1px dotted var(--b); outline-offset: 1px; }
+.a-desk.by-name .a-icon { width: 170px; grid-template-columns: 20px 1fr; justify-items: start; align-items: center; text-align: left; }
+.a-desk.by-name .a-icon svg { width: 18px; height: 18px; }
+.a-win { position: absolute; background: var(--w); border: 1px solid var(--b); box-shadow: 2px 2px 0 var(--b); display: flex; flex-direction: column; min-width: 200px; max-width: calc(100% - 12px); }
+.a-win[hidden] { display: none; }
+.a-title { position: relative; height: 22px; flex: none; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--b); cursor: grab; touch-action: none;
+  background: repeating-linear-gradient(to bottom, var(--w) 0 2px, var(--b) 2px 3px) 0 4px / 100% 14px no-repeat; }
+.a-win:not(.front) .a-title { background: var(--w); }
+.a-title span { padding: 0 10px; background: var(--w); font: 600 15px/1 var(--pix); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: calc(100% - 60px); }
+.a-close { all: unset; position: absolute; left: 7px; top: 3px; width: 14px; height: 14px; border: 1px solid var(--b); background: var(--w); cursor: pointer; display: grid; place-items: center; }
+.a-close svg { width: 10px; height: 10px; shape-rendering: crispEdges; }
+.a-close:hover { background: var(--b); } .a-close:hover svg { filter: invert(1); }
+.a-close:focus-visible { outline: 1px dotted var(--b); outline-offset: 2px; }
+.a-info { display: flex; justify-content: space-between; padding: 3px 10px; border-bottom: 1px solid var(--b); font-size: 13px; flex: none; }
+.a-scroller { display: grid; grid-template-columns: 1fr 16px; flex: 1; min-height: 0; }
+.a-body { min-height: 0; overflow: auto; padding: 14px 18px; scrollbar-width: none; user-select: text; }
+.a-body::-webkit-scrollbar { display: none; }
+.a-bar { border-left: 1px solid var(--b); background: repeating-conic-gradient(#000 0 25%, #fff 0 50%) 0 0 / 2px 2px; position: relative; }
+.a-bar i { position: absolute; left: 0; right: 0; top: 0; height: 22px; background: var(--w); border-block: 1px solid var(--b); }
+.a-body p { margin: 0 0 0.8em; }
+.a-body .lead { font-weight: 600; }
+.a-body .small-logo { width: 150px; margin: 2px 0 14px; }
+.a-files { display: flex; flex-wrap: wrap; gap: 8px 4px; padding: 14px 10px; align-content: flex-start; }
+.a-files .a-icon { position: static; }
+.a-list { list-style: none; margin: 0; padding: 6px 0; }
+.a-list li { display: grid; grid-template-columns: 22px 1fr auto; gap: 8px; align-items: center; padding: 3px 12px; }
+.a-list li svg { width: 18px; height: 18px; shape-rendering: crispEdges; }
+.a-list li small { font-size: 13px; color: #555; }
+.a-dlg { width: 400px; }
+.a-dlg .a-body { display: grid; grid-template-columns: 44px 1fr; gap: 14px; align-items: start; padding: 18px; }
+.a-dlg .a-body > svg, .a-dlg .a-body > canvas { width: 40px; height: 40px; shape-rendering: crispEdges; }
+.a-btns { grid-column: 1 / -1; display: flex; justify-content: flex-end; gap: 14px; margin-top: 4px; }
+.a-btn { all: unset; padding: 3px 20px; border: 1px solid var(--b); border-radius: 9px; cursor: pointer; font-weight: 600; text-align: center; }
+.a-btn.default { border-width: 2px; box-shadow: 0 0 0 2px var(--w), 0 0 0 4px var(--b); }
+.a-btn:active, .a-btn:focus-visible { background: var(--b); color: var(--w); }
+.a-note textarea { all: unset; box-sizing: border-box; flex: 1; width: 100%; padding: 12px 14px; font: 400 16px/1.35 var(--pix); white-space: pre-wrap; user-select: text; cursor: text; }
+.a-specs { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; margin: 0; }
+.a-specs dt { font-weight: 600; } .a-specs dd { margin: 0; }
+.a-meter { height: 10px; border: 1px solid var(--b); margin-top: 3px; }
+.a-meter i { display: block; height: 100%; background: repeating-conic-gradient(#000 0 25%, #fff 0 50%) 0 0 / 2px 2px; }
+/* the boot screen for Restart */
+.a-boot { position: absolute; inset: 0; z-index: 1000; display: grid; place-items: center; background: repeating-conic-gradient(#000 0 25%, #fff 0 50%) 0 0 / 2px 2px; }
+.a-boot[hidden] { display: none; }
+.a-boot div { background: var(--w); border: 1px solid var(--b); box-shadow: 2px 2px 0 var(--b); padding: 22px 30px; display: grid; justify-items: center; gap: 12px; font-weight: 600; }
+.a-boot.black { background: #000; }
+.a-boot.black div { display: none; }
+/* Butler, in pixels */
+.a-butler .a-body { display: grid; grid-template-columns: 112px 1fr; gap: 14px; padding: 14px; }
+.a-bot { all: unset; cursor: pointer; display: block; width: 112px; height: 112px; }
+.a-bot canvas { width: 112px; height: 112px; image-rendering: pixelated; }
+.a-bot:focus-visible { outline: 1px dotted var(--b); outline-offset: 2px; }
+.a-bot.shake { animation: a-shake .3s steps(3) 2; }
+@keyframes a-shake { 33% { transform: translateX(-3px); } 66% { transform: translateX(3px); } }
+.a-say { position: relative; border: 1px solid var(--b); border-radius: 10px; padding: 10px 12px; min-height: 88px; }
+.a-say::before { content: ""; position: absolute; left: -9px; top: 24px; border: 8px solid transparent; border-right-color: var(--b); border-left: 0; }
+.a-say::after { content: ""; position: absolute; left: -7px; top: 25px; border: 7px solid transparent; border-right-color: var(--w); border-left: 0; }
+.a-say p { margin: 0 0 8px; }
+.a-asks { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.a-asks button { all: unset; display: block; width: 100%; box-sizing: border-box; padding: 2px 6px; cursor: pointer; }
+.a-asks button::before { content: "▸ "; }
+.a-asks button:hover, .a-asks button:focus-visible { background: var(--b); color: var(--w); }
+.a-asks em { font: 400 11px/1 var(--tiny); font-style: normal; border: 1px solid currentColor; padding: 1px 3px; margin-left: 6px; }
+.a-balloon { position: absolute; z-index: 800; box-sizing: border-box; background: var(--w); border: 1px solid var(--b); border-radius: 12px; box-shadow: 2px 2px 0 var(--b); padding: 12px 14px; }
+.a-balloon[hidden] { display: none; }
+.a-balloon::before, .a-balloon::after { content: ""; position: absolute; top: calc(var(--tail, 30px) - 9px); border: 9px solid transparent; }
+.a-balloon::before { right: -18px; border-left-color: var(--b); }
+.a-balloon::after { right: -16px; border-left-color: var(--w); }
+.a-balloon.to-above::before, .a-balloon.to-below::before, .a-balloon.to-above::after, .a-balloon.to-below::after { right: auto; top: auto; left: var(--tailx, 50%); }
+.a-balloon.to-above::before { bottom: -18px; border-left-color: transparent; border-top-color: var(--b); }
+.a-balloon.to-above::after { bottom: -16px; border-left-color: transparent; border-top-color: var(--w); }
+.a-balloon.to-below::before { top: -18px; border-left-color: transparent; border-bottom-color: var(--b); }
+.a-balloon.to-below::after { top: -16px; border-left-color: transparent; border-bottom-color: var(--w); }
+.a-balloon.to-right::before { right: auto; left: -18px; border-left-color: transparent; border-right-color: var(--b); }
+.a-balloon.to-right::after { right: auto; left: -16px; border-left-color: transparent; border-right-color: var(--w); }
+.a-balloon .a-say { border: 0; border-radius: 0; padding: 0; min-height: 0; }
+.a-balloon .a-say::before, .a-balloon .a-say::after { display: none; }
+.a-bclose { all: unset; position: relative; z-index: 2; float: right; margin: -4px -4px 4px 8px; width: 14px; height: 14px; border: 1px solid var(--b); display: grid; place-items: center; cursor: pointer; background: var(--w); }
+.a-bclose svg { width: 10px; height: 10px; shape-rendering: crispEdges; }
+.a-bclose:hover { background: var(--b); } .a-bclose:hover svg { filter: invert(1); }
+.a-butler-icon svg { width: 48px; height: 48px; }
+.a-butler-icon.shake { animation: a-shake .3s steps(3) 2; }
+.a-toast { position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 990; background: var(--w); border: 1px solid var(--b); box-shadow: 2px 2px 0 var(--b); padding: 5px 12px; }
+.a-toast[hidden] { display: none; }
+
+.a-browser { display: flex; flex-direction: column; }
+.br-bar { display: flex; align-items: center; gap: 6px; padding: 5px 8px; border-bottom: 1px solid var(--b); flex: none; font-size: 14px; }
+.br-bar button { all: unset; border: 1px solid var(--b); border-radius: 5px; padding: 1px 9px; cursor: pointer; box-shadow: 1px 1px 0 var(--b); }
+.br-bar button:active, .br-bar button:focus-visible { background: var(--b); color: var(--w); }
+.br-go { margin-left: 4px; }
+.br-url { flex: 1; min-width: 0; border: 1px solid var(--b); padding: 1px 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; user-select: text; }
+.br-page { position: relative; flex: 1; min-height: 0; container-type: inline-size; user-select: text; }
+.br-status { flex: none; border-top: 1px solid var(--b); padding: 2px 8px; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 560px) { .br-go { display: none; } }
+@container (max-width: 600px) { .br-page .bk { grid-template-columns: minmax(0, 1fr); padding: 0 18px 60px; } .br-page .bk > * { grid-column: 1 !important; } .br-page .bk-m { text-align: left; display: flex; gap: 10px; align-items: baseline; margin-top: 10px; } .br-page .bk-m b { font-size: 34px; } }
+
+.a-slides { display: flex; flex-direction: column; }
+.sl-stage { position: relative; flex: 1; min-height: 0; background: #fff; }
+.sl-stage img { position: absolute; inset: 8px; width: calc(100% - 16px); height: calc(100% - 16px); object-fit: contain; display: block; }
+.sl-bar { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 12px; border-top: 1px solid var(--b); }
+.sl-bar .a-btn:disabled { opacity: .35; cursor: default; }
+.sl-pos { font-variant-numeric: tabular-nums; }
+.sl-follow { flex: none; display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-top: 1px solid var(--b); text-decoration: none; }
+.sl-follow svg { width: 24px; height: 24px; flex: none; shape-rendering: crispEdges; }
+.sl-follow span { text-decoration: underline; text-underline-offset: 3px; }
+.sl-follow.end { background: var(--b); color: var(--w); } .sl-follow.end svg { filter: invert(1); }
+.a.narrow .a-icon { width: 72px; } .a.narrow .a-icon svg { width: 32px; height: 32px; } .a.narrow .a-icon span { font-size: 12px; }
+.a.narrow .a-butler-icon svg { width: 36px; height: 36px; }
+.sl-bar .a-btn { white-space: nowrap; } .a.narrow .sl-bar { gap: 6px; padding: 8px; } .a.narrow .sl-bar .a-btn { padding: 3px 10px; } .sl-pos { white-space: nowrap; }
+.a-more { margin-top: 1.4em !important; padding-top: 10px; border-top: 1px dotted var(--b); }
+
+/* ================= B. Pixel zine: shared ================= */
+.z { --paper: #e9e4d3; --ink: #24221d; --band: #d6d0bc; background: var(--paper); color: var(--ink); font: 400 19px/1.22 var(--grenze); }
+.z .crisp { filter: url(#onebit); }
+.z-scroll { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; scrollbar-color: var(--ink) var(--paper); }
+.z-label { font: 400 9px/1.2 var(--tiny); letter-spacing: 0.06em; text-transform: uppercase; }
+.z p { margin: 0 0 0.75em; }
+.z h2, .z h3 { margin: 0; font-weight: 700; font-family: var(--gotisch); }
+.z a { text-underline-offset: 3px; }
+.z-mantra { font: 700 clamp(28px, 4.2vw, 48px)/1.02 var(--gotisch); }
+
+/* B1 Booklet: one printed column with marginalia */
+.bk { max-width: 860px; margin: 0 auto; padding: 0 24px 80px; display: grid; grid-template-columns: 120px minmax(0, 1fr); column-gap: 28px; }
+.bk-run { grid-column: 1 / -1; position: sticky; top: 0; z-index: 2; display: flex; justify-content: space-between; padding: 10px 0 8px; margin-bottom: 30px; background: var(--paper); border-bottom: 1px solid var(--ink); }
+.bk-front { grid-column: 2; padding: 30px 0 40px; border-bottom: 1px dotted var(--ink); margin-bottom: 34px; }
+.bk-front .z-label { margin-top: 14px; }
+.bk-m { grid-column: 1; text-align: right; padding-top: 4px; }
+.bk-m b { display: block; font: 700 42px/0.9 var(--gotisch); }
+.bk-t { grid-column: 2; max-width: 34em; }
+.bk-drop::first-letter { float: left; font: 700 76px/0.78 var(--gotisch); margin: 6px 8px 0 0; }
+.bk-mantra { grid-column: 2; margin: 18px 0 30px; padding: 18px 0; border-block: 3px double var(--ink); text-align: center; }
+.bk-fn { grid-column: 2; margin-top: 30px; padding-top: 12px; border-top: 1px solid var(--ink); font-size: 16px; }
+.bk-colo { grid-column: 2; margin-top: 30px; display: grid; justify-items: center; gap: 8px; }
+@media (max-width: 680px) { .bk { grid-template-columns: minmax(0, 1fr); } .bk > * { grid-column: 1 !important; } .bk-m { text-align: left; display: flex; gap: 10px; align-items: baseline; margin-top: 10px; } .bk-m b { font-size: 34px; } }
+
+.bk-strip { grid-column: 1 / -1; min-width: 0; margin: 10px 0 34px; border-top: 3px double var(--ink); border-bottom: 3px double var(--ink); }
+.bk-strip-head { display: flex; justify-content: space-between; padding: 8px 0 0; }
+.bk-strip .st-row { padding: 14px 2px; }
+.bk-strip .st-p { width: min(310px, 80%); }
+.bk-strip .st-p .in { overflow: visible; }
+.bk-strip .st-nav { padding: 8px 0; }
+.bk-strip .st-row:focus-visible { outline: 1px dashed var(--ink); outline-offset: 2px; }
+
+/* B2 Index cards: a grid of cards pinned to the board */
+.cd { padding: 18px; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; align-items: stretch; }
+.cd-card { border: 1px solid var(--ink); background: var(--paper); display: flex; flex-direction: column; min-width: 0; }
+.cd-card > .z-label { padding: 6px 10px; border-bottom: 1px solid var(--ink); display: flex; justify-content: space-between; }
+.cd-card > .in { padding: 12px 14px; flex: 1; }
+.cd-ink { background: var(--ink); color: var(--paper); }
+.cd-ink > .z-label { border-color: var(--paper); }
+.cd-logo { grid-column: span 4; } .cd-fig { grid-column: span 2; grid-row: span 2; } .cd-intro { grid-column: span 4; }
+.cd-mantra { grid-column: span 6; } .cd-mantra .in { display: grid; place-items: center; padding: 40px 20px; text-align: center; }
+.cd-age { grid-column: span 3; } .cd-age .in { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start; }
+.cd-age b { font: 700 64px/0.8 var(--gotisch); }
+.cd-why { grid-column: span 4; } .cd-links { grid-column: span 2; } .cd-close { grid-column: span 6; } .cd-close .in { columns: 2 280px; column-gap: 28px; }
+.cd-links .in { display: grid; gap: 10px; align-content: start; font: 600 20px/1.2 var(--grenze); }
+@media (max-width: 760px) { .cd { grid-template-columns: 1fr; } .cd > * { grid-column: auto !important; grid-row: auto !important; } }
+
+/* B3 Comic strip: the story as panels, scrolled sideways */
+.st { position: absolute; inset: 0; display: grid; grid-template-rows: auto 1fr auto; }
+.st-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 18px; border-bottom: 1px solid var(--ink); }
+.st-head canvas { height: auto; }
+.st-row { display: flex; gap: 14px; padding: 18px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: thin; scrollbar-color: var(--ink) var(--paper); }
+.st-p { flex: none; width: min(360px, 80%); scroll-snap-align: start; border: 3px solid var(--ink); display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.st-p .z-label { padding: 6px 10px; border-bottom: 1px solid var(--ink); display: flex; justify-content: space-between; }
+.st-p .in { padding: 14px; overflow-y: auto; flex: 1; scrollbar-width: none; }
+.st-p .in::-webkit-scrollbar { display: none; }
+.st-p.wide { width: min(560px, 88%); }
+.st-p .age { font: 700 92px/0.8 var(--gotisch); margin-bottom: 10px; }
+.st-p.ink { background: var(--ink); color: var(--paper); }
+.st-p.ink .z-label { border-color: var(--paper); }
+.st-p.center .in { display: grid; place-items: center; text-align: center; }
+.st-nav { display: flex; justify-content: space-between; align-items: center; padding: 8px 18px; border-top: 1px solid var(--ink); }
+.st-nav button { all: unset; cursor: pointer; padding: 6px 12px; border: 1px solid var(--ink); font: 400 10px/1 var(--tiny); }
+.st-nav button:hover, .st-nav button:focus-visible { background: var(--ink); color: var(--paper); }
+
+/* B4 Broadsheet: a newspaper front page */
+.bs { max-width: 1080px; margin: 0 auto; padding: 18px 22px 70px; }
+.bs-mast { text-align: center; border-bottom: 3px double var(--ink); padding-bottom: 6px; }
+.bs-mast h2 { font: 700 clamp(48px, 9vw, 112px)/0.9 var(--gotisch); }
+.bs-date { display: flex; justify-content: space-between; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--ink); flex-wrap: wrap; }
+.bs-head { padding: 18px 0 10px; text-align: center; }
+.bs-head .z-mantra { font-size: clamp(34px, 5.4vw, 64px); }
+.bs-deck { text-align: center; font-style: italic; margin: 8px auto 16px; max-width: 40em; }
+.bs-body { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 1fr); gap: 0; border-top: 1px solid var(--ink); }
+.bs-cols { columns: 3 220px; column-gap: 22px; column-rule: 1px solid var(--ink); padding: 16px 22px 0 0; }
+.bs-cols p:first-child::first-letter { float: left; font: 700 62px/0.8 var(--gotisch); margin: 4px 6px 0 0; }
+.bs-fig { break-inside: avoid; margin: 0 0 12px; }
+.bs-fig figcaption { margin-top: 4px; }
+.bs-side { border-left: 1px solid var(--ink); padding: 16px 0 0 18px; }
+.bs-side h3 { font-size: 28px; margin-bottom: 8px; }
+.bs-side .row { display: grid; grid-template-columns: 2.2em 1fr; gap: 6px; padding: 8px 0; border-top: 1px dotted var(--ink); font-size: 16px; }
+.bs-side .row b { font: 700 26px/1 var(--gotisch); }
+.bs-foot { margin-top: 22px; border-top: 3px double var(--ink); padding-top: 8px; display: flex; gap: 22px; justify-content: center; font: 600 20px/1.2 var(--grenze); }
+@media (max-width: 760px) { .bs-body { grid-template-columns: 1fr; } .bs-side { border-left: 0; border-top: 1px solid var(--ink); padding-left: 0; } .bs-cols { padding-right: 0; } }
+@media (prefers-reduced-motion: reduce) { .a-bot.shake { animation: none; } }
+/* the site version: the desktop fills the window */
+html, body { height: 100%; }
+body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
+.shell { max-width: none; padding: 0; display: block; height: 100%; }
+.intro, .tabs, .notes, #o-b1, #o-b2, #o-b3, #o-b4 { display: none !important; }
+.stage { display: block; height: 100%; }
+.stage > div, .mock { height: 100%; }
+.crt { height: 100%; min-height: 0; border-radius: 0; box-shadow: none; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <!-- one-bit ink: every pixel is paper or ink, so type gets hard, jagged edges like a bitmap screen -->
+  <filter id="onebit" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+    <feColorMatrix type="saturate" values="0"/>
+    <feComponentTransfer><feFuncR type="discrete" tableValues="0.141 0.914"/><feFuncG type="discrete" tableValues="0.133 0.894"/><feFuncB type="discrete" tableValues="0.114 0.827"/></feComponentTransfer>
+  </filter>
+</svg>
+
+<div class="shell">
+  <header class="intro">
+    <h1>The Tiny Wisdom, on an old computer</h1>
+    <p>A and B combined: the working desktop, where The Tiny Wisdom icon opens the booklet (B1, with the ages as a comic strip) as a website in an old browser window. Butler sits on the desktop and talks in a balloon. Your logo, figures, story, mantra and links throughout; no comics or products.</p>
+  </header>
+  <div class="tabs" role="tablist" aria-label="Options" hidden>
+    <button role="tab" id="t-a" aria-controls="o-a" aria-selected="true"><b>A</b>Desktop</button>
+  </div>
+  <div class="stage">
+    <div>
+      <section class="mock" id="o-a" role="tabpanel" aria-labelledby="t-a"><div class="crt a" id="a"></div></section>
+      <section class="mock" id="o-b1" role="tabpanel" aria-labelledby="t-b1" hidden><div class="crt z" id="b1"></div></section>
+      <section class="mock" id="o-b2" role="tabpanel" aria-labelledby="t-b2" hidden><div class="crt z" id="b2"></div></section>
+      <section class="mock" id="o-b3" role="tabpanel" aria-labelledby="t-b3" hidden><div class="crt z" id="b3"></div></section>
+      <section class="mock" id="o-b4" role="tabpanel" aria-labelledby="t-b4" hidden><div class="crt z" id="b4"></div></section>
+    </div>
+    <aside class="notes" id="notes" aria-live="polite"></aside>
+  </div>
+</div>
+
+<script type="application/json" id="art">{"logo": "../art/ttw-logo.webp", "figures": "../art/ttw-figures.webp"}</script>
+<script type="application/json" id="comics">{"big-fish": ["comics/big-fish-01.jpg", "comics/big-fish-02.jpg", "comics/big-fish-03.jpg", "comics/big-fish-04.jpg", "comics/big-fish-05.jpg", "comics/big-fish-06.jpg", "comics/big-fish-07.jpg"], "talent": ["comics/talent-01.jpg", "comics/talent-02.jpg", "comics/talent-03.jpg", "comics/talent-04.jpg", "comics/talent-05.jpg", "comics/talent-06.jpg", "comics/talent-07.jpg", "comics/talent-08.jpg", "comics/talent-09.jpg", "comics/talent-10.jpg", "comics/talent-11.jpg", "comics/talent-12.jpg"], "stolen": ["comics/stolen-01.jpg"]}</script>
+<script type="application/json" id="articles">{
+ "you-will-look-dumb-when-you-try-your-best": {
+  "title": "You will look dumb when you try your best",
+  "date": "2025-12-04",
+  "paras": [
+   "I recently watched a drama in which one character refused to leave his room. Whenever he was asked to do something to change his life, he has all these answers memorised:",
+   "“I can’t do it.”",
+   "“I’d look dumb doing it.”",
+   "“I know people will make fun of me.”",
+   "“I don’t want to look stupid for failing.”",
+   "I recognised every word, because for years, that was me.",
+   "I have always loved buying notebooks ever since I was a kid. However, for years, I have kept those notebooks clean. I’d write my name on the first page, feel a wave of cringe, and close it forever.",
+   "Why? Because I felt dumb for writing my feelings in a book.",
+   "When I told my friends I wanted to be a filmmaker, they were excited and jumped in to help. However, I was never inside the film itself. I hid behind the camera and only put my name at the end of the film.",
+   "Why? Because I don’t want to look stupid in front of a camera.",
+   "Even as an adult, I always avoided looking dumb. At work, I always found a way to avoid making mistakes. When things got challenging, I would ask my seniors for help or pass the work to my peers. I pretend to know what I am doing, and somehow, everyone at work bought it.",
+   "Why? Because I don’t want people to know that I don’t know what I am doing.",
+   "Over the years, I’ve always avoided looking dumb and stupid. I have never failed, not because I am intelligent, talented, or a genius, but because I have never tried.",
+   "Until one day, I could no longer run away. My boss called me one morning and said something that shook my world that day.",
+   "“Hey, I don’t enjoy working with you at all. Tell me how you can fix this.”",
+   "Those two sentences shattered everything. The careful image I’d built, the competence I’d performed, the safety I’d maintained by never risking looking dumb, my world crumbled like a house of cards.",
+   "Realising I couldn't avoid it any longer, I told him I honestly don’t know what I'm doing. I feared I might seem foolish and be criticised for my lack of knowledge.",
+   "And to my surprise, he understood my fear and helped me become a better person. He did not push me or pressure me; he gave me room to make mistakes without being judged. More on that in another blog post, perhaps.",
+   "# The turning point",
+   "After that phone call, I realised I wasn’t just holding myself back. I was creating problems for everyone around me.",
+   "My fear of looking stupid had made me unreliable. My need to appear perfect had made me incomplete. My pride in running away when things get hard only make me look stupid.",
+   "The irony is brutal: by trying so hard not to look dumb, I was actually being dumb. In attempting to fool everyone, I was seen as a fool.",
+   "And somehow, knowing that people already see me as a fool who can’t do anything right has set me free. I no longer carry the shackles of perfection, and it made me feel like I can do whatever I want.",
+   "So I tried new things, I failed, made mistakes, learned from my experiences, and eventually became a better person.",
+   "In the end, I realised that those who looked dumb were actually trying their best. And all this time, I was the dumb one for not trying my best.",
+   "So friend, if you feel like you want to do something, but you are afraid of looking dumb, let’s push through the cringe.",
+   "You might “look dumb” for trying.",
+   "But you’re not dumb for trying your best.",
+   "I hope you find this insightful. Remember:",
+   "It’s not going to be easy,\nBut it’s not impossible.",
+   "Your friend,\nBrian."
+  ]
+ },
+ "ill-do-it-later": {
+  "title": "“I’ll Do It Later”",
+  "date": "2026-10-01",
+  "paras": [
+   "It’s just a small inconvenience.",
+   "In the beginning, I ignore it. It’s small. It doesn’t really bother me. It is so easy to fix that I tell myself the most dangerous lie in the human language:",
+   "“I’ll do it later.”",
+   "We all have a “later,” don’t we? It’s a magical, mythical time in the future where we have infinite energy, unlimited focus, and a deep, passionate desire to finally organize the mess in our life.",
+   "For me, it started with three tiny things:",
+   "My phone charger. The wire was frayed and only worked if I propped it up at a very specific, delicate angle. I could have easily bought a new cable, but I kept telling myself I’d order one “tonight.” I’ll buy it later.",
+   "My dirty clothes. I didn’t feel like doing a quick load of laundry, so the clothes kept piling up, day after day. I’ll wash them later.",
+   "My employee ID card. Instead of keeping it in my work bag, I kept leaving it in random places—on the kitchen counter, the dining table, or on top of my work desk. I’ll find it later.",
+   "Individually, these aren’t real problems — they are just tiny pebbles. But if you pile up enough of them, they become a mountain too heavy to carry. And eventually, a landslide is bound to happen.",
+   "On a random weekday, sometime during the night, my phone cable slipped off its delicate angle. The phone stopped charging, and the battery died. Because my phone was dead, my morning alarm never went off.",
+   "I woke up very late in a heart-pounding panic. I sprinted to my closet to get dressed, only to realize my laundry pile was now a mountain of unwashed clothes. I had zero clean work attire.",
+   "In total desperation, I pulled out an old pair of pants and a shirt from the back of my wardrobe. Both were clothes that hadn’t fit me in years—squeezing my ribs and pulling awkwardly at my chest and shoulders.",
+   "I ran out the door to catch the bus, but I had already missed my usual timing. Without my phone, I had to choose: should I wait, or should I walk?",
+   "Waiting didn’t feel right. “I’m already late, I should get moving,” I thought to myself. So, I decided to walk.",
+   "Less than one minute later, the bus drove right past me. If my phone had just five percent battery, I could have checked the app, seen the bus was two minutes away, and just waited.",
+   "Instead, I spent the next fifteen minutes walking to the train station in tight, uncomfortable clothes, watching my morning unravel step by step.",
+   "An hour later, I arrived at the office. I reached into my bag for my employee ID card, only to realize it wasn’t there. It was sitting comfortably on my desk at home.",
+   "Because I didn’t have my card, I couldn’t scan through the turnstile. I had to stand in line at the visitor desk, fill out manual sign-in forms, prove my identity, and wait for my colleague to escort me in.",
+   "I walked into my meeting more than 45 minutes late, utterly exhausted, embarrassed, and wearing a shirt that felt like it was made for a teenager.",
+   "# Tiny inconveniences",
+   "We often trick ourselves into believing that because a task is easy, it doesn’t carry any mental weight. But every time you walk past that pile of dirty clothes, your brain spends a fraction of a second thinking, “I need to do that.”",
+   "When you have twenty small things pending, it’s just like having twenty browser tabs open in your mind. They run quietly in the background, draining your battery, slowing down your brain, and making you feel exhausted before your day has even started.",
+   "They are all small. But together, they pile up and overwhelm us.",
+   "So, the next time you realize you are slowly collecting pebbles, don’t try to clear the whole mountain at once. Just pick up one pebble.",
+   "Because you don’t have to fix your whole life today. Today, just buy the new phone charger cable. Tomorrow, put your ID card in your bag. The day after, throw one load of clothes into the laundry.",
+   "You don’t need to clear a mountain today.",
+   "Stop carrying small inconveniences around with you.",
+   "You just need to pick up one single pebble and throw it away.",
+   "I hope you found this insightful, remember:",
+   "It’s not going to be easy\nBut it’s not impossible",
+   "Your friend,\nBrian"
+  ]
+ },
+ "the-boring-adult-life": {
+  "title": "The “boring” adult life",
+  "date": "2026-11-04",
+  "paras": [
+   "You open your phone, and everyone is somewhere else.",
+   "They are climbing a mountain in Switzerland, launching a startup, eating handmade sushi in Tokyo, or sharing a montage of their aesthetic 5 AM morning routine.",
+   "Then you look up.",
+   "You are sitting at your desk under flickering fluorescent lights in your cubicle. You just finished a spreadsheet that your colleagues will skim once, you’re on your third cup of lukewarm coffee, and five minutes ago you were venting to a coworker about a meeting that could have been an email.",
+   "In a few hours, you will commute home, stare at the fridge, wash two dishes, scroll until your eyes burn, and go to bed dreading the sound of your alarm.",
+   "It feels monotonous. It feels boring.",
+   "And because nobody posts a reel about their piling laundry, their arguments with their spouses, or their increasing debts, we slowly convince ourselves of a lie: Everyone else is truly living, and I am the only one stuck in a loop.",
+   "The internet isn’t real life. It’s a highlight reel of eight billion people sharing only their top 1% moments.",
+   "What’s actually normal is the 9-to-5 grind. What’s normal is feeling exhausted, having days where nothing noteworthy happens, and wondering if this is really all there is.",
+   "We’ve been conditioned to treat “boring” like a failure. We think if our days aren’t cinematic, we are wasting them. If our lives aren’t interesting, we are not truly living.",
+   "So we chase the sparks. We live for the birthdays, the promotions, the annual vacations, the weddings, and the Friday nights. We crave that hit of dopamine: the sudden, thrilling interruption of our predictable lives.",
+   "And wanting that doesn’t make you shallow. It makes you human.",
+   "You are not weird for feeling tired of the routine. You are not broken for wanting a break from the ordinary. But more importantly: you are not missing out on life just because yours is “boring.”",
+   "If every day were fireworks, your eyes wouldn’t gleam at the light, instead, you would got sick of the noise. The big, shining milestones only feel special because they stand against the boring days.",
+   "So here’s a reminder that a boring life isn’t a wasted life. It is a stable life. It means nothing is on fire.",
+   "You don’t need to turn every day into a movie to make your existence valid.",
+   "Sometimes, living well just means getting through the ordinary days, making your morning cup of coffee, and realizing that a calm, ordinary life is miracle on its own.",
+   "Don’t let social media tell you that your life is not worth living.",
+   "I hope you found this insightful, remember:",
+   "It’s not going to be easy\nBut it’s not impossible",
+   "Your friend,\nBrian"
+  ]
+ }
+}</script>
+<script>
+(() => {
+  const ART = JSON.parse(document.getElementById('art').textContent);
+  const COMICS = JSON.parse(document.getElementById('comics').textContent);
+  const ARTICLES = JSON.parse(document.getElementById('articles').textContent);
+  const $ = (id) => document.getElementById(id);
+  const el = (t, c, txt) => { const e = document.createElement(t); if (c) e.className = c; if (txt != null) e.textContent = txt; return e; };
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const coarse = matchMedia('(pointer: coarse)').matches;
+
+  /* ---- the owner's words ---- */
+  const MANTRA = 'It’s not gonna be easy, but it’s not impossible.';
+  const ABOUT = [
+    'Today, The Tiny Wisdom has grown far beyond a bedroom side project. I’ve created hundreds of comics and blog posts, spoken to hundreds of people at live events, and watched something I made genuinely change people’s lives.',
+    'Before any of that existed, though, it all started with one sentence:',
+    '“' + MANTRA + '”',
+    'This is the mantra I created for The Tiny Wisdom, and the compass I’ve used for my own life. After everything I’ve been through, I genuinely believe that I will eventually end up where I want to be.',
+    'There’s only one catch: it only happens if I don’t give up on myself.',
+    'I haven’t just proven this theory once or twice—I’ve lived it so many times that it’s become a pattern.',
+    'The formula itself is simple. The hard part is staying consistent, pushing through the cringe, getting back up when you’re knocked down, and believing you can actually become the best version of yourself.',
+  ];
+  const STORY = [
+    ['23', 'When I was 23, I wanted to work abroad. It took a year and a half and countless rejections, but I eventually landed a role in a neighboring country.'],
+    ['25', 'By 25, I had set my sights on a dream job at a specific company. I finally got the offer shortly after turning 27.'],
+    ['26', 'In the middle of chasing that, I started The Tiny Wisdom from my bedroom at 26. Two years later, at 28, I had 100k followers on Instagram who genuinely cared about what I was creating.'],
+    ['29', 'Then I turned 29, and with that came the realization that the dream job wasn’t what I thought it would be. I had glorified it so much in my head that the reality left me disappointed. So, my wife and I decided to start a new life in Japan, and by 31, I was living there.'],
+  ];
+  const CLOSE = [
+    'I’m not sharing this to brag. I’m showing you the pattern I’ve seen, the pattern I’ve lived. The point is that dreams really do come true—just rarely on our schedule.',
+    'They probably won’t arrive the moment you want them to, and they almost certainly won’t look the way you pictured them.',
+    'Dreams take detours. They show up in shapes and timelines we never could have planned for.',
+    'So if you’re in the middle of the waiting, the rejection, or the quiet disappointment of a path that didn’t pan out the way you hoped: keep going.',
+    'Adjust the plan, pivot when you need to, and give yourself grace when the timeline stretches out.',
+    'The road ahead won’t be effortless, and it won’t always make sense while you’re walking it.',
+    'Remember: ' + MANTRA,
+  ];
+  const LINKS = [['Instagram', 'instagram.com/thetinywisdom', 'https://instagram.com/thetinywisdom'], ['Website', 'www.thetinywisdom.com', 'https://www.thetinywisdom.com']];
+  const linkA = ([, label, href]) => { const a = el('a', null, label); a.href = href; a.target = '_blank'; a.rel = 'noopener'; return a; };
+
+  /* ---- pictures: the owner's art dithered to one bit (Atkinson), `dot` CSS px per dot ---- */
+  const imgs = {};
+  const load = (k) => imgs[k] || (imgs[k] = new Promise((res) => { const i = new Image(); i.onload = () => res(i); i.src = ART[k]; }));
+  const onebit = async (canvas, key, cssW, dot, ink, paper) => {
+    const img = await load(key), w = Math.max(20, Math.round(cssW / dot)), h = Math.round(w * img.height / img.width);
+    canvas.width = w; canvas.height = h; canvas.style.width = (w * dot) + 'px';
+    const g = canvas.getContext('2d', { willReadFrequently: true });
+    g.fillStyle = '#fff'; g.fillRect(0, 0, w, h); g.drawImage(img, 0, 0, w, h);
+    const im = g.getImageData(0, 0, w, h), d = im.data, v = new Float32Array(w * h);
+    for (let i = 0; i < w * h; i++) v[i] = 0.299 * d[i * 4] + 0.587 * d[i * 4 + 1] + 0.114 * d[i * 4 + 2];
+    const add = (x, y, e) => { if (x >= 0 && x < w && y < h) v[y * w + x] += e; };
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+      const i = y * w + x, o = v[i], n = o < 128 ? 0 : 255, e = (o - n) / 8;
+      add(x + 1, y, e); add(x + 2, y, e); add(x - 1, y + 1, e); add(x, y + 1, e); add(x + 1, y + 1, e); add(x, y + 2, e);
+      const c = n ? paper : ink; d[i * 4] = c[0]; d[i * 4 + 1] = c[1]; d[i * 4 + 2] = c[2]; d[i * 4 + 3] = 255;
+    }
+    g.putImageData(im, 0, 0); return canvas;
+  };
+  const pix = (cls = '') => { const c = el('canvas', 'dith ' + cls); c.setAttribute('aria-hidden', 'true'); return c; };
+  const icon = (rows) => { const s = 16, ns = 'http://www.w3.org/2000/svg', svg = document.createElementNS(ns, 'svg'); svg.setAttribute('viewBox', `0 0 ${s} ${s}`); svg.setAttribute('aria-hidden', 'true');
+    rows.forEach((r, y) => [...r].forEach((ch, x) => { if (ch !== '#' && ch !== 'o') return; const q = document.createElementNS(ns, 'rect'); q.setAttribute('x', x); q.setAttribute('y', y); q.setAttribute('width', 1); q.setAttribute('height', 1); if (ch === 'o') q.setAttribute('fill', '#fff'); svg.append(q); })); return svg; };
+  const I = {
+    doc: ['  ##########    ', '  #oooooooo##   ', '  #oooooooo#o#  ', '  #oooooooo####  ', '  #o#######ooo# ', '  #oooooooooooo#', '  #o##########o#', '  #oooooooooooo#', '  #o#########oo#', '  #oooooooooooo#', '  #o##########o#', '  #oooooooooooo#', '  #oooooooooooo#', '  ##############', '                ', '                '],
+    camera: ['                ', '                ', '     ####       ', ' ##############', ' #oooooooooooo#', ' #oooo####oooo#', ' #ooo#oooo#ooo#', ' #oo#oo##oo#oo#', ' #oo#o#oo#o#oo#', ' #oo#oo##oo#oo#', ' #ooo#oooo#ooo#', ' #oooo####oooo#', ' #oooooooooooo#', ' ##############', '                ', '                '],
+    globe: ['     ######     ', '   ##o#oo#o##   ', '  #oo#oooo#oo#  ', ' #oo#oooooo#oo# ', ' ############## ', ' #o#oooooooo#o# ', '#oo#oooooooo#oo#', '################', '#oo#oooooooo#oo#', ' #o#oooooooo#o# ', ' ############## ', ' #oo#oooooo#oo# ', '  #oo#oooo#oo#  ', '   ##o#oo#o##   ', '     ######     ', '                '],
+    bulb: ['     ######     ', '   ##oooooo##   ', '  #oooooooooo#  ', ' #oooo#oo#oooo# ', ' #ooooo##ooooo# ', ' #ooooo##ooooo# ', '  #oooo##oooo#  ', '   #ooo##ooo#   ', '    #oo##oo#    ', '    ########    ', '    #oooooo#    ', '    ########    ', '    #oooooo#    ', '     ######     ', '                ', '                '],
+    trash: ['     ######     ', '  ############  ', '  #oooooooooo#  ', '   #o#o#o#o#   ', '   #o#o#o#o#   ', '   #o#o#o#o#   ', '   #o#o#o#o#   ', '   #o#o#o#o#   ', '   #o#o#o#o#   ', '   #o#o#o#o#   ', '   #o#o#o#o#   ', '   ##########   ', '                ', '                ', '                ', '                '],
+    pencil: ['             ## ', '            #oo#', '           #oo# ', '          #oo#  ', '         #oo#   ', '        #oo#    ', '       #oo#     ', '      #oo#      ', '     #oo#       ', '    #oo#        ', '   #oo#         ', '  ###           ', '  ##            ', '                ', '                ', '                '],
+    brush: ['            ### ', '           #oo# ', '          #oo#  ', '         #oo#   ', '        #oo#    ', '       #oo#     ', '      ####      ', '     ####       ', '    #####       ', '   ######       ', '  #####         ', '  ###           ', '                ', '                ', '                ', '                '],
+    spray: ['   #  #         ', ' #  #  #        ', '   #  #  ##     ', '  #  #  ####    ', '        #oo#    ', '        #oo#    ', '       ######   ', '       #oooo#   ', '       #oooo#   ', '       #oooo#   ', '       #oooo#   ', '       #oooo#   ', '       ######   ', '                ', '                ', '                '],
+    eraser: ['                ', '                ', '      ########  ', '     #oooooo##  ', '    #oooooo#o#  ', '   #oooooo#oo#  ', '  ########oo#   ', '  #oooooo#o#    ', '  #oooooo##     ', '  ########      ', '                ', '                ', '                ', '                ', '                ', '                '],
+    hand: ['      ##        ', '     #oo# ##    ', '     #oo##oo#   ', '     #oo#oo#o## ', '  ## #oo#oo#oo# ', ' #oo##ooooooooo#', ' #oooooooooooo# ', '  #ooooooooooo# ', '   #oooooooooo# ', '    #oooooooo#  ', '     ########   ', '                ', '                ', '                ', '                ', '                '],
+    clear: ['                ', '  ############  ', '  #oooooooooo#  ', '  #o##oooo##o#  ', '  #oo##oo##oo#  ', '  #ooo####ooo#  ', '  #oooo##oooo#  ', '  #ooo####ooo#  ', '  #oo##oo##oo#  ', '  #o##oooo##o#  ', '  #oooooooooo#  ', '  ############  ', '                ', '                ', '                ', '                '],
+  };
+  Object.assign(I, {
+    comic: [' ############## ', ' #oooooo#ooooo# ', ' #o##ooo#o###o# ', ' #o##ooo#ooooo# ', ' #oooooo#o#o#o# ', ' ############## ', ' #oooo#ooooooo# ', ' #o##o#ooo##oo# ', ' #oooo#oo#oo#o# ', ' #o#oo#ooo##oo# ', ' #oooo#ooooooo# ', ' ############## ', '                ', '                ', '                ', '                '],
+    browser: [' ############## ', ' #oooooooooooo# ', ' ############## ', ' #oooooooooooo# ', ' #ooo######ooo# ', ' #oo#o#oo#o#oo# ', ' #o#oo#oo#oo#o# ', ' #o##########o# ', ' #o#oo#oo#oo#o# ', ' #oo#o#oo#o#oo# ', ' #ooo######ooo# ', ' #oooooooooooo# ', ' ############## ', '                ', '                ', '                '],
+    folder: ['                ', '                ', '  #####         ', ' #ooooo#        ', ' ##############', ' #oooooooooooo#', ' #oooooooooooo#', ' #oooooooooooo#', ' #oooooooooooo#', ' #oooooooooooo#', ' #oooooooooooo#', ' #oooooooooooo#', ' ##############', '                ', '                ', '                '],
+    note: [' ############## ', ' #oooooooooooo# ', ' #o##########o# ', ' #oooooooooooo# ', ' #o#########oo# ', ' #oooooooooooo# ', ' #o##########o# ', ' #oooooooooooo# ', ' #o######ooooo# ', ' #oooooooooooo# ', ' #oooooooooooo# ', ' #oooooooooo### ', ' #ooooooooo#o#  ', ' ############   ', '                ', '                '],
+    bot: ['   #      #     ', '    #    #      ', '  ############  ', '  #oooooooooo#  ', '  #o########o#  ', '  #o#o####o#o#  ', '  #o########o#  ', '  #o##oooo##o#  ', '  #oooooooooo#  ', '  ############  ', '     ######     ', '   ##oooooo##   ', '  # #oooooo# #  ', '    ########    ', '    ##    ##    ', '                '],
+    trashFull: ['     ######     ', '  ############  ', '  #oooooooooo#  ', '  ##o#o##o#o#  ', ' # #o#o#o#o## # ', '   #o#o#o#o#    ', '   #o#o#o#o#   ', '   #o#o#o#o#   ', '   #o#o#o#o#   ', '   #o#o#o#o#   ', '   #o#o#o#o#   ', '   ##########   ', '                ', '                ', '                ', '                '],
+    x: ['##        ##', '###      ###', ' ###    ### ', '  ###  ###  ', '   ######   ', '    ####    ', '    ####    ', '   ######   ', '  ###  ###  ', ' ###    ### ', '###      ###', '##        ##'],
+    ttw: ['                ', '     ######     ', '   ##########   ', '  ###o####o###  ', '  ####o##o####  ', ' #####oo#####  ', ' #oooooooooo#  ', ' #####oo#####  ', ' #####oo#####  ', '  ####oo####   ', '   ##########   ', '     ######     ', '                ', '                ', '                ', '                '],
+    warn: ['       ##       ', '      #oo#      ', '      #oo#      ', '     #oooo#     ', '     #o##o#     ', '    #oo##oo#    ', '    #oo##oo#    ', '   #ooo##ooo#   ', '   #ooo##ooo#   ', '  #oooooooooo#  ', '  #oooo##oooo#  ', ' #ooooo##ooooo# ', ' ############## ', '                ', '                ', '                '],
+  });
+  const xIcon = () => { const s = icon(I.x); s.setAttribute('viewBox', '0 0 12 12'); return s; };
+  const now = () => new Date().toTimeString().slice(0, 5);
+
+  const INK = [36, 34, 29], PAPER = [233, 228, 211];
+  const draws = {};
+  const later = (k, fn) => { draws[k] = fn; };
+
+  /* ============================================ A. Desktop ============================================ */
+  (() => {
+    const root = $('a');
+    root.innerHTML = '<div class="a-menu" role="menubar" aria-label="Menu bar"></div><div class="a-desk"><div class="a-icons"></div></div><div class="a-toast" hidden></div><div class="a-boot" hidden><div></div></div>';
+    const menu = root.querySelector('.a-menu'), desk = root.querySelector('.a-desk'), iconsLayer = root.querySelector('.a-icons'), toastEl = root.querySelector('.a-toast'), boot = root.querySelector('.a-boot');
+    const toast = (t) => { toastEl.textContent = t; toastEl.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => { toastEl.hidden = true; }, 2200); };
+
+    /* ---- windows ---- */
+    let z = 10;
+    const front = (W) => { W.style.zIndex = ++z; desk.querySelectorAll('.a-win').forEach((w) => w.classList.toggle('front', w === W)); };
+    const show = (W) => { W.hidden = false; front(W); };
+    const hide = (W) => { W.hidden = true; const top = [...desk.querySelectorAll('.a-win:not([hidden])')].sort((a, b) => b.style.zIndex - a.style.zIndex)[0]; if (top) front(top); };
+    const win = (title, w, info) => {
+      const W = el('div', 'a-win'); W.hidden = true; W.style.width = w + 'px';
+      const t = el('div', 'a-title'), close = el('button', 'a-close'); close.type = 'button'; close.setAttribute('aria-label', 'Close ' + (title || 'window')); close.append(xIcon());
+      t.append(close, el('span', null, title)); W.append(t);
+      if (info) { const i = el('div', 'a-info'); info.forEach((s) => i.append(el('span', null, s))); W.append(i); W._info = i; }
+      close.onclick = (e) => { e.stopPropagation(); hide(W); };
+      W.addEventListener('pointerdown', () => front(W));
+      t.addEventListener('pointerdown', (e) => {
+        if (e.target.closest('.a-close')) return; t.setPointerCapture(e.pointerId);
+        const sx = e.clientX - W.offsetLeft, sy = e.clientY - W.offsetTop;
+        const mv = (ev) => { W.style.left = Math.max(-W.offsetWidth + 60, Math.min(desk.clientWidth - 60, ev.clientX - sx)) + 'px'; W.style.top = Math.max(0, Math.min(desk.clientHeight - 30, ev.clientY - sy)) + 'px'; };
+        const up = () => { t.removeEventListener('pointermove', mv); t.removeEventListener('pointerup', up); };
+        t.addEventListener('pointermove', mv); t.addEventListener('pointerup', up);
+      });
+      desk.append(W); return W;
+    };
+    // on a narrow screen windows leave the icon column on the right free
+    const at = (W, x, y, h) => { const dw = desk.clientWidth, dh = desk.clientHeight, narrow = dw < 600; const w = Math.min(parseInt(W.style.width), dw - (narrow ? 84 : 16));
+      if (narrow) x = 6;
+      W.style.width = w + 'px'; W.style.left = Math.max(8, Math.min(x, dw - w - 8)) + 'px'; W.style.top = Math.max(8, Math.min(y, dh - 80)) + 'px'; if (h) W.style.height = Math.min(h, dh - Math.max(8, y) - 10) + 'px'; };
+    const scroller = (W) => { const s = el('div', 'a-scroller'), body = el('div', 'a-body'), bar = el('div', 'a-bar'), knob = el('i'); bar.append(knob); s.append(body, bar); W.append(s);
+      body.addEventListener('scroll', () => { const f = body.scrollTop / Math.max(1, body.scrollHeight - body.clientHeight); knob.style.top = (f * (bar.clientHeight - 22)) + 'px'; }); return body; };
+    const text = (title, paras, w = 420, lead = []) => { const W = win(title, w, [`${paras.length} paragraphs`, 'SimpleText']); const b = scroller(W); paras.forEach((p, i) => b.append(el('p', lead.includes(i) ? 'lead' : null, p))); return W; };
+    // a dialog: icon, message, buttons [[label, fn, default]]
+    const dialog = (iconRows, msg, buttons, w = 400) => {
+      const W = win('', w); W.classList.add('a-dlg'); const b = el('div', 'a-body'); b.append(icon(iconRows));
+      const m = el('div'); (Array.isArray(msg) ? msg : [msg]).forEach((t, i) => m.append(el('p', i === 0 ? 'lead' : null, t))); b.append(m);
+      const bs = el('div', 'a-btns'); buttons.forEach(([label, fn, def]) => { const x = el('button', 'a-btn' + (def ? ' default' : ''), label); x.type = 'button'; x.onclick = () => { hide(W); fn?.(); setTimeout(() => W.remove(), 0); }; bs.append(x); });
+      b.append(bs); W.append(b); const dw = desk.clientWidth; at(W, (dw - Math.min(w, dw - 16)) / 2, desk.clientHeight * 0.3); show(W); bs.lastChild?.focus(); return W;
+    };
+
+    const fileIcon = (name, rows, open) => {
+      const b = el('button', 'a-icon'); b.type = 'button'; b.append(icon(rows), el('span', null, name));
+      b.addEventListener('click', () => { document.querySelectorAll('#a .a-icon.sel').forEach((x) => x.classList.remove('sel')); b.classList.add('sel'); if (coarse) open(); });
+      b.addEventListener('dblclick', open); b.addEventListener('keydown', (e) => { if (e.key === 'Enter') open(); });
+      b._open = open; return b;
+    };
+
+    /* ---- the windows ---- */
+    // The Tiny Wisdom website: an old browser window with the booklet (B1) as the page
+    const about = win('The Tiny Wisdom', 720); about.classList.add('a-browser');
+    const bar = el('div', 'br-bar'); const homeB = el('button', null, 'Home'), reloadB = el('button', null, 'Reload'); homeB.type = reloadB.type = 'button';
+    const url = el('div', 'br-url'); url.textContent = 'http://www.thetinywisdom.com/about'; bar.append(homeB, reloadB, el('span', 'br-go', 'Go to:'), url);
+    const page = el('div', 'br-page z'); const site = makeBooklet(page); const ab = site.scroller;
+    const status = el('div', 'br-status', 'Document: Done');
+    about.append(bar, page, status);
+    homeB.onclick = () => { ab.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }); };
+    reloadB.onclick = () => { status.textContent = 'Connecting to www.thetinywisdom.com…'; page.style.visibility = 'hidden';
+      setTimeout(() => { page.style.visibility = ''; ab.scrollTop = 0; site.draw(); status.textContent = 'Document: Done'; }, reduced ? 0 : 700); };
+    // the status bar shows where a link goes, and the address follows the section you are reading
+    page.addEventListener('mouseover', (e) => { const a = e.target.closest('a'); status.textContent = a ? a.href : 'Document: Done'; });
+    ab.addEventListener('scroll', () => { const strip = ab.querySelector('.bk-strip'), fn = ab.querySelector('.bk-fn'), y = ab.scrollTop + 120;
+      url.textContent = 'http://www.thetinywisdom.com/about' + (fn && y > fn.offsetTop ? '#follow' : strip && y > strip.offsetTop - 200 ? '#the-pattern' : ''); });
+    const folder = (title, items) => { const W = win(title, 380, [`${items.length} items`, '']); const f = el('div', 'a-files'); items.forEach((it) => f.append(fileIcon(...it))); W.append(f); return W; };
+    const note = win('Note to self', 360, ['untitled', '']); note.classList.add('a-note'); note.style.height = '240px';
+    const ta = el('textarea'); ta.setAttribute('aria-label', 'Note to self'); ta.placeholder = 'Write your own tiny wisdom here…'; note.append(ta);
+    let trashItems = ['self-comparison', 'greed', 'envy', 'self-doubt', 'fear of failure', 'procrastination', 'giving up', 'people-pleasing', 'prabowo'];
+    const trash = win('Trash', 330, ['', '']);
+    const trashList = el('ul', 'a-list'); trash.append(trashList);
+    const drawTrash = () => {
+      trashList.replaceChildren(...trashItems.map((t) => { const li = el('li'); li.append(icon(I.doc), el('span', null, t), el('small', null, '1K')); return li; }));
+      if (!trashItems.length) { const li = el('li', null, 'Empty. Lighter already.'); li.style.display = 'block'; trashList.append(li); }
+      trash._info.firstChild.textContent = `${trashItems.length} items`; trash._info.lastChild.textContent = trashItems.length ? 'worth letting go' : '';
+      trashIcon?.replaceChildren(icon(trashItems.length ? I.trashFull : I.trash), el('span', null, 'Trash'));
+    };
+    /* ---- Comics: each comic opens as a slideshow; no links to X, a nudge to follow on Instagram instead ---- */
+    const COMIC_LIST = [['Big fish, small pond', 'big-fish'], ['How to live without talent', 'talent'], ['The rest is just noise', 'stolen']];
+    const viewer = win('', 470); viewer.classList.add('a-slides');
+    const vImg = el('img'); vImg.alt = ''; const vStage = el('div', 'sl-stage'); vStage.append(vImg);
+    const vBar = el('div', 'sl-bar'); const vPrev = el('button', 'a-btn', '◀ Prev'), vNext = el('button', 'a-btn default', 'Next ▶'); vPrev.type = vNext.type = 'button';
+    const vPos = el('span', 'sl-pos'); vBar.append(vPrev, vPos, vNext);
+    const vFollow = el('a', 'sl-follow'); vFollow.href = 'https://instagram.com/thetinywisdom'; vFollow.target = '_blank'; vFollow.rel = 'noopener';
+    vFollow.append(icon(I.camera), el('span', null, 'Like it? Follow @thetinywisdom on Instagram for new comics.'));
+    viewer.append(vStage, vBar, vFollow);
+    let vKey = null, vAt = 0;
+    const vShow = () => { const imgs = COMICS[vKey]; vImg.src = imgs[vAt]; vPos.textContent = `${vAt + 1} / ${imgs.length}`; vPrev.disabled = vAt === 0; vNext.disabled = vAt === imgs.length - 1;
+      vFollow.classList.toggle('end', vAt === imgs.length - 1); };
+    vPrev.onclick = () => { if (vAt > 0) { vAt--; vShow(); } }; vNext.onclick = () => { if (vAt < COMICS[vKey].length - 1) { vAt++; vShow(); } };
+    viewer.addEventListener('keydown', (e) => { if (e.key === 'ArrowLeft') vPrev.click(); if (e.key === 'ArrowRight') vNext.click(); });
+    const openComic = (name, key) => { vKey = key; vAt = 0; viewer.querySelector('.a-title span').textContent = name; vShow();
+      const dw = desk.clientWidth, dh = desk.clientHeight, w = Math.min(470, dw - 16); viewer.style.width = w + 'px'; show(viewer); at(viewer, (dw - w) / 2, 10, dh - 20); viewer.tabIndex = -1; viewer.focus({ preventScroll: true }); };
+    const comics = folder('Comics', COMIC_LIST.map(([n, k]) => [n, I.comic, () => openComic(n, k)]));
+    /* ---- Articles: plain .txt files, text only ---- */
+    const ART_LIST = [['you-will-look-dumb-when-you-try-your-best', 'Look dumb.txt'], ['ill-do-it-later', 'Do it later.txt'], ['the-boring-adult-life', 'Boring adult life.txt']];
+    const artWins = {};
+    const openArticle = (slug, file) => {
+      let W = artWins[slug];
+      if (!W) { const a = ARTICLES[slug]; W = win(file, 480, [a.date, 'SimpleText']); const b = scroller(W);
+        b.append(el('p', 'lead', a.title)); a.paras.forEach((t) => b.append(el('p', t.startsWith('# ') ? 'lead' : null, t.replace(/^# /, ''))));
+        const more = el('p', 'a-more'); const lk = el('a', null, 'www.thetinywisdom.com'); lk.href = 'https://www.thetinywisdom.com'; lk.target = '_blank'; lk.rel = 'noopener'; more.append('More articles at ', lk); b.append(more);
+        artWins[slug] = W; }
+      const dw = desk.clientWidth, n = Object.keys(artWins).indexOf(slug); show(W); at(W, Math.max(10, dw * 0.12 + n * 26), 20 + n * 24, desk.clientHeight - 60);
+    };
+    const articles = folder('Articles', ART_LIST.map(([slug, file]) => [file, I.doc, () => openArticle(slug, file)]));
+    const links = win('Links', 300, ['2 items', '']);
+    const lf = el('div', 'a-files'); LINKS.forEach(([n, label, href], k) => { const a = el('a', 'a-icon'); a.href = href; a.target = '_blank'; a.rel = 'noopener'; a.title = label; a.append(icon(k ? I.globe : I.camera), el('span', null, n)); lf.append(a); }); links.append(lf);
+
+    /* ---- Butler: he sits on the desktop as his icon; clicking him opens his chat in a balloon beside him ---- */
+    const balloon = el('div', 'a-balloon'); balloon.hidden = true; balloon.setAttribute('role', 'dialog'); balloon.setAttribute('aria-label', 'Butler');
+    const bClose = el('button', 'a-bclose'); bClose.type = 'button'; bClose.setAttribute('aria-label', 'Close Butler'); bClose.append(xIcon());
+    const say = el('div', 'a-say'); balloon.append(bClose, say); desk.append(balloon);
+    // his face is the icon's little TV screen (8 x 4 pixels: # dark, o lit), and it changes with his mood
+    const SCREENS = {
+      neutral: ['########', '#o####o#', '########', '##oooo##'],
+      blink:   ['########', '########', '#oo##oo#', '##oooo##'],
+      happy:   ['#o####o#', 'o#o##o#o', '########', '#oooooo#'],
+      wink:    ['########', '#o###ooo', '########', '##oooo##'],
+      laugh:   ['#o####o#', 'o#o##o#o', '##oooo##', '##oooo##'],
+      angry:   ['oo####oo', '#oo##oo#', '########', '##oooo##'],
+      sad:     ['########', '#o####o#', '#o######', '##oooo##'],
+    };
+    const botRows = (face) => { const r = [...I.bot], sc = SCREENS[face] || SCREENS.neutral; for (let k = 0; k < 4; k++) r[4 + k] = r[4 + k].slice(0, 4) + sc[k] + r[4 + k].slice(12); return r; };
+    let mood = 'neutral', butlerIcon = null, openedAt = 0, greeting = false;
+    const drawBot = (face) => { if (butlerIcon) butlerIcon.querySelector('svg').replaceWith(icon(botRows(face))); };
+    const setMood = (m) => { mood = m; drawBot(m); };
+    setInterval(() => { if (mood === 'neutral' && !reduced) { drawBot('blink'); setTimeout(() => drawBot(mood), 140); } }, 3800);
+    // the balloon sits to the left of Butler's icon (or to the right if there is no room), its tail pointing at him
+    const placeBalloon = () => {
+      if (balloon.hidden || !butlerIcon) return;
+      const dw = desk.clientWidth, dh = desk.clientHeight, ix = butlerIcon.offsetLeft, iy = butlerIcon.offsetTop, iw = butlerIcon.offsetWidth, ih = butlerIcon.offsetHeight;
+      const roomL = ix - 22, roomR = dw - ix - iw - 22;
+      balloon.classList.remove('to-right', 'to-above', 'to-below');
+      if (Math.max(roomL, roomR) >= 230) {
+        // beside him, on the side with more room
+        const left = roomL >= roomR, w = Math.min(330, left ? roomL : roomR);
+        balloon.style.width = w + 'px'; if (!left) balloon.classList.add('to-right');
+        balloon.style.left = (left ? ix - w - 14 : ix + iw + 14) + 'px';
+        const top = Math.max(8, Math.min(iy - 18, dh - balloon.offsetHeight - 8));
+        balloon.style.top = top + 'px'; balloon.style.setProperty('--tail', (iy + 18 - top) + 'px');
+      } else {
+        // a narrow screen: across the desktop, above or below him, the tail pointing at his head
+        const w = dw - 16; balloon.style.width = w + 'px'; balloon.style.left = '8px';
+        const h = balloon.offsetHeight, above = iy - h - 14 >= 8;
+        balloon.classList.add(above ? 'to-above' : 'to-below');
+        balloon.style.top = (above ? iy - h - 14 : Math.min(dh - h - 8, iy + ih + 14)) + 'px';
+        balloon.style.setProperty('--tailx', (ix + iw / 2 - 8 - 9) + 'px');
+      }
+    };
+    bClose.onclick = () => { balloon.hidden = true; setMood('neutral'); butlerIcon?.focus(); };
+    // what Butler can do on this page
+    const QA = [
+      { q: 'What is The Tiny Wisdom?', a: 'Comics and writing about not giving up. Brian started it from his bedroom at 26; two years later it had 100k followers on Instagram, and it has grown into hundreds of comics, blog posts and live talks.', mood: 'happy', act: ['Open the website', () => openAbout()] },
+      { q: 'What’s the mantra?', a: MANTRA + ' It’s the sentence The Tiny Wisdom started with.', mood: 'wink', act: ['Show it', () => act('Mantra')] },
+      { q: 'Where do I start?', a: 'Open The Tiny Wisdom on the desktop. It’s the website, with the whole story. Then try the Comics and Articles folders.', mood: 'happy', act: ['Open the website', () => openAbout()] },
+      { q: 'How does this computer work?', a: 'Double-click an icon to open it (one tap on a phone). Drag a window by its striped bar, close it with the X. The menus at the top all work.', mood: 'neutral' },
+      { q: 'What’s in the Trash?', a: 'Things worth letting go of. Have a look, then choose Special › Empty Trash.', mood: 'wink', act: ['Open Trash', () => openTrash()] },
+      { q: 'Can I read some comics?', a: 'Open the Comics folder: each comic plays as a slideshow. The Articles folder has a few essays as plain text files.', mood: 'happy', act: ['Open Comics', () => { show(comics); at(comics, desk.clientWidth - 520, 60); }] },
+      { q: 'Where can I follow it?', a: 'On Instagram at instagram.com/thetinywisdom, and at www.thetinywisdom.com. Both are in the Links folder.', mood: 'happy', act: ['Open Links', () => { show(links); at(links, desk.clientWidth - 440, 40); }] },
+    ];
+    const CHAIN = [
+      { q: 'Who are you?', a: 'I’m Butler. On this computer I’m made of pixels instead of light. Ask away.', mood: 'happy' },
+      { q: 'What are you?', a: 'A robot with a TV for a head, drawn one pixel at a time. Please don’t try to shake my hand.', mood: 'wink' },
+      { q: 'Why are you?', a: 'Why am I?! That’s a very rude thing to ask someone made of pixels.', mood: 'angry' },
+      { q: 'Sorry', a: 'It’s fine… *sniff* … nobody ever asks how the assistant is doing.', mood: 'sad' },
+    ];
+    let step = 0, pokes = 0, pokeT = 0, laugh = 0, cross = 0;
+    const LAUGHS = ['Hehe! That tickles!', 'Ha ha, stop it!', 'Hee hee! I’m ticklish there.'];
+    const CROSS = ['Hey! Stop poking me!', 'I said stop! I’m made of pixels, not jelly.', 'That’s enough poking for one day.'];
+    const menuOfQuestions = () => {
+      setMood('neutral'); say.replaceChildren(el('p', null, 'I’m here to help. What’s up?'));
+      const ul = el('ul', 'a-asks');
+      [...QA, CHAIN[step]].forEach((it, k) => { const li = el('li'), b = el('button', null, it.q); b.type = 'button'; if (k === QA.length && step) b.append(el('em', null, 'NEW'));
+        b.onclick = () => answer(it, k === QA.length); li.append(b); ul.append(li); });
+      say.append(ul); placeBalloon();
+    };
+    const answer = (it, chained, ok = 'Got it') => {
+      setMood(it.mood); say.replaceChildren(el('p', null, it.a));
+      const bs = el('div', 'a-btns');
+      if (it.act) { const x = el('button', 'a-btn', it.act[0]); x.type = 'button'; x.onclick = () => { it.act[1](); menuOfQuestions(); }; bs.append(x); }
+      const x = el('button', 'a-btn default', ok); x.type = 'button'; x.onclick = () => { if (chained) step = (step + 1) % CHAIN.length; menuOfQuestions(); }; bs.append(x);
+      say.append(bs); placeBalloon();
+    };
+    // clicking Butler while his balloon is open tickles him; poke him three times quickly and he gets cross
+    const poke = () => {
+      const t = performance.now(); if (t - openedAt < 500) return;            // the second click of a double-click
+      pokes = t - pokeT < 1400 ? pokes + 1 : 1; pokeT = t;
+      if (pokes >= 3) { butlerIcon.classList.remove('shake'); void butlerIcon.offsetWidth; butlerIcon.classList.add('shake'); answer({ a: CROSS[cross++ % CROSS.length], mood: 'angry' }, false, 'Sorry'); }
+      else answer({ a: LAUGHS[laugh++ % LAUGHS.length], mood: 'laugh' }, false, 'LOL');
+    };
+
+    /* ---- desktop icons ---- */
+    const openAbout = () => { show(about); about.style.width = Math.min(720, Math.max(320, desk.clientWidth * 0.64)) + 'px'; at(about, 24, 18, desk.clientHeight - 40); ab.scrollTop = 0; requestAnimationFrame(site.draw); };
+    const openTrash = () => { show(trash); at(trash, desk.clientWidth - 470, desk.clientHeight - 330); };
+    // on arrival he only says hello; clicking him opens the questions
+    const greet = () => { balloon.hidden = false; greeting = true; setMood('happy'); say.replaceChildren(el('p', null, 'Hi, I’m Butler. Need anything? Click me.')); placeBalloon(); };
+    const openButler = () => { greeting = false; balloon.hidden = false; openedAt = performance.now(); menuOfQuestions(); balloon.querySelector('.a-asks button')?.focus({ preventScroll: true }); };
+    const DESK = [
+      ['The Tiny Wisdom', I.browser, openAbout], ['Mantra', I.bulb, () => act('Mantra')],
+      ['Comics', I.folder, () => { show(comics); at(comics, desk.clientWidth - 520, 60); }], ['Articles', I.folder, () => { show(articles); at(articles, desk.clientWidth - 540, 150); }],
+      ['Links', I.folder, () => { show(links); at(links, desk.clientWidth - 440, 40); }], ['Butler', I.bot, () => {}], ['Trash', I.trashFull, openTrash],
+    ];
+    let trashIcon = null;
+    const deskIcons = DESK.map(([n, r, o]) => { const b = fileIcon(n, r, o); iconsLayer.append(b); if (n === 'Trash') trashIcon = b;
+      if (n === 'Butler') { butlerIcon = b; desk.append(b); b.style.zIndex = 790;   /* the assistant stays above the windows */
+        b.classList.add('a-butler-icon'); b.setAttribute('aria-label', 'Butler, your assistant'); b.addEventListener('click', () => { if (balloon.hidden || greeting) openButler(); else poke(); }); }
+      // icons can be dragged around the desktop, like the real thing
+      b.addEventListener('pointerdown', (e) => { if (coarse) return; const sx = e.clientX - b.offsetLeft, sy = e.clientY - b.offsetTop; let moved = false;
+        const mv = (ev) => { moved = true; b.style.left = (ev.clientX - sx) + 'px'; b.style.top = (ev.clientY - sy) + 'px'; if (b === butlerIcon) placeBalloon(); };
+        const up = () => { removeEventListener('pointermove', mv); removeEventListener('pointerup', up); };
+        addEventListener('pointermove', mv); addEventListener('pointerup', up); });
+      return b; });
+    let view = 'icon';
+    const arrange = () => {
+      const dw = desk.clientWidth, dh = desk.clientHeight, step = view === 'name' ? 30 : Math.min(84, (dh - 40) / DESK.length);
+      desk.classList.toggle('by-name', view === 'name');
+      const narrow = dw < 600, col = narrow ? 76 : view === 'name' ? 190 : 110;
+      root.classList.toggle('narrow', narrow);
+      // the Trash sits alone at the bottom, like the real thing; the rest stack from the top
+      const rest = deskIcons.filter((b) => b !== trashIcon), st = view === 'name' ? 30 : Math.min(84, (dh - 110) / rest.length);
+      rest.forEach((b, i) => { b.style.left = (dw - col) + 'px'; b.style.top = (10 + i * st) + 'px'; });
+      if (trashIcon) { trashIcon.style.left = (dw - col) + 'px'; trashIcon.style.top = (view === 'name' ? 10 + rest.length * st : dh - 76) + 'px'; }
+      placeBalloon();
+    };
+
+    /* ---- menus ---- */
+    const drop = el('div', 'a-drop'); drop.hidden = true; root.append(drop);
+    const MENUS = {
+      ttw: () => [['About This Computer…', () => act('About This Computer')], '-', ['Butler', openButler], ['Note to self', () => act('New Note')]],
+      File: () => [['New Note', () => act('New Note'), '⌘N'], ['Open The Tiny Wisdom', openAbout, '⌘O'], '-', ['Close Window', () => act('Close'), '⌘W'], '-', ['Shut Down', () => act('Shut Down')]],
+      Edit: () => [['Undo', () => act('Undo'), '⌘Z'], '-', ['Copy the Mantra', () => act('Copy'), '⌘C'], ['Select All', () => act('Select All'), '⌘A']],
+      View: () => [['by Icon', () => { view = 'icon'; arrange(); }, null, view === 'icon'], ['by Name', () => { view = 'name'; arrange(); }, null, view === 'name'], '-', ['Clean Up Windows', () => act('Clean Up')]],
+      Special: () => [['Empty Trash…', () => act('Empty Trash'), null, false, !trashItems.length], '-', ['Restart', () => act('Restart')], ['Shut Down', () => act('Shut Down')]],
+    };
+    const closeMenus = () => { drop.hidden = true; menu.querySelectorAll(':scope > button').forEach((b) => b.setAttribute('aria-expanded', 'false')); };
+    const openMenu = (btn, key) => {
+      const was = btn.getAttribute('aria-expanded') === 'true'; closeMenus(); if (was) return;
+      btn.setAttribute('aria-expanded', 'true'); drop.replaceChildren();
+      MENUS[key]().forEach((it) => { if (it === '-') { drop.append(el('hr')); return; } const [label, fn, kbd, checked, disabled] = it;
+        const b = el('button'); b.type = 'button'; b.append(el('span', null, label)); if (kbd) b.append(el('kbd', null, kbd)); if (checked) b.setAttribute('aria-checked', 'true'); if (disabled) b.disabled = true;
+        b.onclick = () => { closeMenus(); fn(); }; drop.append(b); });
+      drop.style.left = Math.min(btn.offsetLeft, root.clientWidth - 240) + 'px'; drop.hidden = false; drop.querySelector('button:not(:disabled)')?.focus();
+    };
+    const ttwBtn = el('button', 'logo'); ttwBtn.type = 'button'; ttwBtn.setAttribute('aria-label', 'The Tiny Wisdom menu'); ttwBtn.append(icon(I.ttw)); ttwBtn.onclick = () => openMenu(ttwBtn, 'ttw'); menu.append(ttwBtn);
+    ['File', 'Edit', 'View', 'Special'].forEach((n) => { const b = el('button', null, n); b.type = 'button'; b.setAttribute('aria-haspopup', 'true'); b.onclick = () => openMenu(b, n); menu.append(b); });
+    const clock = el('span', 'clock', now()); menu.append(clock); setInterval(() => { clock.textContent = now(); }, 20000);
+    desk.addEventListener('pointerdown', (e) => { closeMenus(); if (e.target === desk || e.target === iconsLayer) document.querySelectorAll('#a .a-icon.sel').forEach((x) => x.classList.remove('sel')); });
+    root.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenus(); });
+
+    /* ---- what the menus do ---- */
+    function act(what) {
+      const dw = desk.clientWidth;
+      if (what === 'Mantra') dialog(I.bulb, [MANTRA, 'The sentence The Tiny Wisdom started with.'], [['Copy', () => act('Copy')], ['OK', null, true]]);
+      if (what === 'About This Computer') {
+        const W = win('About This Computer', 380); const b = el('div', 'a-body'); const lg = pix(); b.append(lg);
+        const dl = el('dl', 'a-specs'); [['System', 'The Tiny Wisdom'], ['Built', 'in a bedroom, at 26'], ['Followers', '100k by 28'], ['Location', 'Japan, since 31'], ['Runs on', 'not giving up']].forEach(([k, v]) => dl.append(el('dt', null, k), el('dd', null, v)));
+        const meter = el('div', 'a-meter'), fill = el('i'); fill.style.width = trashItems.length ? '72%' : '3%'; meter.append(fill);
+        b.append(dl, el('p', null, ''), el('p', 'lead', `Disk space used by doubts: ${trashItems.length ? '72%' : '3%, since you emptied the Trash'}`), meter); W.append(b); show(W); at(W, dw / 2 - 190, 50);
+        onebit(lg, 'logo', 180, 1, [0, 0, 0], [255, 255, 255]); lg.style.marginBottom = '12px';
+      }
+      if (what === 'New Note') { show(note); at(note, dw / 2 - 180, 90); ta.focus(); }
+      if (what === 'Close') { const top = [...desk.querySelectorAll('.a-win:not([hidden])')].sort((a, b) => b.style.zIndex - a.style.zIndex)[0]; if (top) hide(top); }
+      if (what === 'Undo') dialog(I.warn, ['Can’t undo the past.', 'You can only keep going.'], [['OK', null, true]]);
+      if (what === 'Copy') { navigator.clipboard?.writeText(MANTRA).then(() => toast('Mantra copied'), () => toast(MANTRA)); }
+      if (what === 'Select All') deskIcons.forEach((b) => b.classList.add('sel'));
+      if (what === 'Clean Up') { const open = [...desk.querySelectorAll('.a-win:not([hidden])')]; open.forEach((W, i) => { W.style.left = (20 + i * 24) + 'px'; W.style.top = (14 + i * 24) + 'px'; front(W); }); }
+      if (what === 'Empty Trash') dialog(I.warn, [`The Trash holds ${trashItems.length} things you don’t need.`, 'Let go of them for good?'], [['Cancel'], ['Let go', () => { trashItems = []; drawTrash(); toast('Trash emptied. Lighter already.'); }, true]]);
+      if (what === 'Restart') { boot.hidden = false; boot.classList.add('black'); boot.firstChild.replaceChildren();
+        setTimeout(() => { boot.classList.remove('black'); const c = pix(); boot.firstChild.append(c, el('span', null, 'Welcome to The Tiny Wisdom'), el('span', null, MANTRA)); onebit(c, 'logo', 240, 1, [0, 0, 0], [255, 255, 255]); }, reduced ? 0 : 500);
+        setTimeout(() => { boot.hidden = true; trashItems = ['self-comparison', 'greed', 'envy', 'self-doubt', 'fear of failure', 'procrastination', 'giving up', 'people-pleasing', 'prabowo']; drawTrash();
+          desk.querySelectorAll('.a-win').forEach((w) => { w.hidden = true; }); view = 'icon'; arrange(); openAbout(); }, reduced ? 600 : 2600); }
+      if (what === 'Shut Down') dialog(I.warn, ['Shut down?', 'On the site this takes you back to the room of TVs.'], [['Cancel'], ['Shut Down', () => { boot.hidden = false; boot.classList.add('black'); setTimeout(() => { if (window.parent !== window) window.parent.postMessage({ ttw: 'shutdown' }, '*'); boot.hidden = true; boot.classList.remove('black'); }, 900); }, true]]);
+    }
+    let started = false;
+    window.__A = () => { arrange(); if (!started) { started = true; drawTrash(); openAbout(); greet(); } if (!about.hidden) site.draw(); };
+  })();
+
+  /* ============================================ B. shared bits ============================================ */
+  const label = (t, cls = '') => el('div', 'z-label crisp ' + cls, t);
+  const story = (wrapAge) => STORY.map(([a, t]) => wrapAge(a, t));
+  /* B1 Booklet: built into any container (the B1 tab, and the website window on the desktop) */
+  function makeBooklet(root) {
+    const sc = el('div', 'z-scroll'); const bk = el('div', 'bk crisp'); sc.append(bk); root.append(sc);
+    const run = el('div', 'bk-run'); run.append(el('span', 'z-label', 'The Tiny Wisdom'), el('span', 'z-label', 'About · a short book')); bk.append(run);
+    const fr = el('div', 'bk-front'); const lg = pix(); fr.append(lg, el('div', 'z-label', 'by Brian · comics & writing, since age 26')); bk.append(fr);
+    const P = (t, cls = 'bk-t') => { const p = el('p', cls, t); bk.append(p); return p; };
+    const M = (k, t) => { const m = el('div', 'bk-m'); if (k) m.append(el('b', null, k)); m.append(el('span', 'z-label', t)); bk.append(m); };
+    M('', 'today'); P(ABOUT[0], 'bk-t bk-drop'); P(ABOUT[1]);
+    const mm = el('div', 'bk-mantra'); mm.append(el('div', 'z-mantra', '“' + MANTRA + '”')); bk.append(mm);
+    M('', 'the compass'); P(ABOUT[3]); P(ABOUT[4]); P(ABOUT[5]); P(ABOUT[6]);
+    // the story by age, as a strip of comic panels (B3's style) across the page
+    const strip = el('div', 'bk-strip'); const sh = el('div', 'bk-strip-head'); sh.append(el('span', 'z-label', 'The pattern, by age'), el('span', 'z-label', '4 panels · scroll →'));
+    const row = el('div', 'st-row'); row.setAttribute('tabindex', '0'); row.setAttribute('aria-label', 'The story by age');
+    STORY.forEach(([a, t], k) => { const pn = el('div', 'st-p'); const l = el('div', 'z-label'); l.append(el('span', null, `Panel ${String(k + 1).padStart(2, '0')}`), el('span', null, 'age ' + a));
+      const i = el('div', 'in'); i.append(el('div', 'age', a), el('p', null, t)); pn.append(l, i); row.append(pn); });
+    const nav = el('div', 'st-nav'); const prev = el('button', null, '← prev'), next = el('button', null, 'next →'); prev.type = next.type = 'button';
+    const pos = el('span', 'z-label'); nav.append(prev, pos, next);
+    const go = (d) => row.scrollBy({ left: d * (row.firstChild.offsetWidth + 14), behavior: reduced ? 'auto' : 'smooth' });
+    prev.onclick = () => go(-1); next.onclick = () => go(1);
+    const upd = () => { const i = Math.round(row.scrollLeft / (row.firstChild.offsetWidth + 14)); pos.textContent = `panel ${Math.min(STORY.length, i + 1)} of ${STORY.length}`; };
+    row.addEventListener('scroll', upd); upd();
+    strip.append(sh, row, nav); bk.append(strip);
+    M('', 'the point'); CLOSE.forEach((t, i) => { if (i) bk.append(el('div', 'bk-m')); P(t); });
+    const fn = el('div', 'bk-fn'); fn.append(el('div', 'z-label', 'Follow')); LINKS.forEach((l, i) => { const p = el('p'); p.append(`${i + 1}. ${l[0]}: `, linkA(l)); fn.append(p); }); bk.append(fn);
+    const co = el('div', 'bk-colo'); const fig = pix(); co.append(fig, el('div', 'z-label', 'colophon: drawn by Brian')); bk.append(co);
+    const draw = () => { const w = bk.querySelector('.bk-t').clientWidth; if (!w) return; onebit(lg, 'logo', Math.min(460, w), 1, INK, PAPER); onebit(fig, 'figures', Math.min(320, w), 2, INK, PAPER); };
+    return { scroller: sc, draw };
+  }
+  later('b1', makeBooklet($('b1')).draw);
+
+  /* B2 Index cards */
+  (() => {
+    const root = $('b2'); const sc = el('div', 'z-scroll'); const cd = el('div', 'cd'); sc.append(cd); root.append(sc);
+    const card = (cls, lab, right, ...kids) => { const c = el('div', 'cd-card ' + cls); const l = label(lab); if (right) l.append(el('span', null, right)); const i = el('div', 'in crisp'); kids.forEach((k) => i.append(typeof k === 'string' ? el('p', null, k) : k)); c.append(l, i); cd.append(c); return c; };
+    const lg = pix(); card('cd-logo', 'No. 01 · name', 'TTW', lg);
+    const fg = pix(); card('cd-fig', 'No. 02 · the crew', '', fg);
+    card('cd-intro', 'No. 03 · today', '', ABOUT[0], ABOUT[1]);
+    card('cd-mantra cd-ink', 'No. 04 · the mantra', 'the compass', el('div', 'z-mantra', '“' + MANTRA + '”'));
+    card('cd-why', 'No. 05 · the catch', '', ABOUT[3], ABOUT[4], ABOUT[5], ABOUT[6]);
+    const ln = card('cd-links', 'No. 06 · follow', ''); LINKS.forEach((l) => ln.querySelector('.in').append(linkA(l)));
+    STORY.forEach(([a, t], k) => { const box = el('div'); box.append(el('b', null, a), el('p', null, t)); const c = card('cd-age', `No. 0${7 + k} · age ${a}`, '', box); c.querySelector('.in').prepend(c.querySelector('.in > div')); });
+    card('cd-close', 'No. 11 · keep going', '', ...CLOSE);
+    later('b2', () => { onebit(lg, 'logo', lg.parentElement.clientWidth - 30, 1, INK, PAPER); onebit(fg, 'figures', fg.parentElement.clientWidth - 30, 2, INK, PAPER); });
+  })();
+
+  /* B3 Comic strip */
+  (() => {
+    const root = $('b3'); const st = el('div', 'st'); root.append(st);
+    const head = el('div', 'st-head crisp'); const lg = pix(); head.append(lg, el('span', 'z-label', 'a strip in 9 panels · scroll →')); st.append(head);
+    const row = el('div', 'st-row'); st.append(row);
+    const panel = (n, cls, lab, ...kids) => { const p = el('div', 'st-p ' + cls); const l = label(`Panel ${String(n).padStart(2, '0')}`); l.append(el('span', null, lab)); const i = el('div', 'in crisp'); kids.forEach((k) => i.append(typeof k === 'string' ? el('p', null, k) : k)); p.append(l, i); row.append(p); return p; };
+    const fg = pix(); panel(1, 'wide', 'today', fg, ABOUT[0]);
+    panel(2, '', 'before all that', ABOUT[1], el('p', 'z-mantra', '“' + MANTRA + '”'));
+    panel(3, '', 'the compass', ABOUT[3], ABOUT[4], ABOUT[5]);
+    STORY.forEach(([a, t], k) => panel(4 + k, '', 'age ' + a, el('div', 'age', a), t));
+    panel(8, '', 'the point', ABOUT[6], ...CLOSE.slice(0, 3));
+    const last = panel(9, 'ink center', 'keep going', el('div', null, CLOSE[3]), el('p', 'z-mantra', MANTRA));
+    const fl = el('p'); LINKS.forEach((l, i) => { fl.append(linkA(l)); if (!i) fl.append(' · '); }); last.querySelector('.in').append(fl);
+    const nav = el('div', 'st-nav crisp'); const prev = el('button', null, '← prev'), next = el('button', null, 'next →'); prev.type = next.type = 'button';
+    const pos = el('span', 'z-label', ''); nav.append(prev, pos, next); st.append(nav);
+    const go = (d) => row.scrollBy({ left: d * (row.firstChild.offsetWidth + 14), behavior: reduced ? 'auto' : 'smooth' });
+    prev.onclick = () => go(-1); next.onclick = () => go(1);
+    row.addEventListener('wheel', (e) => { if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) { row.scrollLeft += e.deltaY; e.preventDefault(); } }, { passive: false });
+    const upd = () => { const i = Math.round(row.scrollLeft / (row.children[1].offsetWidth + 14)); pos.textContent = `panel ${Math.min(9, i + 1)} of 9`; }; row.addEventListener('scroll', upd);
+    later('b3', () => { onebit(lg, 'logo', Math.min(220, root.clientWidth * 0.4), 1, INK, PAPER); onebit(fg, 'figures', fg.parentElement.clientWidth - 28, 2, INK, PAPER); upd(); });
+  })();
+
+  /* B4 Broadsheet */
+  (() => {
+    const root = $('b4'); const sc = el('div', 'z-scroll'); const bs = el('div', 'bs crisp'); sc.append(bs); root.append(sc);
+    const mast = el('div', 'bs-mast'); mast.append(el('h2', null, 'The Tiny Wisdom')); bs.append(mast);
+    const dl = el('div', 'bs-date'); ['Vol. 31 · Japan edition', 'Est. in a bedroom, age 26', 'Price: not giving up'].forEach((t) => dl.append(el('span', 'z-label', t))); bs.append(dl);
+    const hd = el('div', 'bs-head'); hd.append(el('div', 'z-mantra', MANTRA)); bs.append(hd);
+    bs.append(el('p', 'bs-deck', 'The sentence that started it all, and the pattern it keeps proving.'));
+    const body = el('div', 'bs-body'); const cols = el('div', 'bs-cols'); const side = el('aside', 'bs-side'); body.append(cols, side); bs.append(body);
+    const fig = el('figure', 'bs-fig'); const fg = pix(); fig.append(fg, Object.assign(el('figcaption', 'z-label'), { textContent: 'The crew, drawn by Brian.' }));
+    [ABOUT[0], ABOUT[1]].forEach((t) => cols.append(el('p', null, t))); cols.append(fig); [ABOUT[3], ABOUT[4], ABOUT[5], ABOUT[6], ...CLOSE].forEach((t) => cols.append(el('p', null, t)));
+    side.append(el('h3', null, 'The pattern'), el('div', 'z-label', 'by age'));
+    STORY.forEach(([a, t]) => { const r = el('div', 'row'); r.append(el('b', null, a), el('span', null, t)); side.append(r); });
+    const ft = el('div', 'bs-foot'); LINKS.forEach((l) => ft.append(linkA(l))); bs.append(ft);
+    later('b4', () => onebit(fg, 'figures', fig.clientWidth || 220, 2, INK, PAPER));
+  })();
+
+  /* ---------- tabs and notes ---------- */
+  const NOTES = {
+    a: [['What changed', 'A and B are one now. The Tiny Wisdom icon opens the website: an old browser window (Home, Reload, an address bar that follows the section you read, a status bar that shows where links go) with the booklet inside, the ages as a comic strip. The Comics folder (three comics, each a slideshow, with a nudge to follow on Instagram instead of links to X), the Articles folder (three essays as plain .txt). The other icons: Mantra (an alert you can copy from), Links (Instagram and the website), Butler, and the Trash.'],
+        ['The menus', 'The logo menu: About This Computer (the system specs of The Tiny Wisdom), Butler, Note to self. File: New Note, Open, Close Window, Shut Down. Edit: Undo ("can’t undo the past"), Copy the Mantra, Select All. View: by Icon / by Name, Clean Up Windows. Special: Empty Trash, Restart, Shut Down.'],
+        ['Butler', 'He sits on the desktop as his own icon, no window: click him and his chat opens in a balloon beside him, with his face on the icon\'s little TV screen changing with his mood. His questions are about this page: what The Tiny Wisdom is, the mantra, where to start, how the computer works, the Trash, where to follow. Answers have a button that does it. With the balloon open, click him again to tickle him (LOL); poke him three times quickly and he gets cross (Sorry). The X closes the balloon; dragging his icon takes the balloon with him. "Who are you?" still leads to the little chain.'],
+        ['Try', 'Click Butler, ask “What’s in the Trash?”, press Open Trash, then Special › Empty Trash. Click Butler a few times quickly.']],
+    b1: [['Booklet', 'One column like a small printed book: a running head, a drop cap, the mantra between double rules, the links as numbered footnotes, and the figures as a colophon at the end. The story by age is now a strip of comic panels across the page (B3’s style): one panel per age with a big blackletter number, scrolled sideways with prev / next.'],
+         ['Good for', 'The best for reading a long story; quiet and literary.']],
+    b2: [['Index cards', 'Your story cut into numbered cards (No. 01 to 11) on a grid: the logo and the figures as cards, the mantra as one wide black card, each age a card with a huge numeral.'],
+         ['Good for', 'Scanning; each part stands on its own. On a phone the cards stack.']],
+    b3: [['Comic strip', 'Fits a comic artist: the story is a strip of nine bordered panels you scroll sideways (wheel, swipe or the buttons), each age its own panel with a big numeral, ending on a black panel with the mantra and the links.'],
+         ['Good for', 'The most "you". Reading sideways is the trade-off.']],
+    b4: [['Broadsheet', 'A newspaper front page: The Tiny Wisdom as the masthead, a dateline ("Vol. 31 · Japan edition"), the mantra as the headline, your text in three ruled columns with a drop cap and the figures, and "The pattern" by age in a sidebar.'],
+         ['Good for', 'The most graphic and confident; a lot on one screen.']],
+  };
+  const notes = $('notes');
+  const showNotes = (k) => notes.replaceChildren(...NOTES[k].map(([h, t]) => { const d = el('div', h === 'Try' ? 'try' : null); d.append(el('b', null, h), document.createTextNode(t)); return d; }));
+  const tabs = [...document.querySelectorAll('[role=tab]')]; let current = 'a';
+  const run = () => { if (current === 'a') window.__A?.(); else draws[current]?.(); };
+  const pick = (t) => { for (const x of tabs) { const on = x === t; x.setAttribute('aria-selected', String(on)); $(x.getAttribute('aria-controls')).hidden = !on; }
+    current = t.id.slice(2); showNotes(current); requestAnimationFrame(run);  };
+  tabs.forEach((t) => t.addEventListener('click', () => pick(t)));
+  let rt = 0; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(run, 200); });
+  const start = tabs[0];
+  pick(start);
+  document.fonts?.ready.then(run);
+})();
+</script>
+
+</body>
+</html>
