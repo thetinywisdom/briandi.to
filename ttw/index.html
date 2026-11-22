@@ -423,7 +423,7 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
     ['23', 'When I was 23, I wanted to work abroad. It took a year and a half and countless rejections, but I eventually landed a role in a neighboring country.'],
     ['25', 'By 25, I had set my sights on a dream job at a specific company. I finally got the offer shortly after turning 27.'],
     ['26', 'In the middle of chasing that, I started The Tiny Wisdom from my bedroom at 26. Two years later, at 28, I had 100k followers on Instagram who genuinely cared about what I was creating.'],
-    ['29', 'Then I turned 29, and with that came the realization that the dream job wasn’t what I thought it would be. I had glorified it so much in my head that the reality left me disappointed. So, my wife and I decided to start a new life in Japan, and by 31, I was living there.'],
+    ['29', 'As I turned 29, I realized that I had glorified my dream job so much that the reality disappointed me. My wife and I decided to start a new life in Japan, and at 31, we moved there.'],
   ];
   const CLOSE = [
     'I’m not sharing this to brag. I’m showing you the pattern I’ve seen, the pattern I’ve lived. The point is that dreams really do come true—just rarely on our schedule.',
@@ -783,8 +783,10 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
     // the story by age, as a strip of comic panels (B3's style) across the page
     const strip = el('div', 'bk-strip'); const sh = el('div', 'bk-strip-head'); sh.append(el('span', 'z-label', 'The lesson'), el('span', 'z-label', '4 panels · scroll →'));
     const row = el('div', 'st-row'); row.setAttribute('tabindex', '0'); row.setAttribute('aria-label', 'The story by age');
-    STORY.forEach(([a, t]) => { const pn = el('div', 'st-p');
-      const i = el('div', 'in'); i.append(el('div', 'age', a), el('p', null, t)); pn.append(i); row.append(pn); });
+    // each panel ends with what that age taught (the owner's lines), a paragraph after the story
+    const LESSONS = ["At 23, I learned that dreams are achievable.", "At 25, I learned that dreams might be achieved late.", "At 28, I learned that I don’t need talent; I just need to be consistent.", "At 31, I learned that I can reset my life."];
+    STORY.forEach(([a, t], k) => { const pn = el('div', 'st-p');
+      const i = el('div', 'in'); i.append(el('div', 'age', a), el('p', null, t), el('p', null, LESSONS[k])); pn.append(i); row.append(pn); });
     const nav = el('div', 'st-nav'); const prev = el('button', null, '← prev'), next = el('button', null, 'next →'); prev.type = next.type = 'button';
     const pos = el('span', 'z-label'); nav.append(prev, pos, next);
     const go = (d) => row.scrollBy({ left: d * (row.firstChild.offsetWidth + 14), behavior: reduced ? 'auto' : 'smooth' });
