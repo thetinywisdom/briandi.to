@@ -349,6 +349,10 @@ body.giant-on retro-map { visibility: hidden; }
 .doc h3 { margin: 2.5rem 0 0.75rem; font: 600 17px/1.4 var(--body); color: var(--doc-ink); scroll-margin-top: 2rem; }
 .doc h4 { margin: 1.5rem 0 0.5rem; font: 500 12px/1.4 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--doc-dim); }
 .doc h2 span, .doc h3 span { display: inline-block; min-width: 2.2em; font: 400 0.8em/1 var(--mono); color: var(--doc-dim); }
+/* the numbered points under "The problem" */
+.doc-points { margin: 0 0 1.1em; padding-left: 1.5em; }
+.doc-points li { margin: 0 0 1.1em; padding-left: 0.25em; }
+.doc-points li::marker { color: var(--doc-ink); font-weight: 600; }
 .doc-note { margin: 0 0 1.1em; padding: 1rem 1.25rem; background: var(--doc-note); border-radius: 8px; color: var(--doc-ink); }
 .doc-note p:last-child { margin-bottom: 0; }
 .doc-list { margin: 0; }
