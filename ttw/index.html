@@ -490,6 +490,7 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
     trashFull: ['     ######     ', '  ############  ', '  #oooooooooo#  ', '  ##o#o##o#o#  ', ' # #o#o#o#o## # ', '   #o#o#o#o#    ', '   #o#o#o#o#   ', '   #o#o#o#o#   ', '   #o#o#o#o#   ', '   #o#o#o#o#   ', '   #o#o#o#o#   ', '   ##########   ', '                ', '                ', '                ', '                '],
     x: ['##        ##', '###      ###', ' ###    ### ', '  ###  ###  ', '   ######   ', '    ####    ', '    ####    ', '   ######   ', '  ###  ###  ', ' ###    ### ', '###      ###', '##        ##'],
     ttw: ['                ', '     ######     ', '   ##########   ', '  ###o####o###  ', '  ####o##o####  ', ' #####oo#####  ', ' #oooooooooo#  ', ' #####oo#####  ', ' #####oo#####  ', '  ####oo####   ', '   ##########   ', '     ######     ', '                ', '                ', '                ', '                '],
+    mail: ['                ', '                ', '################', '##oooooooooooo##', '#o##oooooooo##o#', '#ooo##oooo##ooo#', '#ooooo####ooooo#', '#oooooooooooooo#', '#oooooooooooooo#', '#oooooooooooooo#', '#oooooooooooooo#', '################', '                ', '                ', '                ', '                '],
     mac: ['   ##########   ', '  #oooooooooo#  ', '  #o########o#  ', '  #o#oooooo#o#  ', '  #o#oooooo#o#  ', '  #o#oooooo#o#  ', '  #o#oooooo#o#  ', '  #o########o#  ', '  #oooooooooo#  ', '  #oo####oooo#  ', '  #oooooooooo#  ', '  ############  ', '   #oooooooo#   ', '  ############  ', '                ', '                '],
     warn: ['       ##       ', '      #oo#      ', '      #oo#      ', '     #oooo#     ', '     #o##o#     ', '    #oo##oo#    ', '    #oo##oo#    ', '   #ooo##ooo#   ', '   #ooo##ooo#   ', '  #oooooooooo#  ', '  #oooo##oooo#  ', ' #ooooo##ooooo# ', ' ############## ', '                ', '                ', '                '],
   });
@@ -772,7 +773,7 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
     const DESK = [
       ['The Tiny Wisdom', I.browser, openAbout], ['Mantra', I.bulb, () => act('Mantra')],
       ['Comics', I.folder, () => { show(comics); at(comics, desk.clientWidth - 520, 60); }], ['Articles', I.folder, () => { show(articles); at(articles, desk.clientWidth - 540, 150); }],
-      ['Links', I.folder, () => { show(links); at(links, desk.clientWidth - 440, 40); }], ['Butler', I.bot, () => {}], ['Trash', I.trashFull, openTrash],
+      ['Links', I.folder, () => { show(links); at(links, desk.clientWidth - 440, 40); }], ['Mail', I.mail, () => act('New Note')], ['Butler', I.bot, () => {}], ['Trash', I.trashFull, openTrash],
     ];
     let trashIcon = null;
     const deskIcons = DESK.map(([n, r, o]) => { const b = fileIcon(n, r, o); iconsLayer.append(b); if (n === 'Trash') trashIcon = b;

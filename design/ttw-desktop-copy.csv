@@ -4,6 +4,7 @@ Desktop,Desktop icon: Mantra,Icon label,Mantra,Quick access to the core message,
 Desktop,Desktop icon: Comics,Icon label,Comics,Show the owner’s comics,Opens the Comics folder window (3 comics),Same folder as Butler’s “Open Comics” button,Claude
 Desktop,Desktop icon: Articles,Icon label,Articles,Show the owner’s writing,Opens the Articles folder window (3 .txt files),Mentioned in Butler’s “Where do I start?” and “Can I read some comics?” answers,Claude
 Desktop,Desktop icon: Links,Icon label,Links,Where to follow,"Opens the Links folder (Instagram, Website)",Same folder as Butler’s “Open Links” button,Claude
+Desktop,Desktop icon: Mail,Icon label,Mail,Write to The Tiny Wisdom,Opens the Note to The Tiny Wisdom window,Same as File › New Note and the logo menu item,Owner
 Desktop,Desktop icon: Butler,Icon label,Butler,On-page assistant,Click: opens Butler’s balloon with questions. Click again while open: tickle; 3 quick clicks: poke (angry),His face on the icon changes with mood; balloon follows the icon when dragged; greets on page load,Claude
 Desktop,Desktop icon: Trash,Icon label,Trash,A playful list of things to let go of,Opens the Trash window,Icon shows full/empty; Restart refills it,Claude
 Menu bar,Logo menu,Menu,(The Tiny Wisdom logo),Brand menu,Opens: About This Computer… / Butler / Note to The Tiny Wisdom,,Claude
