@@ -1,0 +1,98 @@
+﻿Area,Element,Type,Copy (exact text),Purpose,What it opens / what happens,Impact on other parts,Source of the text
+Desktop,Desktop icon: The Tiny Wisdom,Icon label,The Tiny Wisdom,Main entry: the website with the full story,Double-click (tap on phone) opens the browser window with the booklet; opens by itself when the page loads,Same window as File › Open The Tiny Wisdom and Butler’s “Open the website” buttons,Claude
+Desktop,Desktop icon: Mantra,Icon label,Mantra,Quick access to the core message,Opens the Mantra alert,Alert’s Copy button shows the “Mantra copied” toast,Claude
+Desktop,Desktop icon: Comics,Icon label,Comics,Show the owner’s comics,Opens the Comics folder window (3 comics),Same folder as Butler’s “Open Comics” button,Claude
+Desktop,Desktop icon: Articles,Icon label,Articles,Show the owner’s writing,Opens the Articles folder window (3 .txt files),Mentioned in Butler’s “Where do I start?” and “Can I read some comics?” answers,Claude
+Desktop,Desktop icon: Links,Icon label,Links,Where to follow,"Opens the Links folder (Instagram, Website)",Same folder as Butler’s “Open Links” button,Claude
+Desktop,Desktop icon: Butler,Icon label,Butler,On-page assistant,Click: opens Butler’s balloon with questions. Click again while open: tickle; 3 quick clicks: poke (angry),His face on the icon changes with mood; balloon follows the icon when dragged; greets on page load,Claude
+Desktop,Desktop icon: Trash,Icon label,Trash,A playful list of things to let go of,Opens the Trash window,Icon shows full/empty; emptying it lowers “Disk space used by doubts” in About This Computer; Restart refills it,Claude
+Menu bar,Logo menu,Menu,(The Tiny Wisdom logo),Brand menu,Opens: About This Computer… / Butler / Note to self,,Claude
+Menu bar,Logo menu › About This Computer…,Menu item,About This Computer…,,Opens a window with the logo and “system specs” of The Tiny Wisdom,Doubts meter reads 72% or 3% depending on the Trash,Claude
+Menu bar,Logo menu › Butler,Menu item,Butler,,Opens Butler’s question balloon,Same as clicking the Butler icon,Claude
+Menu bar,Logo menu › Note to self,Menu item,Note to self,,Opens the Note to self window,Same as File › New Note,Claude
+Menu bar,File › New Note ⌘N,Menu item,New Note ⌘N,,Opens the Note to self window and focuses it,,Claude
+Menu bar,File › Open The Tiny Wisdom ⌘O,Menu item,Open The Tiny Wisdom ⌘O,,"Opens the website window, scrolled to top",Same as the desktop icon,Claude
+Menu bar,File › Close Window ⌘W,Menu item,Close Window ⌘W,,Closes the front window,Next window comes to front,Claude
+Menu bar,File › Shut Down,Menu item,Shut Down,,Opens the Shut Down dialog,On the real site: back to the room of TVs,Claude
+Menu bar,Edit › Undo ⌘Z,Menu item,Undo ⌘Z,,Shows the “Can’t undo the past” dialog,Gimmick with a message,Claude
+Menu bar,Edit › Copy the Mantra ⌘C,Menu item,Copy the Mantra ⌘C,,Copies the mantra to the clipboard; toast “Mantra copied”,"If the clipboard is blocked, the toast shows the mantra instead",Claude
+Menu bar,Edit › Select All ⌘A,Menu item,Select All ⌘A,,Highlights all desktop icons,,Claude
+Menu bar,View › by Icon,Menu item,by Icon,,Shows desktop icons as big icons,Checked state in menu,Claude
+Menu bar,View › by Name,Menu item,by Name,,Shows desktop icons as a list with small icons,Trash moves into the list,Claude
+Menu bar,View › Clean Up Windows,Menu item,Clean Up Windows,,Stacks all open windows from the top left,,Claude
+Menu bar,Special › Empty Trash…,Menu item,Empty Trash…,,Opens the Empty Trash dialog (disabled when empty),"Empties the Trash list, icon, doubts meter",Claude
+Menu bar,Special › Restart,Menu item,Restart,,"Black screen, then a boot screen with logo, “Welcome to The Tiny Wisdom” and the mantra, then a fresh desktop","Closes all windows, refills the Trash, resets icon view, reopens the website",Claude
+Menu bar,Special › Shut Down,Menu item,Shut Down,,Same as File › Shut Down,,Claude
+Menu bar,Clock,Label,(current time HH:MM),Desktop realism,Updates every 20 s,,Claude
+Website window,Browser: Window title,UI,The Tiny Wisdom,Names the window,,,Claude
+Website window,Browser: Home button,UI,Home,Navigation,Scrolls the page to the top,,Claude
+Website window,Browser: Reload button,UI,Reload,Old-browser feel,"Status shows “Connecting to www.thetinywisdom.com…”, page redraws, scrolls to top",,Claude
+Website window,Browser: Address label,UI,Go to:,Old-browser feel,,,Claude
+Website window,Browser: Address bar,UI,http://www.thetinywisdom.com/about,Shows where you are,Changes to …#the-pattern at the comic strip and …#follow at the links,,Claude
+Website window,Browser: Status bar,UI,Document: Done,Old-browser feel,Shows a link’s address when you point at it,,Claude
+Website window,Browser: Status while reloading,UI,Connecting to www.thetinywisdom.com…,Feedback for Reload,Shown ~0.7 s,,Claude
+Website window,Booklet: Running head (left),Label,The Tiny Wisdom,Booklet header,,,Claude
+Website window,Booklet: Running head (right),Label,About · a short book,Says what the page is,,,Claude
+Website window,Booklet: Under the logo,Label,"by Brian · comics & writing, since age 26",Byline,,,Claude
+Website window,Booklet: Margin label,Label,today,Section marker,,,Claude
+Website window,Booklet: Margin label,Label,the compass,Section marker,,,Claude
+Website window,Booklet: Strip heading,Label,"The pattern, by age",Introduces the story by age,,Address bar changes at the strip and at Follow,Claude
+Website window,Booklet: Strip hint,Label,4 panels · scroll →,Tells readers to scroll sideways,,,Claude
+Website window,Booklet: Panel labels,Label,Panel 01 · age 23 / Panel 02 · age 25 / Panel 03 · age 26 / Panel 04 · age 29,Panel titles,,,Claude
+Website window,Booklet: Strip buttons,Label,← prev / next →,Move through panels,,,Claude
+Website window,Booklet: Strip counter,Label,panel 1 of 4,Position,,,Claude
+Website window,Booklet: Margin label,Label,the point,Section marker,,,Claude
+Website window,Booklet: Footnote label,Label,Follow,Links section,,Address bar changes at the strip and at Follow,Claude
+Website window,Booklet: Footnotes,Label,1. Instagram: instagram.com/thetinywisdom / 2. Website: www.thetinywisdom.com,Where to follow,Links open in a new tab,,Claude
+Website window,Booklet: Colophon,Label,colophon: drawn by Brian,Credit under the figures drawing,,,Claude
+Website window,Booklet: body text,Body,"About text, mantra, story by age (23, 25, 26, 29), closing",The story,,Story by age shows as comic panels,Owner (pasted text)
+Website window,Booklet: mantra,Headline,"“It’s not gonna be easy, but it’s not impossible.”","Core message, between double rules",,"Same text as the Mantra alert, Restart screen and Butler",Owner
+Mantra alert,Message,Dialog text,"It’s not gonna be easy, but it’s not impossible. / The sentence The Tiny Wisdom started with.",Show the mantra,,,Owner + Claude (second line)
+Mantra alert,Copy button,Button,Copy,Copy the mantra,Copies; toast “Mantra copied”,Same action as Edit › Copy the Mantra,Claude
+Mantra alert,OK button,Button,OK,Close,Closes the alert,,Claude
+Toast,Copy confirmation,Toast,Mantra copied,Feedback,Disappears after ~2 s,,Claude
+Comics folder,Folder info,Label,3 items,Count,,,Claude
+Comics folder,"Comic: Big fish, small pond",File label,"Big fish, small pond",A comic by the owner,Opens the slideshow window titled with this name (7 images),No link to X,Claude (title); images from X thread 1943294204333166613
+Comics folder,Comic: How to live without talent,File label,How to live without talent,A comic by the owner,Opens the slideshow window titled with this name (12 images),No link to X,Claude (title); images from X thread 1878774692112449820
+Comics folder,Comic: The rest is just noise,File label,The rest is just noise,A comic by the owner,Opens the slideshow window titled with this name (1 image),No link to X,Claude (title); images from X post 2099523866737647670 (owner’s image only)
+Comic slideshow,Prev / Next,Buttons,◀ Prev / Next ▶,Page through the comic,Previous / next image; also ← → keys; disabled at the ends,,Claude
+Comic slideshow,Counter,Label,1 / 7,Position,Updates per image,,Claude
+Comic slideshow,Follow line,Link,Like it? Follow @thetinywisdom on Instagram for new comics.,Replace X links with an Instagram follow,Opens instagram.com/thetinywisdom in a new tab,Turns black on the last image to stand out,Claude
+Articles folder,Folder info,Label,3 items,Count,,,Claude
+Articles folder,Article: Look dumb.txt,File label,Look dumb.txt,An essay by the owner,"Opens a SimpleText window: date, title, full text (no images)",,Claude (file name); title and text from thetinywisdom.com
+Articles folder,Article: Do it later.txt,File label,Do it later.txt,An essay by the owner,"Opens a SimpleText window: date, title, full text (no images)",,Claude (file name); title and text from thetinywisdom.com
+Articles folder,Article: Boring adult life.txt,File label,Boring adult life.txt,An essay by the owner,"Opens a SimpleText window: date, title, full text (no images)",,Claude (file name); title and text from thetinywisdom.com
+Article window,Info line,Label,(post date) · SimpleText,Old-computer feel,,,Claude
+Article window,End line,Link,More articles at www.thetinywisdom.com,Send readers to the newsletter,Opens www.thetinywisdom.com in a new tab,,Claude
+Links folder,Folder info,Label,2 items,Count,,,Claude
+Links folder,Instagram,Link icon,Instagram,Follow,Opens instagram.com/thetinywisdom in a new tab,,Owner (URL)
+Links folder,Website,Link icon,Website,Read more,Opens www.thetinywisdom.com in a new tab,,Owner (URL)
+Trash window,Info line,Label,9 items · worth letting go,Frames the list,Count updates; becomes “0 items” when emptied,,Claude
+Trash window,Items,List,self-comparison · greed · envy · self-doubt · fear of failure · procrastination · giving up · people-pleasing · prabowo (each “1K”),Things worth letting go of,,Removed by Empty Trash; refilled by Restart,"Owner (self-comparison, greed, prabowo) + Claude (rest)"
+Trash window,Empty state,List text,Empty. Lighter already.,Reward after emptying,,,Claude
+Empty Trash dialog,Message,Dialog text,The Trash holds 9 things you don’t need. / Let go of them for good?,Confirm,,,Claude
+Empty Trash dialog,Buttons,Buttons,Cancel / Let go,,Let go empties the Trash and shows the toast,Trash icon becomes empty; doubts meter drops to 3%,Claude
+Toast,Trash emptied,Toast,Trash emptied. Lighter already.,Feedback,,,Claude
+About This Computer,Specs,Window text,"System: The Tiny Wisdom · Built: in a bedroom, at 26 · Followers: 100k by 28 · Location: Japan, since 31 · Runs on: not giving up",Playful summary of the story,,Facts taken from the owner’s story; please confirm,"Claude, from owner’s story"
+About This Computer,Doubts meter,Window text,"Disk space used by doubts: 72% / 3%, since you emptied the Trash",Joke that rewards emptying the Trash,,Depends on the Trash,Claude
+Note to self,Window,Window text,Note to self · untitled · Write your own tiny wisdom here…,Let visitors write,Typing area; not saved,,Claude
+Undo dialog,Message,Dialog text,Can’t undo the past. / You can only keep going. · OK,Gimmick with a message,,,Claude
+Restart screen,Boot text,Screen text,"Welcome to The Tiny Wisdom · It’s not gonna be easy, but it’s not impossible.",Gimmick; resets the desktop,,See Special › Restart,Claude + Owner (mantra)
+Shut Down dialog,Message,Dialog text,Shut down? / On the site this takes you back to the room of TVs. · Cancel · Shut Down,Exit the page,Mockup: black screen briefly; on the site: back to the room,,Claude
+Butler,Greeting,Balloon,"Hi, I’m Butler. Need anything? Click me.",Introduce Butler without covering the website,Shown on page load,Clicking him opens the question list,Claude
+Butler,Question list intro,Balloon,I’m here to help. What’s up?,,,,Owner (from homepage Butler)
+Butler,Q: What is The Tiny Wisdom?,Question + answer,"What is The Tiny Wisdom? → Comics and writing about not giving up. Brian started it from his bedroom at 26; two years later it had 100k followers on Instagram, and it has grown into hundreds of comics, blog posts and live talks. [Button: Open the website] [Got it]",Help visitors use this page,Opens the website window; Got it returns to the list,Butler’s face changes mood with each answer,Claude
+Butler,Q: What’s the mantra?,Question + answer,"What’s the mantra? → It’s not gonna be easy, but it’s not impossible. It’s the sentence The Tiny Wisdom started with. [Button: Show it] [Got it]",Help visitors use this page,Opens the Mantra alert; Got it returns to the list,Butler’s face changes mood with each answer,Claude
+Butler,Q: Where do I start?,Question + answer,"Where do I start? → Open The Tiny Wisdom on the desktop. It’s the website, with the whole story. Then try the Comics and Articles folders. [Button: Open the website] [Got it]",Help visitors use this page,Opens the website window; Got it returns to the list,Butler’s face changes mood with each answer,Claude
+Butler,Q: How does this computer work?,Question + answer,"How does this computer work? → Double-click an icon to open it (one tap on a phone). Drag a window by its striped bar, close it with the X. The menus at the top all work. [Got it]",Help visitors use this page,—; Got it returns to the list,Butler’s face changes mood with each answer,Claude
+Butler,Q: What’s in the Trash?,Question + answer,"What’s in the Trash? → Things worth letting go of. Have a look, then choose Special › Empty Trash. [Button: Open Trash] [Got it]",Help visitors use this page,Opens the Trash window; Got it returns to the list,Butler’s face changes mood with each answer,Claude
+Butler,Q: Can I read some comics?,Question + answer,Can I read some comics? → Open the Comics folder: each comic plays as a slideshow. The Articles folder has a few essays as plain text files. [Button: Open Comics] [Got it],Help visitors use this page,Opens the Comics folder; Got it returns to the list,Butler’s face changes mood with each answer,Claude
+Butler,Q: Where can I follow it?,Question + answer,"Where can I follow it? → On Instagram at instagram.com/thetinywisdom, and at www.thetinywisdom.com. Both are in the Links folder. [Button: Open Links] [Got it]",Help visitors use this page,Opens the Links folder; Got it returns to the list,Butler’s face changes mood with each answer,Claude
+Butler,Chain: Who are you?,Question + answer,Who are you? → I’m Butler. On this computer I’m made of pixels instead of light. Ask away. [Got it],Easter-egg conversation,"After Got it, the next question replaces it in the list, marked NEW; loops back after Sorry",Face: happy,"Owner’s homepage Butler, reworded for pixels"
+Butler,Chain: What are you?,Question + answer,"What are you? → A robot with a TV for a head, drawn one pixel at a time. Please don’t try to shake my hand. [Got it]",Easter-egg conversation,"After Got it, the next question replaces it in the list, marked NEW; loops back after Sorry",Face: wink,"Owner’s homepage Butler, reworded for pixels"
+Butler,Chain: Why are you?,Question + answer,Why are you? → Why am I?! That’s a very rude thing to ask someone made of pixels. [Got it],Easter-egg conversation,"After Got it, the next question replaces it in the list, marked NEW; loops back after Sorry",Face: angry,"Owner’s homepage Butler, reworded for pixels"
+Butler,Chain: Sorry,Question + answer,Sorry → It’s fine… *sniff* … nobody ever asks how the assistant is doing. [Got it],Easter-egg conversation,"After Got it, the next question replaces it in the list, marked NEW; loops back after Sorry",Face: sad,"Owner’s homepage Butler, reworded for pixels"
+Butler,Tickle,Balloon,"Hehe! That tickles! / Ha ha, stop it! / Hee hee! I’m ticklish there. [LOL]",Fun reaction,One click while balloon is open; LOL returns to the list,Face: laughing,Owner’s homepage Butler
+Butler,Poke ×3,Balloon,"Hey! Stop poking me! / I said stop! I’m made of pixels, not jelly. / That’s enough poking for one day. [Sorry]",Fun reaction,Three quick clicks; icon shakes; Sorry returns to the list,Face: angry,"Owner’s homepage Butler, reworded"
+Butler,Close,Button,(X),Close the balloon,Hides the balloon,Face back to neutral,Claude
+Windows,Close box,Button,(X),Close any window,Closes the window,Next window comes to front,Claude
