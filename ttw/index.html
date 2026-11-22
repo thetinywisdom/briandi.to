@@ -771,7 +771,9 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
   /* B1 Booklet: built into any container (the B1 tab, and the website window on the desktop) */
   function makeBooklet(root) {
     const sc = el('div', 'z-scroll'); const bk = el('div', 'bk crisp'); sc.append(bk); root.append(sc);
-    const run = el('div', 'bk-run'); run.append(el('span', 'z-label', 'The Tiny Wisdom'), el('span', 'z-label', 'About · a short book')); bk.append(run);
+    const run = el('div', 'bk-run'); const rr = el('span', 'z-label'); const w1 = el('a', null, 'www.thetinywisdom.com'); w1.href = 'https://www.thetinywisdom.com';
+    const w2 = el('a', null, '@thetinywisdom'); w2.href = 'https://instagram.com/thetinywisdom'; for (const x of [w1, w2]) { x.target = '_blank'; x.rel = 'noopener'; }
+    rr.append(w1, ' • ', w2); run.append(el('span', 'z-label', 'The Tiny Wisdom'), rr); bk.append(run);
     const fr = el('div', 'bk-front'); const lg = pix(); fr.append(lg, el('div', 'z-label', "Over the past few years, I’ve lived in different countries and met people from many different backgrounds. All of it has led me to believe that we’re all the same: human, a little lost, and trying to find our way. The Tiny Wisdom exists to remind you that nobody really knows what they’re doing in life, including you and me, my friend.")); bk.append(fr);
     const P = (t, cls = 'bk-t') => { const p = el('p', cls, t); bk.append(p); return p; };
     const M = (k, t) => { const m = el('div', 'bk-m'); if (k) m.append(el('b', null, k)); m.append(el('span', 'z-label', t)); bk.append(m); };
