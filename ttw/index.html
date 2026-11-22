@@ -718,6 +718,8 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
       }
     };
     bClose.onclick = () => { balloon.hidden = true; setMood('neutral'); butlerIcon?.focus(); };
+    // his balloon floats above the windows while it is open, and goes away when the visitor turns to a window
+    desk.addEventListener('pointerdown', (e) => { if (!balloon.hidden && e.target.closest('.a-win')) { balloon.hidden = true; setMood('neutral'); } }, true);
     // what Butler can do on this page
     const QA = [
       { q: 'What is The Tiny Wisdom?', a: 'Comics and writing about not giving up. Brian started it from his bedroom at 26; two years later it had 100k followers on Instagram, and it has grown into hundreds of comics, blog posts and live talks.', mood: 'happy', act: ['Open the website', () => openAbout()] },
@@ -777,7 +779,7 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
     ];
     let trashIcon = null;
     const deskIcons = DESK.map(([n, r, o]) => { const b = fileIcon(n, r, o); iconsLayer.append(b); if (n === 'Trash') trashIcon = b;
-      if (n === 'Butler') { butlerIcon = b; desk.append(b); b.style.zIndex = 790;   /* the assistant stays above the windows */
+      if (n === 'Butler') { butlerIcon = b;   /* he lies under the windows like every other icon */
         b.classList.add('a-butler-icon'); b.setAttribute('aria-label', 'Butler, your assistant'); b.addEventListener('click', () => { if (balloon.hidden || greeting) openButler(); else poke(); }); }
       // icons can be dragged around the desktop, like the real thing
       b.addEventListener('pointerdown', (e) => { if (coarse) return; const sx = e.clientX - b.offsetLeft, sy = e.clientY - b.offsetTop; let moved = false;
