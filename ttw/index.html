@@ -98,6 +98,16 @@ a { color: inherit; }
 .a-btn.default { border-width: 2px; box-shadow: 0 0 0 2px var(--w), 0 0 0 4px var(--b); }
 .a-btn:active, .a-btn:focus-visible { background: var(--b); color: var(--w); }
 .a-note textarea { all: unset; box-sizing: border-box; flex: 1; width: 100%; padding: 12px 14px; font: 400 16px/1.35 var(--pix); white-space: pre-wrap; user-select: text; cursor: text; }
+/* the note is a little mail form: To, Title, the note, Send */
+.n-row { flex: none; display: grid; grid-template-columns: 52px 1fr; align-items: center; gap: 6px; padding: 5px 12px; border-bottom: 1px solid var(--b); font-size: 14px; }
+.n-row b { font-weight: 600; }
+.n-row input { all: unset; min-width: 0; font: 400 15px/1.3 var(--pix); user-select: text; cursor: text; }
+.n-foot { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 12px; border-top: 1px solid var(--b); font-size: 13px; }
+.n-foot .a-btn:disabled { opacity: .35; cursor: default; }
+/* the sending window: the computer sends the note across the wire to a turning globe */
+.a-send .a-body { padding: 14px 16px 16px; user-select: none; }
+.a-send canvas { display: block; width: 100%; aspect-ratio: 160 / 60; image-rendering: pixelated; border: 1px solid var(--b); margin-bottom: 10px; }
+.a-send p { margin: 0 0 8px; font-weight: 600; }
 .a-specs { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; margin: 0; }
 .a-specs dt { font-weight: 600; } .a-specs dd { margin: 0; }
 .a-meter { height: 10px; border: 1px solid var(--b); margin-top: 3px; }
@@ -480,6 +490,7 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
     trashFull: ['     ######     ', '  ############  ', '  #oooooooooo#  ', '  ##o#o##o#o#  ', ' # #o#o#o#o## # ', '   #o#o#o#o#    ', '   #o#o#o#o#   ', '   #o#o#o#o#   ', '   #o#o#o#o#   ', '   #o#o#o#o#   ', '   #o#o#o#o#   ', '   ##########   ', '                ', '                ', '                ', '                '],
     x: ['##        ##', '###      ###', ' ###    ### ', '  ###  ###  ', '   ######   ', '    ####    ', '    ####    ', '   ######   ', '  ###  ###  ', ' ###    ### ', '###      ###', '##        ##'],
     ttw: ['                ', '     ######     ', '   ##########   ', '  ###o####o###  ', '  ####o##o####  ', ' #####oo#####  ', ' #oooooooooo#  ', ' #####oo#####  ', ' #####oo#####  ', '  ####oo####   ', '   ##########   ', '     ######     ', '                ', '                ', '                ', '                '],
+    mac: ['   ##########   ', '  #oooooooooo#  ', '  #o########o#  ', '  #o#oooooo#o#  ', '  #o#oooooo#o#  ', '  #o#oooooo#o#  ', '  #o#oooooo#o#  ', '  #o########o#  ', '  #oooooooooo#  ', '  #oo####oooo#  ', '  #oooooooooo#  ', '  ############  ', '   #oooooooo#   ', '  ############  ', '                ', '                '],
     warn: ['       ##       ', '      #oo#      ', '      #oo#      ', '     #oooo#     ', '     #o##o#     ', '    #oo##oo#    ', '    #oo##oo#    ', '   #ooo##ooo#   ', '   #ooo##ooo#   ', '  #oooooooooo#  ', '  #oooo##oooo#  ', ' #ooooo##ooooo# ', ' ############## ', '                ', '                ', '                '],
   });
   const xIcon = () => { const s = icon(I.x); s.setAttribute('viewBox', '0 0 12 12'); return s; };
@@ -548,8 +559,56 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
     // the status bar shows where a link goes
     page.addEventListener('mouseover', (e) => { const a = e.target.closest('a'); status.textContent = a ? a.href : 'Document: Done'; });
     const folder = (title, items) => { const W = win(title, 380, [`${items.length} items`, '']); const f = el('div', 'a-files'); items.forEach((it) => f.append(fileIcon(...it))); W.append(f); return W; };
-    const note = win('Note to self', 360, ['untitled', '']); note.classList.add('a-note'); note.style.height = '240px';
-    const ta = el('textarea'); ta.setAttribute('aria-label', 'Note to self'); ta.placeholder = 'Write your own tiny wisdom here…'; note.append(ta);
+    const NOTE_TITLE = 'Note to The Tiny Wisdom';
+    const note = win(NOTE_TITLE, 380); note.classList.add('a-note'); note.style.height = '320px';
+    const toRow = el('div', 'n-row'); toRow.append(el('b', null, 'To:'), el('span', null, 'The Tiny Wisdom'));
+    const tiRow = el('label', 'n-row'), ti = el('input'); ti.maxLength = 120; ti.placeholder = 'Title'; tiRow.append(el('b', null, 'Title:'), ti);
+    const ta = el('textarea'); ta.setAttribute('aria-label', 'Your note'); ta.maxLength = 4000; ta.placeholder = 'Write your note here…';
+    const foot = el('div', 'n-foot'), count = el('span'), send = el('button', 'a-btn default', 'Send'); send.type = 'button'; foot.append(count, send);
+    note.append(toRow, tiRow, ta, foot);
+    const noteState = () => { const n = ta.value.trim().length; send.disabled = !n; count.textContent = n ? `${ta.value.length} characters` : 'Write something to send it'; };
+    ta.addEventListener('input', noteState); noteState();
+    send.onclick = () => { if (!ta.value.trim()) return; sendNote(ti.value.trim(), ta.value.trim()); };
+
+    /* Sending: the note is posted to the owner's Google Form (answers collect in a Google Sheet, download as CSV).
+       Until FORM.action is filled in, nothing is stored; the animation still plays. */
+    const FORM = { action: '', title: '', note: '' }; // e.g. action 'https://docs.google.com/forms/d/e/<id>/formResponse', title 'entry.123', note 'entry.456'
+    const post = (title, body) => { if (!FORM.action) return Promise.resolve();
+      const f = new URLSearchParams(); f.set(FORM.title, title); f.set(FORM.note, body);
+      return fetch(FORM.action, { method: 'POST', mode: 'no-cors', body: f }); };
+    const sendNote = (title, body) => {
+      send.disabled = true; hide(note);
+      const W = win('Sending Note', 380); W.classList.add('a-send'); const b = el('div', 'a-body'), cv = el('canvas'), msg = el('p', null, 'Dialing The Tiny Wisdom…'), meter = el('div', 'a-meter'), fill = el('i');
+      cv.width = 160; cv.height = 60; cv.setAttribute('aria-hidden', 'true'); fill.style.width = '0%'; meter.append(fill); msg.setAttribute('aria-live', 'polite'); b.append(cv, msg, meter); W.append(b);
+      show(W); at(W, desk.clientWidth / 2 - 190, 80);
+      const g = cv.getContext('2d'), ink = '#000', paper = '#fff';
+      const B = [[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]]; // Bayer 4x4 for the globe's shading
+      const sprite = (rows, x0, y0, k) => rows.forEach((r, y) => [...r].forEach((ch, x) => { if (ch === ' ') return; g.fillStyle = ch === '#' ? ink : paper; g.fillRect(x0 + x * k, y0 + y * k, k, k); }));
+      const ENV = ['#########', '##ooooo##', '#o#ooo#o#', '#oo#o#oo#', '#ooo#ooo#', '#########'];
+      const land = (lon, lat) => Math.sin(lon * 2 + 1.3) * Math.cos(lat * 2.2) + 0.5 * Math.sin(lon * 4.3 + lat * 3.1) + 0.35 * Math.cos(lon * 7 - lat * 5) > 0.2 || Math.abs(lat) > 1.25;
+      const globe = (phase) => { const cx = 30, cy = 30, r = 22, at3 = (x, y) => { const nx = (x + 0.5 - cx) / r, ny = (y + 0.5 - cy) / r, d = nx * nx + ny * ny; if (d > 1) return null; const nz = Math.sqrt(1 - d); return { nx, ny, nz, d, lat: Math.asin(-ny), lon: Math.atan2(nx, nz) + phase }; };
+        for (let y = cy - r; y <= cy + r; y++) for (let x = cx - r; x <= cx + r; x++) { const q = at3(x, y); if (!q) continue;
+          const light = Math.max(0, -0.45 * q.nx - 0.35 * q.ny + 0.82 * q.nz), th = (B[y & 3][x & 3] + 0.5) / 16; // lit from the upper left
+          const L = land(q.lon, q.lat), nb = at3(x + 1, y), nd = at3(x, y + 1);
+          const coast = L && ((nb && !land(nb.lon, nb.lat)) || (nd && !land(nd.lon, nd.lat)));
+          const on = q.d > 0.9 || coast || (L ? th < (1 - light) * 0.7 - 0.1 : th < 0.3 + (1 - light) * 0.6); // white land, grey dithered sea, both darker on the night side
+          if (on) { g.fillStyle = ink; g.fillRect(x, y, 1, 1); } } };
+      const t0 = performance.now(), DIAL = 1000, FLY = 1700, DONE = DIAL + FLY * 2;
+      let ok = true; post(title, body).catch(() => { ok = false; });
+      const frame = (now) => { const t = reduced ? DONE : now - t0;
+        g.fillStyle = paper; g.fillRect(0, 0, 160, 60);
+        globe(reduced ? 0 : t / 900);
+        sprite(I.mac, 116, 10, 2); g.fillStyle = ink; g.fillRect(108, 43, 46, 1); // the computer on its desk
+        for (let x = 58; x <= 108; x += 4) { const lit = t < DIAL ? (108 - x) < (t / DIAL) * 50 : true; if (lit) g.fillRect(x, 30, 1, 1); } // the wire, dialing out
+        if (t >= DIAL && t < DONE) { const k = ((t - DIAL) % FLY) / FLY, ex = 108 - k * 50, ey = 30 - Math.sin(k * Math.PI) * 9 - 3;
+          sprite(ENV, Math.round(ex) - 4, Math.round(ey), 1); }
+        msg.textContent = t < DIAL ? 'Dialing The Tiny Wisdom…' : t < DONE ? 'Sending your note…' : ok ? 'Delivered.' : 'No connection. Your note is still in the window.';
+        fill.style.width = Math.min(100, t / DONE * 100) + '%';
+        if (t < DONE + 700 && !reduced) requestAnimationFrame(frame); else finish(); };
+      const finish = () => setTimeout(() => { hide(W); setTimeout(() => W.remove(), 0);
+        if (ok) { ti.value = ''; ta.value = ''; noteState(); dialog(I.mac, ['Note sent.', 'Thank you for writing to The Tiny Wisdom.'], [['OK', null, true]]); }
+        else { show(note); noteState(); } }, reduced ? 600 : 300);
+      requestAnimationFrame(frame); };
     let trashItems = ['self-comparison', 'greed', 'envy', 'self-doubt', 'fear of failure', 'procrastination', 'giving up', 'people-pleasing', 'prabowo'];
     const trash = win('Trash', 330, ['', '']);
     const trashList = el('ul', 'a-list'); trash.append(trashList);
@@ -716,7 +775,7 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
     /* ---- menus ---- */
     const drop = el('div', 'a-drop'); drop.hidden = true; root.append(drop);
     const MENUS = {
-      ttw: () => [['About This Computer…', () => act('About This Computer')], '-', ['Butler', openButler], ['Note to self', () => act('New Note')]],
+      ttw: () => [['About This Computer…', () => act('About This Computer')], '-', ['Butler', openButler], [NOTE_TITLE, () => act('New Note')]],
       File: () => [['New Note', () => act('New Note'), '⌘N'], ['Open The Tiny Wisdom', openAbout, '⌘O'], '-', ['Close Window', () => act('Close'), '⌘W'], '-', ['Shut Down', () => act('Shut Down')]],
       Edit: () => [['Undo', () => act('Undo'), '⌘Z'], '-', ['Copy the Mantra', () => act('Copy'), '⌘C'], ['Select All', () => act('Select All'), '⌘A']],
       View: () => [['by Icon', () => { view = 'icon'; arrange(); }, null, view === 'icon'], ['by Name', () => { view = 'name'; arrange(); }, null, view === 'name'], '-', ['Clean Up Windows', () => act('Clean Up')]],
@@ -748,7 +807,7 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
         b.append(dl, el('p', null, ''), el('p', 'lead', 'Disk space used by doubters: 2%'), meter); W.append(b); show(W); at(W, dw / 2 - 190, 50);
         onebit(lg, 'logo', 180, 1, [0, 0, 0], [255, 255, 255]); lg.style.marginBottom = '12px';
       }
-      if (what === 'New Note') { show(note); at(note, dw / 2 - 180, 90); ta.focus(); }
+      if (what === 'New Note') { show(note); at(note, dw / 2 - 190, 70); (ta.value ? ta : ti).focus(); }
       if (what === 'Close') { const top = [...desk.querySelectorAll('.a-win:not([hidden])')].sort((a, b) => b.style.zIndex - a.style.zIndex)[0]; if (top) hide(top); }
       if (what === 'Undo') dialog(I.warn, ['Can’t undo the past.', 'You can only keep going.'], [['OK', null, true]]);
       if (what === 'Copy') { navigator.clipboard?.writeText(MANTRA).then(() => toast('Mantra copied'), () => toast(MANTRA)); }

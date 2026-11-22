@@ -6,11 +6,11 @@ Desktop,Desktop icon: Articles,Icon label,Articles,Show the owner’s writing,Op
 Desktop,Desktop icon: Links,Icon label,Links,Where to follow,"Opens the Links folder (Instagram, Website)",Same folder as Butler’s “Open Links” button,Claude
 Desktop,Desktop icon: Butler,Icon label,Butler,On-page assistant,Click: opens Butler’s balloon with questions. Click again while open: tickle; 3 quick clicks: poke (angry),His face on the icon changes with mood; balloon follows the icon when dragged; greets on page load,Claude
 Desktop,Desktop icon: Trash,Icon label,Trash,A playful list of things to let go of,Opens the Trash window,Icon shows full/empty; Restart refills it,Claude
-Menu bar,Logo menu,Menu,(The Tiny Wisdom logo),Brand menu,Opens: About This Computer… / Butler / Note to self,,Claude
+Menu bar,Logo menu,Menu,(The Tiny Wisdom logo),Brand menu,Opens: About This Computer… / Butler / Note to The Tiny Wisdom,,Claude
 Menu bar,Logo menu › About This Computer…,Menu item,About This Computer…,,Opens a window with the logo and “system specs” of The Tiny Wisdom,Meter reads 2%,Claude
 Menu bar,Logo menu › Butler,Menu item,Butler,,Opens Butler’s question balloon,Same as clicking the Butler icon,Claude
-Menu bar,Logo menu › Note to self,Menu item,Note to self,,Opens the Note to self window,Same as File › New Note,Claude
-Menu bar,File › New Note ⌘N,Menu item,New Note ⌘N,,Opens the Note to self window and focuses it,,Claude
+Menu bar,Logo menu › Note to The Tiny Wisdom,Menu item,Note to The Tiny Wisdom,,Opens the note window,Same as File › New Note,Owner
+Menu bar,File › New Note ⌘N,Menu item,New Note ⌘N,,Opens the note window and focuses it,,Claude
 Menu bar,File › Open The Tiny Wisdom ⌘O,Menu item,Open The Tiny Wisdom ⌘O,,"Opens the website window, scrolled to top",Same as the desktop icon,Claude
 Menu bar,File › Close Window ⌘W,Menu item,Close Window ⌘W,,Closes the front window,Next window comes to front,Claude
 Menu bar,File › Shut Down,Menu item,Shut Down,,Opens the Shut Down dialog,On the real site: back to the room of TVs,Claude
@@ -70,7 +70,11 @@ Empty Trash dialog,Buttons,Buttons,Cancel / Let go,,Let go empties the Trash and
 Toast,Trash emptied,Toast,Trash emptied. Lighter already.,Feedback,,,Claude
 About This Computer,Specs,Window text,"System: The Tiny OS · Built: July 19, 2021 · Location: Jakarta, Indonesia & Tokyo, Japan · Runs on: Coffee & Consistency",Playful summary of the story,,,Owner
 About This Computer,Doubts meter,Window text,"Disk space used by doubters: 2%",Joke: the doubters barely register,,Fixed value; no longer changes with the Trash,Owner
-Note to self,Window,Window text,Note to self · untitled · Write your own tiny wisdom here…,Let visitors write,Typing area; not saved,,Claude
+Note window,Window title,Window text,Note to The Tiny Wisdom,Let visitors write to The Tiny Wisdom,,,Owner
+Note window,Fields,Labels + placeholders,To: The Tiny Wisdom · Title: (Title) · (Write your note here…),A pretend email form,Title is optional; the note is needed to send,,Claude
+Note window,Footer,Status + button,Write something to send it / N characters · Send,,Send plays the sending animation and posts the title and note to the Google Form,Notes collect in the owner’s Google Sheet (download as CSV); nothing is stored until the form is connected,Claude
+Sending window,Title + status,Window text,Sending Note · Dialing The Tiny Wisdom… · Sending your note… · Delivered. / No connection. Your note is still in the window.,The dialing animation: an envelope flies from the computer to a turning globe,Closes itself when done,On no connection the note window comes back with the text kept,Claude
+Note sent alert,Message,Dialog text,Note sent. / Thank you for writing to The Tiny Wisdom.,Confirms the note was sent,OK closes it,The note window is cleared,Claude
 Undo dialog,Message,Dialog text,Can’t undo the past. / You can only keep going. · OK,Gimmick with a message,,,Claude
 Restart screen,Boot text,Screen text,"Welcome to The Tiny Wisdom · It’s not gonna be easy, but it’s not impossible.",Gimmick; resets the desktop,,See Special › Restart,Claude + Owner (mantra)
 Shut Down dialog,Message,Dialog text,Shut down? / On the site this takes you back to the room of TVs. · Cancel · Shut Down,Exit the page,Mockup: black screen briefly; on the site: back to the room,,Claude
