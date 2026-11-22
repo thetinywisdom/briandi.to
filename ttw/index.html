@@ -593,12 +593,37 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
           const coast = L && ((nb && !land(nb.lon, nb.lat)) || (nd && !land(nd.lon, nd.lat)));
           const on = q.d > 0.9 || coast || (L ? th < (1 - light) * 0.7 - 0.1 : th < 0.3 + (1 - light) * 0.6); // white land, grey dithered sea, both darker on the night side
           if (on) { g.fillStyle = ink; g.fillRect(x, y, 1, 1); } } };
+      // the computer, drawn like the globe: a three-quarter view lit from the upper left, faces shaded with the same dither
+      const part = (x, y) => {
+        if (x >= 112 && x <= 141 && y >= 9 && y <= 44) {
+          if (x >= 118 && x <= 135 && y >= 14 && y <= 29) return 'screen';
+          if (x >= 116 && x <= 137 && y >= 12 && y <= 31) return 'bezel';
+          if (y === 37 && x >= 125 && x <= 137) return 'slot';
+          if (x >= 115 && x <= 117 && y === 40) return 'slot';
+          return 'front'; }
+        if (y >= 5 && y <= 8) { const k = 9 - y; if (x >= 112 + 2 * k && x <= 141 + 2 * k) return 'top'; }
+        if (x >= 142 && x <= 149) { const c = Math.ceil((x - 141) / 2); if (y >= 9 - c && y <= 44 - c) return 'side'; }
+        if (y >= 48 && y <= 52) { const k = y - 48; if (x >= 108 - k && x <= 136 - k) return 'keys'; }
+        return null; };
+      const TONE = { front: 0.1, top: 0.28, side: 0.5, bezel: 0.2, screen: 0.7, slot: 1, keys: 0.12 };
+      const computer = (t) => { const blink = Math.floor(t / 400) % 2 === 0;
+        for (let y = 2; y <= 55; y++) for (let x = 100; x <= 158; x++) { const P = part(x, y); if (!P) continue;
+          const th = (B[y & 3][x & 3] + 0.5) / 16;
+          const edge = P !== 'screen' && [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => { const n = part(x + dx, y + dy); return n !== P && n !== 'shadow'; });
+          let on = edge || th < TONE[P] * (P === 'front' ? 0.6 + 0.8 * ((x - 112) / 30) * ((y - 9) / 36) : 1);
+          if (P === 'side' && !edge) on = th < 0.38 + (x - 142) * 0.04; // darker towards the back
+          if (P === 'screen' && !edge) { const u = (x - 126.5) / 9, v = (y - 21.5) / 8, r2 = u * u + v * v; // the tube glows in the middle, darker at the corners
+            on = th < 0.4 + Math.min(1, r2) * 0.2;
+            if ((y === 16 && x >= 121 && x <= 124) || (x === 120 && y >= 17 && y <= 19)) on = false; // a glint at the upper left
+            if (blink && x >= 121 && x <= 123 && y >= 24 && y <= 25) on = true; } // a blinking cursor
+          if (P === 'keys' && !edge) on = (y === 49 || y === 51) && (x + (y - 48)) % 3 === 0;
+          if (on) { g.fillStyle = ink; g.fillRect(x, y, 1, 1); } } };
       const t0 = performance.now(), DIAL = 1000, FLY = 1700, DONE = DIAL + FLY * 2;
       let ok = true; post(title, body).catch(() => { ok = false; });
       const frame = (now) => { const t = reduced ? DONE : now - t0;
         g.fillStyle = paper; g.fillRect(0, 0, 160, 60);
         globe(reduced ? 0 : t / 900);
-        sprite(I.mac, 116, 10, 2); g.fillStyle = ink; g.fillRect(108, 43, 46, 1); // the computer on its desk
+        computer(t); g.fillStyle = ink;
         for (let x = 58; x <= 108; x += 4) { const lit = t < DIAL ? (108 - x) < (t / DIAL) * 50 : true; if (lit) g.fillRect(x, 30, 1, 1); } // the wire, dialing out
         if (t >= DIAL && t < DONE) { const k = ((t - DIAL) % FLY) / FLY, ex = 108 - k * 50, ey = 30 - Math.sin(k * Math.PI) * 9 - 3;
           sprite(ENV, Math.round(ex) - 4, Math.round(ey), 1); }
