@@ -147,14 +147,8 @@ a { color: inherit; }
 .a-toast[hidden] { display: none; }
 
 .a-browser { display: flex; flex-direction: column; }
-.br-bar { display: flex; align-items: center; gap: 6px; padding: 5px 8px; border-bottom: 1px solid var(--b); flex: none; font-size: 14px; }
-.br-bar button { all: unset; border: 1px solid var(--b); border-radius: 5px; padding: 1px 9px; cursor: pointer; box-shadow: 1px 1px 0 var(--b); }
-.br-bar button:active, .br-bar button:focus-visible { background: var(--b); color: var(--w); }
-.br-go { margin-left: 4px; }
-.br-url { flex: 1; min-width: 0; border: 1px solid var(--b); padding: 1px 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; user-select: text; }
 .br-page { position: relative; flex: 1; min-height: 0; container-type: inline-size; user-select: text; }
 .br-status { flex: none; border-top: 1px solid var(--b); padding: 2px 8px; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-@media (max-width: 560px) { .br-go { display: none; } }
 @container (max-width: 600px) { .br-page .bk { grid-template-columns: minmax(0, 1fr); padding: 0 18px 60px; } .br-page .bk > * { grid-column: 1 !important; } .br-page .bk-m { text-align: left; display: flex; gap: 10px; align-items: baseline; margin-top: 10px; } .br-page .bk-m b { font-size: 34px; } }
 
 .a-slides { display: flex; flex-direction: column; }
@@ -546,20 +540,13 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
     };
 
     /* ---- the windows ---- */
-    // The Tiny Wisdom website: an old browser window with the booklet (B1) as the page
+    // The Tiny Wisdom website: a window with the booklet (B1) as the page, and a status bar
     const about = win('The Tiny Wisdom', 720); about.classList.add('a-browser');
-    const bar = el('div', 'br-bar'); const homeB = el('button', null, 'Home'), reloadB = el('button', null, 'Reload'); homeB.type = reloadB.type = 'button';
-    const url = el('div', 'br-url'); url.textContent = 'http://www.thetinywisdom.com/about'; bar.append(homeB, reloadB, el('span', 'br-go', 'Go to:'), url);
     const page = el('div', 'br-page z'); const site = makeBooklet(page); const ab = site.scroller;
     const status = el('div', 'br-status', 'Document: Done');
-    about.append(bar, page, status);
-    homeB.onclick = () => { ab.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }); };
-    reloadB.onclick = () => { status.textContent = 'Connecting to www.thetinywisdom.com…'; page.style.visibility = 'hidden';
-      setTimeout(() => { page.style.visibility = ''; ab.scrollTop = 0; site.draw(); status.textContent = 'Document: Done'; }, reduced ? 0 : 700); };
-    // the status bar shows where a link goes, and the address follows the section you are reading
+    about.append(page, status);
+    // the status bar shows where a link goes
     page.addEventListener('mouseover', (e) => { const a = e.target.closest('a'); status.textContent = a ? a.href : 'Document: Done'; });
-    ab.addEventListener('scroll', () => { const strip = ab.querySelector('.bk-strip'), fn = ab.querySelector('.bk-fn'), y = ab.scrollTop + 120;
-      url.textContent = 'http://www.thetinywisdom.com/about' + (fn && y > fn.offsetTop ? '#follow' : strip && y > strip.offsetTop - 200 ? '#the-pattern' : ''); });
     const folder = (title, items) => { const W = win(title, 380, [`${items.length} items`, '']); const f = el('div', 'a-files'); items.forEach((it) => f.append(fileIcon(...it))); W.append(f); return W; };
     const note = win('Note to self', 360, ['untitled', '']); note.classList.add('a-note'); note.style.height = '240px';
     const ta = el('textarea'); ta.setAttribute('aria-label', 'Note to self'); ta.placeholder = 'Write your own tiny wisdom here…'; note.append(ta);
@@ -884,7 +871,7 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
 
   /* ---------- tabs and notes ---------- */
   const NOTES = {
-    a: [['What changed', 'A and B are one now. The Tiny Wisdom icon opens the website: an old browser window (Home, Reload, an address bar that follows the section you read, a status bar that shows where links go) with the booklet inside, the ages as a comic strip. The Comics folder (three comics, each a slideshow, with a nudge to follow on Instagram instead of links to X), the Articles folder (three essays as plain .txt). The other icons: Mantra (an alert you can copy from), Links (Instagram and the website), Butler, and the Trash.'],
+    a: [['What changed', 'A and B are one now. The Tiny Wisdom icon opens the website: a window with the booklet inside and a status bar that shows where links go, the ages as a comic strip. The Comics folder (three comics, each a slideshow, with a nudge to follow on Instagram instead of links to X), the Articles folder (three essays as plain .txt). The other icons: Mantra (an alert you can copy from), Links (Instagram and the website), Butler, and the Trash.'],
         ['The menus', 'The logo menu: About This Computer (the system specs of The Tiny Wisdom), Butler, Note to self. File: New Note, Open, Close Window, Shut Down. Edit: Undo ("can’t undo the past"), Copy the Mantra, Select All. View: by Icon / by Name, Clean Up Windows. Special: Empty Trash, Restart, Shut Down.'],
         ['Butler', 'He sits on the desktop as his own icon, no window: click him and his chat opens in a balloon beside him, with his face on the icon\'s little TV screen changing with his mood. His questions are about this page: what The Tiny Wisdom is, the mantra, where to start, how the computer works, the Trash, where to follow. Answers have a button that does it. With the balloon open, click him again to tickle him (LOL); poke him three times quickly and he gets cross (Sorry). The X closes the balloon; dragging his icon takes the balloon with him. "Who are you?" still leads to the little chain.'],
         ['Try', 'Click Butler, ask “What’s in the Trash?”, press Open Trash, then Special › Empty Trash. Click Butler a few times quickly.']],

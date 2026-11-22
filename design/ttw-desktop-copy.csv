@@ -1,5 +1,5 @@
 ﻿Area,Element,Type,Copy (exact text),Purpose,What it opens / what happens,Impact on other parts,Source of the text
-Desktop,Desktop icon: The Tiny Wisdom,Icon label,The Tiny Wisdom,Main entry: the website with the full story,Double-click (tap on phone) opens the browser window with the booklet; opens by itself when the page loads,Same window as File › Open The Tiny Wisdom and Butler’s “Open the website” buttons,Claude
+Desktop,Desktop icon: The Tiny Wisdom,Icon label,The Tiny Wisdom,Main entry: the website with the full story,Double-click (tap on phone) opens the window with the booklet; opens by itself when the page loads,Same window as File › Open The Tiny Wisdom and Butler’s “Open the website” buttons,Claude
 Desktop,Desktop icon: Mantra,Icon label,Mantra,Quick access to the core message,Opens the Mantra alert,Alert’s Copy button shows the “Mantra copied” toast,Claude
 Desktop,Desktop icon: Comics,Icon label,Comics,Show the owner’s comics,Opens the Comics folder window (3 comics),Same folder as Butler’s “Open Comics” button,Claude
 Desktop,Desktop icon: Articles,Icon label,Articles,Show the owner’s writing,Opens the Articles folder window (3 .txt files),Mentioned in Butler’s “Where do I start?” and “Can I read some comics?” answers,Claude
@@ -25,24 +25,19 @@ Menu bar,Special › Restart,Menu item,Restart,,"Black screen, then a boot scree
 Menu bar,Special › Shut Down,Menu item,Shut Down,,Same as File › Shut Down,,Claude
 Menu bar,Clock,Label,(current time HH:MM),Desktop realism,Updates every 20 s,,Claude
 Website window,Browser: Window title,UI,The Tiny Wisdom,Names the window,,,Claude
-Website window,Browser: Home button,UI,Home,Navigation,Scrolls the page to the top,,Claude
-Website window,Browser: Reload button,UI,Reload,Old-browser feel,"Status shows “Connecting to www.thetinywisdom.com…”, page redraws, scrolls to top",,Claude
-Website window,Browser: Address label,UI,Go to:,Old-browser feel,,,Claude
-Website window,Browser: Address bar,UI,http://www.thetinywisdom.com/about,Shows where you are,Changes to …#the-pattern at the comic strip and …#follow at the links,,Claude
 Website window,Browser: Status bar,UI,Document: Done,Old-browser feel,Shows a link’s address when you point at it,,Claude
-Website window,Browser: Status while reloading,UI,Connecting to www.thetinywisdom.com…,Feedback for Reload,Shown ~0.7 s,,Claude
 Website window,Booklet: Running head (left),Label,The Tiny Wisdom,Booklet header,,,Claude
 Website window,Booklet: Running head (right),Label,About · a short book,Says what the page is,,,Claude
 Website window,Booklet: Under the logo,Label,"Over the past few years, I’ve lived in different countries and met people from many different backgrounds. All of it has led me to believe that we’re all the same: human, a little lost, and trying to find our way. The Tiny Wisdom exists to remind you that nobody really knows what they’re doing in life, including you and me, my friend.",Why The Tiny Wisdom exists,,,Owner (lightly edited)
 Website window,Booklet: Margin label,Label,today,Section marker,,,Claude
 Website window,Booklet: Margin label,Label,the compass,Section marker,,,Claude
 Website window,Booklet: Lead-in to the strip,Body,Here’s how I’ve seen that pattern play out in my own life:,Leads from “the formula” into the story by age,,Sits right before the comic strip,"Owner’s idea, Claude’s wording"
-Website window,Booklet: Strip heading,Label,The pattern,Introduces the story by age,,Address bar changes at the strip and at Follow,Claude
+Website window,Booklet: Strip heading,Label,The pattern,Introduces the story by age,,,Claude
 Website window,Booklet: Strip hint,Label,4 panels · scroll →,Tells readers to scroll sideways,,,Claude
 Website window,Booklet: Strip buttons,Label,← prev / next →,Move through panels,,,Claude
 Website window,Booklet: Strip counter,Label,panel 1 of 4,Position,,,Claude
 Website window,Booklet: Margin label,Label,the pattern,Section marker,,,Claude
-Website window,Booklet: Footnote label,Label,Follow,Links section,,Address bar changes at the strip and at Follow,Claude
+Website window,Booklet: Footnote label,Label,Follow,Links section,,,Claude
 Website window,Booklet: Footnotes,Label,1. Instagram: instagram.com/thetinywisdom / 2. Website: www.thetinywisdom.com,Where to follow,Links open in a new tab,,Claude
 Website window,Booklet: body text,Body,"About text, mantra, story by age (23, 25, 26, 29), closing",The story,,Story by age shows as comic panels,Owner (pasted text)
 Website window,Booklet: mantra,Headline,"“It’s not gonna be easy, but it’s not impossible.”","Core message, between double rules",,"Same text as the Mantra alert, Restart screen and Butler",Owner
