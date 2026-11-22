@@ -187,7 +187,6 @@ a { color: inherit; }
 .bk-run { grid-column: 1 / -1; position: sticky; top: 0; z-index: 2; display: flex; justify-content: space-between; padding: 10px 0 8px; margin-bottom: 30px; background: var(--paper); border-bottom: 1px solid var(--ink); }
 .bk-front { grid-column: 2; padding: 30px 0 40px; border-bottom: 1px dotted var(--ink); margin-bottom: 34px; }
 .bk-front .z-label { margin-top: 14px; }
-.bk-intro { margin: 18px 0 0 !important; max-width: 34em; font: italic 400 21px/1.4 var(--grenze); }
 .bk-m { grid-column: 1; text-align: right; padding-top: 4px; }
 .bk-m b { display: block; font: 700 42px/0.9 var(--gotisch); }
 .bk-t { grid-column: 2; max-width: 34em; }
@@ -779,7 +778,7 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
   function makeBooklet(root) {
     const sc = el('div', 'z-scroll'); const bk = el('div', 'bk crisp'); sc.append(bk); root.append(sc);
     const run = el('div', 'bk-run'); run.append(el('span', 'z-label', 'The Tiny Wisdom'), el('span', 'z-label', 'About · a short book')); bk.append(run);
-    const fr = el('div', 'bk-front'); const lg = pix(); fr.append(lg, el('p', 'bk-intro', "Over the past few years, I’ve lived in different countries and met people from many different backgrounds. All of it has led me to believe that we’re all the same: human, a little lost, and trying to find our way. The Tiny Wisdom exists to remind you that nobody really knows what they’re doing in life, including you and me, my friend.")); bk.append(fr);
+    const fr = el('div', 'bk-front'); const lg = pix(); fr.append(lg, el('div', 'z-label', "Over the past few years, I’ve lived in different countries and met people from many different backgrounds. All of it has led me to believe that we’re all the same: human, a little lost, and trying to find our way. The Tiny Wisdom exists to remind you that nobody really knows what they’re doing in life, including you and me, my friend.")); bk.append(fr);
     const P = (t, cls = 'bk-t') => { const p = el('p', cls, t); bk.append(p); return p; };
     const M = (k, t) => { const m = el('div', 'bk-m'); if (k) m.append(el('b', null, k)); m.append(el('span', 'z-label', t)); bk.append(m); };
     M('', 'today'); P(ABOUT[0], 'bk-t bk-drop'); P(ABOUT[1]);

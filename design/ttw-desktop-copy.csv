@@ -33,7 +33,7 @@ Website window,Browser: Status bar,UI,Document: Done,Old-browser feel,Shows a li
 Website window,Browser: Status while reloading,UI,Connecting to www.thetinywisdom.com…,Feedback for Reload,Shown ~0.7 s,,Claude
 Website window,Booklet: Running head (left),Label,The Tiny Wisdom,Booklet header,,,Claude
 Website window,Booklet: Running head (right),Label,About · a short book,Says what the page is,,,Claude
-Website window,Booklet: Intro under the logo,Intro paragraph,"Over the past few years, I’ve lived in different countries and met people from many different backgrounds. All of it has led me to believe that we’re all the same: human, a little lost, and trying to find our way. The Tiny Wisdom exists to remind you that nobody really knows what they’re doing in life, including you and me, my friend.",Why The Tiny Wisdom exists,,,Owner (lightly edited)
+Website window,Booklet: Under the logo,Label,"Over the past few years, I’ve lived in different countries and met people from many different backgrounds. All of it has led me to believe that we’re all the same: human, a little lost, and trying to find our way. The Tiny Wisdom exists to remind you that nobody really knows what they’re doing in life, including you and me, my friend.",Why The Tiny Wisdom exists,,,Owner (lightly edited)
 Website window,Booklet: Margin label,Label,today,Section marker,,,Claude
 Website window,Booklet: Margin label,Label,the compass,Section marker,,,Claude
 Website window,Booklet: Strip heading,Label,"The pattern, by age",Introduces the story by age,,Address bar changes at the strip and at Follow,Claude
