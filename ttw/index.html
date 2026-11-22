@@ -198,7 +198,9 @@ a { color: inherit; }
 
 .bk-strip { grid-column: 1 / -1; min-width: 0; margin: 10px 0 34px; border-top: 3px double var(--ink); border-bottom: 3px double var(--ink); }
 .bk-strip-head { display: flex; justify-content: space-between; padding: 8px 0 0; }
-.bk-strip .st-row { padding: 14px 2px; }
+.bk-strip .st-row { padding: 14px 2px; cursor: grab; user-select: none; -webkit-user-select: none; overscroll-behavior-x: contain; }
+.bk-strip .st-row.dragging { cursor: grabbing; scroll-snap-type: none; }
+.bk-strip .st-row.dragging .st-p { pointer-events: none; }
 .bk-strip .st-p { width: min(310px, 80%); }
 .bk-strip .st-p .in { overflow: visible; }
 .bk-strip .st-nav { padding: 8px 0; }
@@ -795,6 +797,24 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
     prev.onclick = () => go(-1); next.onclick = () => go(1);
     const upd = () => { const i = Math.round(row.scrollLeft / (row.firstChild.offsetWidth + 14)); pos.textContent = `panel ${Math.min(STORY.length, i + 1)} of ${STORY.length}`; };
     row.addEventListener('scroll', upd); upd();
+    // drag the panels sideways with the mouse (touch and trackpads scroll natively); a drag ends on the nearest panel
+    const stepW = () => row.firstChild.offsetWidth + 14;
+    row.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      const x0 = e.clientX, s0 = row.scrollLeft; let moved = false;
+      const mv = (ev) => { const dx = ev.clientX - x0; if (!moved && Math.abs(dx) < 4) return; moved = true; row.classList.add('dragging'); row.scrollLeft = s0 - dx; };
+      const up = () => { removeEventListener('pointermove', mv); removeEventListener('pointerup', up);
+        if (!moved) return; row.classList.remove('dragging');
+        row.scrollTo({ left: Math.round(row.scrollLeft / stepW()) * stepW(), behavior: reduced ? 'auto' : 'smooth' }); };
+      addEventListener('pointermove', mv); addEventListener('pointerup', up);
+      e.preventDefault();
+    });
+    row.addEventListener('dragstart', (e) => e.preventDefault());
+    // a mostly vertical wheel or trackpad scroll over the strip scrolls the page only, never the strip
+    row.addEventListener('wheel', (e) => {
+      if (Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
+      e.preventDefault(); sc.scrollTop += e.deltaY * (e.deltaMode === 1 ? 16 : 1);
+    }, { passive: false });
     strip.append(sh, row, nav); bk.append(strip);
     M('', 'the point'); CLOSE.forEach((t, i) => { if (i) bk.append(el('div', 'bk-m')); P(t); });
     const fn = el('div', 'bk-fn'); fn.append(el('div', 'z-label', 'Follow')); LINKS.forEach((l, i) => { const p = el('p'); p.append(`${i + 1}. ${l[0]}: `, linkA(l)); fn.append(p); }); bk.append(fn);
