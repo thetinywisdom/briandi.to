@@ -570,9 +570,9 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
     ta.addEventListener('input', noteState); noteState();
     send.onclick = () => { if (!ta.value.trim()) return; sendNote(ti.value.trim(), ta.value.trim()); };
 
-    /* Sending: the note is posted to the owner's Google Form (answers collect in a Google Sheet, download as CSV).
-       Until FORM.action is filled in, nothing is stored; the animation still plays. */
-    const FORM = { action: '', title: '', note: '' }; // e.g. action 'https://docs.google.com/forms/d/e/<id>/formResponse', title 'entry.123', note 'entry.456'
+    /* Sending: the note is posted to the owner’s Google Form (answers collect in its Responses; link a Sheet to download a CSV).
+       The form fields are Title and Note; the entry ids come from its pre-filled link. */
+    const FORM = { action: 'https://docs.google.com/forms/d/e/1FAIpQLSceyNDaFcrIwnI0T-CeuV4xkLzsa-d0mAAsIMVz479m6X8XUQ/formResponse', title: 'entry.1928238783', note: 'entry.1303293624' }; // e.g. action 'https://docs.google.com/forms/d/e/<id>/formResponse', title 'entry.123', note 'entry.456'
     const post = (title, body) => { if (!FORM.action) return Promise.resolve();
       const f = new URLSearchParams(); f.set(FORM.title, title); f.set(FORM.note, body);
       return fetch(FORM.action, { method: 'POST', mode: 'no-cors', body: f }); };

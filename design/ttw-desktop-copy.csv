@@ -72,7 +72,7 @@ About This Computer,Specs,Window text,"System: The Tiny OS · Built: July 19, 20
 About This Computer,Doubts meter,Window text,"Disk space used by doubters: 2%",Joke: the doubters barely register,,Fixed value; no longer changes with the Trash,Owner
 Note window,Window title,Window text,Note to The Tiny Wisdom,Let visitors write to The Tiny Wisdom,,,Owner
 Note window,Fields,Labels + placeholders,To: The Tiny Wisdom · Title: (Title) · (Write your note here…),A pretend email form,Title is optional; the note is needed to send,,Claude
-Note window,Footer,Status + button,Write something to send it / N characters · Send,,Send plays the sending animation and posts the title and note to the Google Form,Notes collect in the owner’s Google Sheet (download as CSV); nothing is stored until the form is connected,Claude
+Note window,Footer,Status + button,Write something to send it / N characters · Send,,Send plays the sending animation and posts the title and note to the Google Form,Notes collect in the owner’s Google Form responses (link a Sheet, download as CSV),Claude
 Sending window,Title + status,Window text,Sending Note · Dialing The Tiny Wisdom… · Sending your note… · Delivered. / No connection. Your note is still in the window.,The dialing animation: an envelope flies from the computer to a turning globe,Closes itself when done,On no connection the note window comes back with the text kept,Claude
 Note sent alert,Message,Dialog text,Note sent. / Thank you for writing to The Tiny Wisdom.,Confirms the note was sent,OK closes it,The note window is cleared,Claude
 Undo dialog,Message,Dialog text,Can’t undo the past. / You can only keep going. · OK,Gimmick with a message,,,Claude
