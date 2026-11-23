@@ -195,6 +195,14 @@ retro-shelf[full-screen] .tv-guide .guide-top { font-size: 15px; }
 retro-shelf[full-screen] .tv-guide .guide-title { font-size: 24px; }
 retro-shelf[full-screen] .tv-guide .guide-list { grid-template-columns: 1fr; grid-template-rows: none; grid-auto-flow: row; row-gap: 2px; }
 retro-shelf[full-screen] .tv-guide .guide-list button { min-height: 44px; align-items: center; padding: 0 12px; font-size: 20px; }
+/* phones and tablets: the top TV's tube shows a still card until its screen is tapped (html.still-tvs) */
+.guide-still { display: none; }
+.still-tvs .tv-guide:not(.tv-howto) .guide-still { position: absolute; inset: 0; z-index: 1; display: grid; grid-template-rows: auto 1fr; padding: 22px 34px; background: inherit; }
+.guide-still-mid { display: grid; place-content: center; justify-items: center; gap: 22px; }
+retro-shelf[full-screen] .tv-guide .guide-still { display: none !important; }
+.guide-still-top { display: flex; justify-content: space-between; font-size: 21px; }
+.guide-still-title { margin: 0; padding: 14px 30px 10px; background: var(--phosphor); color: #031208; text-shadow: none; text-align: center; font-size: 64px; line-height: 1.05; letter-spacing: 0.04em; box-shadow: 0 0 22px rgba(141, 255, 154, 0.5); }
+.guide-still-more { margin: 0; text-align: center; font-size: 24px; }
 retro-shelf[full-screen] .tv-guide .guide-keys { display: none; }   /* they name the set's keys, which are off screen here */
 retro-shelf[full-screen] .tv-guide .guide-blink { font-size: 15px; }
 retro-shelf[full-screen] .tv-guide .guide-mark { display: none; }

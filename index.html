@@ -71,7 +71,7 @@
   // The bar fills from real numbers: the bundle's download (to 85%), then the room being built (to 100%).
   (() => {
     // ?v= changes with each new bundle, so a browser never pairs this page with an old copy it kept
-    const BUNDLE = 'vendor/retro-3d.js?v=c339d712';
+    const BUNDLE = 'vendor/retro-3d.js?v=8620ed85';
     const SIZE = 1042000;                                   // about the bundle's size, used when the server does not say
     let target = 0.03, shown = 0, done = false;
     const el = () => document.getElementById('boot');
@@ -716,6 +716,12 @@
       <div><dt>BACK</dt><dd>: BACK KEY OR ESC</dd></div>
     </dl>
     <p class="guide-blink">[ PICK A CHANNEL ]</p>
+    <!-- phones and tablets: a still card on the tube instead of the guide; tapping it opens the TV full screen -->
+    <div class="guide-still" aria-hidden="true">
+      <div class="guide-still-top"><span>BRIANDI.TO</span><span>CH 01 &#9654;</span></div>
+      <div class="guide-still-mid"><p class="guide-still-title">PROGRAM<br>GUIDE</p>
+        <p class="guide-still-more">&#9654; TAP TO SEE MORE</p></div>
+    </div>
     <i class="guide-mark" style="left: 6px; top: 6px"></i><i class="guide-mark" style="right: 6px; top: 6px"></i>
     <i class="guide-mark" style="left: 6px; bottom: 6px"></i><i class="guide-mark" style="right: 6px; bottom: 6px"></i>
   </div>
@@ -1651,6 +1657,7 @@
     const shelf = document.getElementById('shelf'), bar = document.querySelector('.chbar');
     if (!bar) return;
     const small = matchMedia('(max-width: 760px), (hover: none) and (pointer: coarse)');
+    if (small.matches) shelf.setAttribute('live-hint', 'Tap the screen to see more');   // the pager's words while in on this TV
     const ORDER = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 'u1', 'u2'];
     const now = bar.querySelector('.chbar-now');
     const current = () => (shelf.tv('kv-5200')?.input || 'ch-1').replace('ch-', '');
@@ -1667,11 +1674,14 @@
     bar.querySelector('.chbar-exit').addEventListener('click', () => shelf.unfocus());
     shelf.addEventListener('pvm-input', update);
     shelf.addEventListener('shelf-full', (e) => { bar.hidden = !e.detail.open; document.body.classList.toggle('tv-full', e.detail.open); update(); });
-    // coming in on the channel TV on a small screen: once the camera has arrived, its picture goes full screen
-    shelf.addEventListener('shelf-focus', () => {
-      if (shelf._focusKey !== 'kv-5200' || !small.matches) return;
-      setTimeout(() => { if (shelf._focusKey === 'kv-5200' && !shelf._full && !shelf._reading) shelf.fullScreen('kv-5200'); }, 700);
-    });
+    // small screens: like the other TVs, tap the set to come in, then tap its screen to open it full screen.
+    // The tube shows a still card (.guide-still); leaving full screen tunes back to it.
+    const guide = document.querySelector('.tv-guide[slot="kv-5200"]');
+    guide?.addEventListener('click', (e) => {
+      if (!small.matches || shelf._full || shelf._focusKey !== 'kv-5200') return;
+      e.preventDefault(); e.stopPropagation(); shelf.fullScreen('kv-5200');
+    }, true);
+    shelf.addEventListener('shelf-full', (e) => { if (!e.detail.open && small.matches) tune('1'); });
   })();
 
   // screen savers rest while the camera is in on another TV (they run in the room view and on their own TV):
