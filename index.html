@@ -1759,7 +1759,7 @@
     const sync = () => { bar.hidden = !shelf._full; update(); osd(); };
     // on a laptop the camera frames the set's screen and its keys are out of view, so each channel carries its own
     // on-screen display, like a real TV's: a strip along the bottom of the picture (previous / next channel and
-    // the guide) that comes up when the channel is tuned in or the pointer is on the screen, then fades
+    // the guide), always on
     // an empty channel gets a page showing static (like the set's own), so it can carry the strip too; made only
     // once the channel list is in, so it never takes the place of a real channel
     let snow = '';
@@ -1791,19 +1791,10 @@
         o.querySelector('.osd-next').addEventListener('click', () => step(1));
         o.querySelector('.osd-guide').addEventListener('click', () => tune('1'));
         page.append(o);
-        hold(page);
       }
       const ch = current(), page = shelf.querySelector(`[slot="kv-5200:ch-${ch}"]`), o = page?.querySelector(':scope > .tv-osd');
       if (!o) return;
       o.querySelector('.osd-now').textContent = now.textContent;
-      o.classList.add('up'); clearTimeout(o._t); o._t = setTimeout(() => o.classList.remove('up'), 3000);
-    };
-    // the pointer on the picture keeps the strip up, and it fades 2 s after the pointer leaves. (Entering and
-    // leaving are heard even over a YouTube player, whose frame keeps its own pointer moves to itself.)
-    const hold = (page) => {
-      if (page._osdHold) return; page._osdHold = true;
-      page.addEventListener('pointerenter', (e) => { if (e.pointerType !== 'mouse') return; const o = page.querySelector(':scope > .tv-osd'); if (!o) return; clearTimeout(o._t); o.classList.add('up'); });
-      page.addEventListener('pointerleave', () => { const o = page.querySelector(':scope > .tv-osd'); if (!o) return; clearTimeout(o._t); o._t = setTimeout(() => o.classList.remove('up'), 2000); });
     };
     shelf.addEventListener('shelf-full', (e) => { document.body.classList.toggle('tv-full', e.detail.open); sync(); });
     shelf.addEventListener('shelf-focus', sync);
