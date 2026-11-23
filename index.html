@@ -15,6 +15,9 @@
   })();
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- phones and tablets: the TV screens stand still (only the WORK TV keeps its drifting logo), so four moving
+     screens at once do not make the page lag. styles.css and the standby scripts read this class. -->
+<script>if (matchMedia('(hover: none) and (pointer: coarse), (max-width: 760px)').matches) document.documentElement.classList.add('still-tvs');</script>
 <title>briandi.to</title>
 <meta name="description" content="Briandito Priambodo: husband, artist, designer. This is my corner of the internet.">
 <meta property="og:title" content="briandi.to">
@@ -688,6 +691,7 @@
                   -=======-                   .========.                     =+++++++++++++++++++-            .-=====-:.                           :=+++=:        ..                                  -=+***+=:</pre>
       </div>
       <div class="ident-snow"></div>
+      <img class="ident-still" src="art/ttw-logo.webp" alt="">
       <div class="ident-grid"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
       <div class="ident-bar ident-more" data-click="&#9654; CLICK TO SEE MORE" data-tap="&#9654; TAP TO SEE MORE">&#9654; CLICK TO SEE MORE</div>
     </div>
@@ -1436,7 +1440,7 @@
   // bad signal; the GAME OVER card stays up throughout. Runs only while the bars are on the tube.
   (() => {
     const box = document.querySelector('.game-standby');
-    if (!box || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!box || matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.classList.contains('still-tvs')) return;
     const c = document.createElement('canvas');
     c.width = c.height = 160;
     const g = c.getContext('2d'), img = g.createImageData(160, 160);
@@ -1488,7 +1492,8 @@
       at = (at + 1) % STEPS.length;
       setTimeout(next, ms);
     };
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) show(logo); else next();
+    const still = document.documentElement.classList.contains('still-tvs');   // phones: the logo picture instead (styles.css)
+    if (still) {} else if (matchMedia('(prefers-reduced-motion: reduce)').matches) show(logo); else next();
     // now and then, as the picture flickers, a burst of snow like an empty channel: a fraction of a
     // second, every 5 to 11 s
     const snow = box.querySelector('.ident-snow');
@@ -1504,7 +1509,7 @@
       setTimeout(() => snow.classList.remove('on'), 120 + Math.random() * 280);
       setTimeout(burst, 5000 + Math.random() * 6000);
     };
-    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) setTimeout(burst, 4000 + Math.random() * 4000);
+    if (!still && !matchMedia('(prefers-reduced-motion: reduce)').matches) setTimeout(burst, 4000 + Math.random() * 4000);
     more.textContent = matchMedia('(hover: none)').matches ? more.dataset.tap : more.dataset.click;
     const tick = () => { const d = new Date(); clock.textContent = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`; };
     tick(); setInterval(tick, 10000);

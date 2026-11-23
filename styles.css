@@ -137,6 +137,11 @@ retro-shelf { height: 100vh; height: 100dvh; }
 .ident-grid.on i:nth-child(6) { animation-delay: 0.4s; } .ident-grid.on i:nth-child(7) { animation-delay: 0.48s; }
 .ident-grid.on i:nth-child(8) { animation-delay: 0.56s; } .ident-grid.on i:nth-child(9) { animation-delay: 0.64s; }
 /* each square stays 2.3 s from when it comes on, so they go in the same order: top left to bottom right */
+/* phones and tablets (html.still-tvs, set in index.html): the CREATE TV shows The Tiny Wisdom logo, still */
+.ident-still { display: none; }
+.still-tvs .ident-art, .still-tvs .ident-grid, .still-tvs .ident-snow { display: none !important; }
+.still-tvs .ident-still { display: block; position: absolute; left: 50%; top: 50%; width: 76%; transform: translate(-50%, -50%); filter: invert(1); }
+.still-tvs .ident-air { animation: none; }
 @keyframes ident-pop { 0% { opacity: 0; } 0.1% { opacity: 1; } 99.9% { opacity: 1; } 100% { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .ident-air, .ident-art.on, .ident-grid.on, .ident-grid.on i { animation: none; } .ident-grid.on i { opacity: 1; } }
 /* channel TV, channel 2: the guide. Green phosphor on black, a dashed grid, pixel lettering. */
@@ -170,6 +175,8 @@ retro-shelf { height: 100vh; height: 100dvh; }
 .tv-guide .guide-blink { margin: auto 0 0; text-align: center; font-size: 26px; animation: guide-blink 1.1s steps(1) infinite; }
 .tv-guide .guide-mark { position: absolute; width: 14px; height: 14px; border: 2px solid var(--phosphor); box-shadow: inset 0 0 0 3px #031208, inset 0 0 0 5px var(--phosphor); }
 @keyframes guide-blink { 50% { opacity: 0; } }
+/* phones and tablets: the channel TV's blinking prompt and the GAME TV's card stand still too */
+.still-tvs .tv-guide .guide-blink, .still-tvs .game-standby .interrupt-sub { animation: none; }
 @media (prefers-reduced-motion: reduce) { .tv-guide .guide-blink { animation: none; } }
 
 /* channel TV, a channel with a bad signal ("interference": true): every few seconds the picture
