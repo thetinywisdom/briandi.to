@@ -725,9 +725,9 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
     desk.addEventListener('pointerdown', (e) => { if (!balloon.hidden && e.target.closest('.a-win')) { balloon.hidden = true; setMood('neutral'); } }, true);
     // what Butler can do on this page
     const QA = [
-      { q: 'What is The Tiny Wisdom?', a: 'Comics and writing about not giving up. Brian started it from his bedroom at 26; two years later it had 100k followers on Instagram, and it has grown into hundreds of comics, blog posts and live talks.', mood: 'happy', act: ['Open the website', () => openAbout()] },
+      { q: 'What is The Tiny Wisdom?', a: 'Comics and writing about not giving up. Brian started it from his bedroom at 26; two years later it had 100k followers on Instagram, and it has grown into hundreds of comics, blog posts and live talks.', mood: 'happy', act: ['The story so far', () => openAbout()] },
       { q: 'What’s the mantra?', a: MANTRA + ' It’s the sentence The Tiny Wisdom started with.', mood: 'wink', act: ['Show it', () => act('Mantra')] },
-      { q: 'Where do I start?', a: 'Open The Tiny Wisdom on the desktop. It’s the website, with the whole story. Then try the Comics and Articles folders.', mood: 'happy', act: ['Open the website', () => openAbout()] },
+      { q: 'Where do I start?', a: 'Open The Tiny Wisdom on the desktop for the story so far. Then try the Comics and Articles folders.', mood: 'happy', act: ['The story so far', () => openAbout()] },
       { q: 'How does this computer work?', a: 'Double-click an icon to open it (one tap on a phone). Drag a window by its striped bar, close it with the X. The menus at the top all work.', mood: 'neutral' },
       { q: 'What’s in the Trash?', a: 'Things worth letting go of. Have a look.', mood: 'wink', act: ['Open Trash', () => openTrash()] },
       { q: 'Can I read some comics?', a: 'Open the Comics folder: each comic plays as a slideshow. The Articles folder has a few essays as plain text files.', mood: 'happy', act: ['Open Comics', () => { show(comics); at(comics, desk.clientWidth - 520, 60); }] },
