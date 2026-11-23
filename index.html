@@ -1373,6 +1373,9 @@
       shelf.append(page);
       onAir[ch] = String(c.title || kind).toUpperCase();
     }
+    // every channel is now built: the on-screen display can give the empty ones a page of their own
+    shelf._channelsReady = true;
+    shelf.dispatchEvent(new CustomEvent('channels-ready'));
     // coming in on the channel TV: fetch each channel's first picture in the background, so tuning in is quick
     let warmed = false;
     const warm = () => { if (warmed || shelf._focusKey !== 'kv-5200') return; warmed = true; for (const pg of shelf.querySelectorAll('.tv-channel')) pg._warm?.(); };
@@ -1737,8 +1740,8 @@
     shelf.setAttribute('live-hint', small.matches ? 'Tap the screen to see more' : 'Click a channel on the screen');
     const ORDER = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 'u1', 'u2'];
     const now = bar.querySelector('.chbar-now');
-    const current = () => (shelf.tv('kv-5200')?.input || 'ch-1').replace('ch-', '');
-    const tune = (ch) => shelf.tv('kv-5200')?.press(`ch-${ch}`);
+    const current = () => (shelf.tv?.('kv-5200')?.input || 'ch-1').replace('ch-', '');   // (the 3D may not be ready yet)
+    const tune = (ch) => shelf.tv?.('kv-5200')?.press(`ch-${ch}`);
     const step = (d) => tune(ORDER[(ORDER.indexOf(current()) + d + ORDER.length) % ORDER.length]);
     // the bar names the channel on air, as the guide lists it
     const update = () => {
@@ -1751,14 +1754,56 @@
     bar.querySelector('.chbar-next').addEventListener('click', () => step(1));
     bar.querySelector('.chbar-guide').addEventListener('click', () => tune('1'));
     bar.querySelector('.chbar-exit').addEventListener('click', () => shelf.unfocus());
-    shelf.addEventListener('pvm-input', update);
-    // the bar shows while the set is full screen, and on a laptop whenever the camera is in on it (the camera frames
-    // its screen there, so the set's own keys are out of view)
-    const sync = () => {
-      const full = !!shelf._full;
-      bar.hidden = !(full || (!small.matches && shelf._focusKey === 'kv-5200' && !shelf._reading));
-      bar.classList.toggle('floating', !full);
-      update();
+    shelf.addEventListener('pvm-input', () => { update(); osd(); });
+    // the bar shows while the set is full screen (phones)
+    const sync = () => { bar.hidden = !shelf._full; update(); osd(); };
+    // on a laptop the camera frames the set's screen and its keys are out of view, so each channel carries its own
+    // on-screen display, like a real TV's: a strip along the bottom of the picture (previous / next channel and
+    // the guide) that comes up when the channel is tuned in or the pointer is on the screen, then fades
+    // an empty channel gets a page showing static (like the set's own), so it can carry the strip too; made only
+    // once the channel list is in, so it never takes the place of a real channel
+    let snow = '';
+    const emptyPages = () => {
+      if (!shelf._channelsReady) return;
+      for (const ch of ORDER.slice(2)) {
+        if (shelf.querySelector(`[slot="kv-5200:ch-${ch}"]`)) continue;
+        if (!snow) {
+          const c = document.createElement('canvas'); c.width = c.height = 160;
+          const g = c.getContext('2d'), d = g.createImageData(160, 160);
+          for (let k = 0; k < d.data.length; k += 4) { const v = Math.random() * 255; d.data[k] = d.data[k + 1] = d.data[k + 2] = v; d.data[k + 3] = 255; }
+          g.putImageData(d, 0, 0); snow = `url(${c.toDataURL()})`;
+        }
+        const page = document.createElement('div');
+        page.className = 'tv tv-channel tv-nosignal'; page.slot = `kv-5200:ch-${ch}`; page.dataset.nowPlaying = 'No signal';
+        const st = document.createElement('div'); st.className = 'nosig-static'; st.style.backgroundImage = snow;
+        page.append(st); shelf.append(page);
+      }
+    };
+    shelf.addEventListener('channels-ready', () => { emptyPages(); osd(); });
+    const osd = () => {
+      emptyPages();
+      for (const page of shelf.querySelectorAll('[slot^="kv-5200:"]')) {
+        if (page.querySelector(':scope > .tv-osd')) continue;
+        const o = document.createElement('div'); o.className = 'tv-osd';
+        o.innerHTML = '<button type="button" class="osd-prev" aria-label="Previous channel">&#9664; CH</button><p class="osd-now"></p>'
+          + '<button type="button" class="osd-next" aria-label="Next channel">CH &#9654;</button><button type="button" class="osd-guide">GUIDE</button>';
+        o.querySelector('.osd-prev').addEventListener('click', () => step(-1));
+        o.querySelector('.osd-next').addEventListener('click', () => step(1));
+        o.querySelector('.osd-guide').addEventListener('click', () => tune('1'));
+        page.append(o);
+        hold(page);
+      }
+      const ch = current(), page = shelf.querySelector(`[slot="kv-5200:ch-${ch}"]`), o = page?.querySelector(':scope > .tv-osd');
+      if (!o) return;
+      o.querySelector('.osd-now').textContent = now.textContent;
+      o.classList.add('up'); clearTimeout(o._t); o._t = setTimeout(() => o.classList.remove('up'), 3000);
+    };
+    // the pointer on the picture keeps the strip up, and it fades 2 s after the pointer leaves. (Entering and
+    // leaving are heard even over a YouTube player, whose frame keeps its own pointer moves to itself.)
+    const hold = (page) => {
+      if (page._osdHold) return; page._osdHold = true;
+      page.addEventListener('pointerenter', (e) => { if (e.pointerType !== 'mouse') return; const o = page.querySelector(':scope > .tv-osd'); if (!o) return; clearTimeout(o._t); o.classList.add('up'); });
+      page.addEventListener('pointerleave', () => { const o = page.querySelector(':scope > .tv-osd'); if (!o) return; clearTimeout(o._t); o._t = setTimeout(() => o.classList.remove('up'), 2000); });
     };
     shelf.addEventListener('shelf-full', (e) => { document.body.classList.toggle('tv-full', e.detail.open); sync(); });
     shelf.addEventListener('shelf-focus', sync);
