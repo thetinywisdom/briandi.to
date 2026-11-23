@@ -514,8 +514,8 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
     /* ---- windows ---- */
     let z = 10;
     const front = (W) => { W.style.zIndex = ++z; desk.querySelectorAll('.a-win').forEach((w) => w.classList.toggle('front', w === W)); };
-    const show = (W) => { W.hidden = false; front(W); };
-    const hide = (W) => { W.hidden = true; const top = [...desk.querySelectorAll('.a-win:not([hidden])')].sort((a, b) => b.style.zIndex - a.style.zIndex)[0]; if (top) front(top); };
+    const show = (W) => { W._wasOpen = !W.hidden; W.hidden = false; front(W); };
+    const hide = (W) => { W.hidden = true; W._moved = false; const top = [...desk.querySelectorAll('.a-win:not([hidden])')].sort((a, b) => b.style.zIndex - a.style.zIndex)[0]; if (top) front(top); };
     const win = (title, w, info) => {
       const W = el('div', 'a-win'); W.hidden = true; W.style.width = w + 'px';
       const t = el('div', 'a-title'), close = el('button', 'a-close'); close.type = 'button'; close.setAttribute('aria-label', 'Close ' + (title || 'window')); close.append(xIcon());
@@ -526,14 +526,15 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
       t.addEventListener('pointerdown', (e) => {
         if (e.target.closest('.a-close')) return; t.setPointerCapture(e.pointerId);
         const sx = e.clientX - W.offsetLeft, sy = e.clientY - W.offsetTop;
-        const mv = (ev) => { W.style.left = Math.max(-W.offsetWidth + 60, Math.min(desk.clientWidth - 60, ev.clientX - sx)) + 'px'; W.style.top = Math.max(0, Math.min(desk.clientHeight - 30, ev.clientY - sy)) + 'px'; };
+        const mv = (ev) => { W._moved = true; W.style.left = Math.max(-W.offsetWidth + 60, Math.min(desk.clientWidth - 60, ev.clientX - sx)) + 'px'; W.style.top = Math.max(0, Math.min(desk.clientHeight - 30, ev.clientY - sy)) + 'px'; };
         const up = () => { t.removeEventListener('pointermove', mv); t.removeEventListener('pointerup', up); };
         t.addEventListener('pointermove', mv); t.addEventListener('pointerup', up);
       });
       desk.append(W); return W;
     };
     // every window opens in the middle of the desktop, like the Mantra alert (x and y are ignored; h caps the height)
-    const at = (W, x, y, h) => { const dw = desk.clientWidth, dh = desk.clientHeight, narrow = dw < 600; const w = Math.min(parseInt(W.style.width), dw - (narrow ? 84 : 16));
+    const at = (W, x, y, h) => { if (W._wasOpen && W._moved) return;   // already open and dragged somewhere: leave it there, show() brought it forward
+      const dw = desk.clientWidth, dh = desk.clientHeight, narrow = dw < 600; const w = Math.min(parseInt(W.style.width), dw - (narrow ? 84 : 16));
       W.style.width = w + 'px'; if (h && dh > 120) W.style.height = Math.min(h, dh - 20) + 'px';
       const was = W.hidden; W.hidden = false; const wh = W.offsetHeight; W.hidden = was;   // measure it, even before it is shown
       const free = narrow ? dw - 78 : dw;   // on a narrow screen the icon column on the right stays free
