@@ -195,6 +195,9 @@ retro-shelf { height: 100vh; height: 100dvh; }
   width: min(560px, calc(100% - 32px)); box-sizing: border-box; padding: 8px 10px; border: 2px solid #8dff9a;
   background: repeating-linear-gradient(to bottom, rgba(141, 255, 154, 0.05) 0 1px, transparent 1px 3px), #031208;
   box-shadow: 0 0 18px rgba(141, 255, 154, 0.3), 0 10px 8px 2px rgba(10, 11, 10, 0.97), inset 0 0 0 4px #031208, inset 0 0 0 5px #3f8f4a; animation: chbar-flicker 6s steps(1) infinite; }
+/* the pager's screen already says what is on, so the hologram is just the keys */
+.chbar.floating { width: auto; gap: 8px; }
+.chbar.floating .chbar-now { display: none; }
 @keyframes chbar-flicker { 0%, 100% { opacity: 1; } 47% { opacity: 0.82; } 48% { opacity: 1; } 83% { opacity: 0.9; } 84% { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .chbar.floating { animation: none; } }
 .chbar button { all: unset; box-sizing: border-box; flex: none; min-width: 40px; height: 40px; padding: 0 10px; display: grid; place-items: center; border: 2px solid #8dff9a; cursor: pointer; }

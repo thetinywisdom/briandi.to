@@ -1743,7 +1743,9 @@
     // the bar names the channel on air, as the guide lists it
     const update = () => {
       const ch = current(), row = document.querySelectorAll('.tv-guide[slot="kv-5200"] .guide-list li')[ORDER.indexOf(ch)];
-      now.textContent = `CH ${ch.toUpperCase().padStart(2, '0')} ${row?.querySelector('span')?.textContent || ''}`.trim();
+      // (a long name in the guide is written twice inside its span so it can roll round: take it once)
+      const span = row?.querySelector('span'), name = span?.querySelector('i')?.textContent || span?.textContent || '';
+      now.textContent = `CH ${ch.toUpperCase().padStart(2, '0')} ${name}`.trim();
     };
     bar.querySelector('.chbar-prev').addEventListener('click', () => step(-1));
     bar.querySelector('.chbar-next').addEventListener('click', () => step(1));
