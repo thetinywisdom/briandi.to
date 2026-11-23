@@ -725,13 +725,10 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
     desk.addEventListener('pointerdown', (e) => { if (!balloon.hidden && e.target.closest('.a-win')) { balloon.hidden = true; setMood('neutral'); } }, true);
     // what Butler can do on this page
     const QA = [
-      { q: 'What is The Tiny Wisdom?', a: 'Comics and writing about not giving up. Brian started it from his bedroom at 26; two years later it had 100k followers on Instagram, and it has grown into hundreds of comics, blog posts and live talks.', mood: 'happy', act: ['The story so far', () => openAbout()] },
-      { q: 'What’s the mantra?', a: MANTRA + ' It’s the sentence The Tiny Wisdom started with.', mood: 'wink', act: ['Show it', () => act('Mantra')] },
-      { q: 'Where do I start?', a: 'Open The Tiny Wisdom on the desktop for the story so far. Then try the Comics and Articles folders.', mood: 'happy', act: ['The story so far', () => openAbout()] },
       { q: 'How does this computer work?', a: 'Double-click an icon to open it (one tap on a phone). Drag a window by its striped bar, close it with the X. The menus at the top all work.', mood: 'neutral' },
-      { q: 'What’s in the Trash?', a: 'Things worth letting go of. Have a look.', mood: 'wink', act: ['Open Trash', () => openTrash()] },
-      { q: 'Can I read some comics?', a: 'Open the Comics folder: each comic plays as a slideshow. The Articles folder has a few essays as plain text files.', mood: 'happy', act: ['Open Comics', () => { show(comics); at(comics, desk.clientWidth - 520, 60); }] },
-      { q: 'Where can I follow it?', a: 'On Instagram at instagram.com/thetinywisdom, and at www.thetinywisdom.com. Both are in the Links folder.', mood: 'happy', act: ['Open Links', () => { show(links); at(links, desk.clientWidth - 440, 40); }] },
+      { q: 'What is The Tiny Wisdom?', a: 'Over the past few years, Brian has lived in different countries and met people from many different backgrounds. All of it has led him to believe that we’re all the same: human, a little lost, and trying to find our way. The Tiny Wisdom exists to remind you that nobody really knows what they’re doing in life, including you, me and Brian, my friend.', mood: 'happy', act: ['The story so far', () => openAbout()] },
+      { q: 'What is the mantra?', a: MANTRA + ' It’s the sentence The Tiny Wisdom started with.', mood: 'wink', act: ['Show it', () => act('Mantra')] },
+      { q: 'Where can I follow The Tiny Wisdom?', a: 'On Instagram at instagram.com/thetinywisdom, and at www.thetinywisdom.com. Both are in the Links folder.', mood: 'happy', act: ['Open Links', () => { show(links); at(links, desk.clientWidth - 440, 40); }] },
     ];
     const CHAIN = [
       { q: 'Who are you?', a: 'I’m Butler. On this computer I’m made of pixels instead of light. Ask away.', mood: 'happy' },
