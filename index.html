@@ -42,7 +42,7 @@
 <meta name="twitter:image" content="https://briandi.to/meta/share.png">
 <meta name="theme-color" content="#030403">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Playfair+Display:ital,wght@1,900&family=Barlow+Semi+Condensed:ital,wght@0,500;0,600;0,700;1,700;1,800&family=DotGothic16&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:ital,wght@0,500;0,600;0,700;1,700;1,800&family=DotGothic16&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="styles.css">
 <!-- Loading screen. Its styles are here, not in styles.css, so it is the first thing a visitor sees.
      The 3D bundle is downloaded by the script below (so the bar can show real progress) and then started;
@@ -294,21 +294,20 @@
         <p class="interrupt-title">GAME OVER</p><p class="interrupt-sub">CONTINUE?</p>
       </div>
     </div>
-    <!-- the page opened full screen: "Games I Love" (option E: brutalist red / black / white menu).
-         Each <li class="game"> is one game: its square cover from covers/ (credits in covers/CREDITS.md),
-         name, platforms (data-platforms and the tags), a description and, optionally, a <p class="game-why"> line
-         saying why I love it. The script
-         at the end turns the list into the slanted menu and shows the picked game on the stage. -->
+    <!-- the page opened full screen: "Games I Love" (option A, "Test Card": colour bars, a green title card and a
+         grid of games). Each <li class="game"> is one game: its square cover from covers/ (credits in
+         covers/CREDITS.md), name, platforms (data-platforms and the tags), a description and, optionally, a
+         <p class="game-why"> line saying why I love it. The script at the end sorts them A to Z, adds each one's
+         channel line and builds the platform filters. -->
     <article class="page-body games">
-      <div class="games-slash" aria-hidden="true"></div><div class="games-slash thin" aria-hidden="true"></div>
-      <p class="games-count" aria-hidden="true"></p>
+      <div class="games-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
       <header class="games-head">
         <p class="doc-crumb">Game</p>
         <h1>Games I Love</h1>
+        <p class="games-continue" aria-hidden="true">CONTINUE?</p>
         <p class="games-intro"><b>These are the games that stayed with me.</b> Some are so good I replay them every year. Some I played over and over with friends, and they still remind me of the good times. And some take me straight back to my childhood.</p>
         <div class="games-filter" role="group" aria-label="Platform"></div>
       </header>
-      <div class="games-body">
       <ul class="games-grid">
           <li class="game" data-platforms="PSP">
             <div class="game-cover"><img src="covers/persona-3-portable.jpg" alt="" loading="lazy" decoding="async" width="512" height="512"></div>
@@ -509,9 +508,7 @@
             <p class="game-about">The sandbox game made of blocks: explore an endless world, gather materials, build whatever you can imagine and survive the night.</p>
           </li>
       </ul>
-      <section class="games-stage" aria-live="polite"></section>
       <p class="games-credit">Game descriptions adapted from <a href="https://en.wikipedia.org/" target="_blank" rel="noopener">Wikipedia</a> (CC BY-SA 4.0). Cover art from <a href="https://www.steamgriddb.com/" target="_blank" rel="noopener">SteamGridDB</a>, made by its community.</p>
-      </div>
     </article>
   </div>
 
@@ -1587,8 +1584,8 @@
     if (f && e.source === f.contentWindow && e.data && e.data.ttw === 'shutdown') document.getElementById('shelf').closeReader();
   });
 
-  // GAME page (option E): the ransom-note title, the slanted menu built from the list, the platform
-  // filters, and the stage that shows the picked game
+  // GAME page (option A, "Test Card"): the games A to Z with their channel lines, the platform filters, and
+  // the glitch on the cover of the card under the pointer
   (() => {
     const page = document.querySelector('.games');
     if (!page) return;
@@ -1596,72 +1593,32 @@
     const byName = (c) => c.querySelector('h3').textContent.trim();
     const cards = [...page.querySelectorAll('.game')].sort((a, b) => byName(a).localeCompare(byName(b), 'en', { sensitivity: 'base', numeric: true }));
     page.querySelector('.games-grid').append(...cards);
-    const stage = page.querySelector('.games-stage'), count = page.querySelector('.games-count');
     const pad = (n) => String(n).padStart(2, '0');
-    // title: each letter cut out in its own face, colour and angle (fixed, so it looks the same every visit)
-    const h1 = page.querySelector('h1'), words = h1.textContent.trim().split(/\s+/);
-    const STYLE = [['#fff', '#0a0a0a', 'Anton', 1], ['#e3001b', '#fff', 'Archivo Black', 0], ['#0a0a0a', '#fff', 'Playfair Display', 1],
-      ['#fff', '#e3001b', 'Anton', 0], ['#0a0a0a', '#fff', 'DotGothic16', 1], ['#e3001b', '#0a0a0a', 'Archivo Black', 1]];
-    h1.setAttribute('aria-label', words.join(' '));
-    h1.replaceChildren(...words.map((w, wi) => {
-      const word = document.createElement('span'); word.className = 'ransom-word'; word.setAttribute('aria-hidden', 'true');
-      [...w.toUpperCase()].forEach((ch, ci) => {
-        const i = wi * 7 + ci, [bg, fg, face, box] = STYLE[(i * 5 + 2) % STYLE.length], sp = document.createElement('span');
-        sp.textContent = ch;
-        Object.assign(sp.style, { background: bg, color: fg, fontFamily: `"${face}", sans-serif`, fontStyle: face === 'Playfair Display' ? 'italic' : 'normal',
-          fontWeight: face === 'Playfair Display' ? '900' : '400', transform: `rotate(${((i * 37) % 15) - 7}deg) translateY(${((i * 13) % 9) - 4}px)`,
-          border: box ? `2px solid ${bg === '#0a0a0a' ? '#fff' : '#0a0a0a'}` : 'none', fontSize: `calc(var(--rs) + ${((i * 7) % 12) * 0.6}px)` });
-        word.append(sp);
-      });
-      return word;
-    }));
-    // the menu: each game's name becomes a button
-    let current = 0;
-    const show = (i, scroll) => {
-      current = i;
-      const c = cards[i];
-      cards.forEach((x, k) => x.querySelector('.game-pick').setAttribute('aria-current', String(k === i)));
-      const pic = document.createElement('div'); pic.className = 'stage-pic';
-      const im = document.createElement('img'); im.src = c.querySelector('.game-cover img').getAttribute('src'); im.alt = ''; im.decoding = 'async'; pic.append(im);
-      const name = document.createElement('h2'); name.className = 'stage-name'; name.textContent = c.querySelector('h3').textContent;
-      const tags = document.createElement('div'); tags.className = 'stage-tags';
-      for (const t of c.querySelectorAll('.game-plat span')) { const s = document.createElement('span'); s.textContent = t.textContent; tags.append(s); }
-      const about = c.querySelector('.game-about').cloneNode(true); about.className = 'stage-about';
-      // an optional <p class="game-why"> (why I love it) shows on a red strip under the description
-      const whyEl = c.querySelector('.game-why'), why = whyEl ? whyEl.cloneNode(true) : null;
-      if (why) why.classList.replace('game-why', 'stage-why');
-      // the counter rides in the stage, so it stays on screen with the picked game
-      stage.replaceChildren(count, ...[pic, name, tags, about, why].filter(Boolean));
-      // the counter: this game's place among the games shown (all, or those of the chosen platform)
-      const vis = cards.filter((x) => !x.hidden);
-      count.replaceChildren(pad(vis.indexOf(c) + 1), Object.assign(document.createElement('small'), { textContent: ' / ' + pad(vis.length) }));
-    };
+    const platsOf = (c) => c.dataset.platforms.split(',').map((x) => x.trim());
+    // the channel line over each name: CH 01 · PSP / PS1
     cards.forEach((c, i) => {
-      const h3 = c.querySelector('h3'), b = document.createElement('button');
-      b.type = 'button'; b.className = 'game-pick'; b.textContent = h3.textContent;
-      b.addEventListener('click', () => show(i, true));
-      b.addEventListener('keydown', (e) => {
-        if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
-        const vis = cards.filter((x) => !x.hidden), at = vis.indexOf(c), next = vis[at + (e.key === 'ArrowDown' ? 1 : -1)];
-        if (next) { e.preventDefault(); next.querySelector('.game-pick').focus(); show(cards.indexOf(next), false); }
-      });
-      h3.replaceChildren(b);
+      const ch = document.createElement('p'); ch.className = 'game-ch'; ch.textContent = `CH ${pad(i + 1)} · ${platsOf(c).join(' / ')}`;
+      c.querySelector('h3').before(ch);
     });
     // the filter row, from the platforms in the list (in the order they first appear)
-    const plats = [...new Set(cards.flatMap((c) => c.dataset.platforms.split(',').map((x) => x.trim())))];
     const bar = page.querySelector('.games-filter');
-    for (const name of ['All', ...plats]) {
+    for (const name of ['All', ...new Set(cards.flatMap(platsOf))]) {
       const b = document.createElement('button');
       b.type = 'button'; b.textContent = name; b.setAttribute('aria-pressed', String(name === 'All'));
       b.addEventListener('click', () => {
         for (const x of bar.children) x.setAttribute('aria-pressed', String(x === b));
-        for (const c of cards) c.hidden = name !== 'All' && !c.dataset.platforms.split(',').map((x) => x.trim()).includes(name);
-        // every filter, All included, starts again from its first game (A to Z)
-        show(cards.findIndex((c) => !c.hidden), false);
+        for (const c of cards) c.hidden = name !== 'All' && !platsOf(c).includes(name);
       });
       bar.append(b);
     }
-    show(0, false);
+    // while the pointer rests on a card, its cover glitches for a moment, then again every 2 s
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const glitch = (c) => { c.classList.remove('glitch'); void c.offsetWidth; c.classList.add('glitch'); };
+    for (const c of cards) {
+      let t = 0;
+      c.addEventListener('pointerenter', (e) => { if (e.pointerType !== 'mouse') return; glitch(c); t = setInterval(() => glitch(c), 2000); });
+      c.addEventListener('pointerleave', () => { clearInterval(t); c.classList.remove('glitch'); });
+    }
   })();
 
   // screen savers rest while the camera is in on another TV (they run in the room view and on their own TV):

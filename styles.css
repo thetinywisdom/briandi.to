@@ -413,100 +413,55 @@ body.giant-on retro-map { visibility: hidden; }
 .ttw-frame iframe { display: block; width: 100%; height: calc(100vh - 96px); height: calc(100dvh - 96px); border: 0; background: #000; }
 @media (min-width: 560px) { .ttw-frame iframe { height: calc(100vh - 144px); height: calc(100dvh - 144px); } }
 
-/* GAME page full screen ("Games I Love"): option E of five (owner, 2026-11-16), brutalist red / black / white
-   in the spirit of a stylish JRPG menu. A ransom-note title, a slanted menu of game names on the left, and
-   the picked game on the right: its cover tilted in a cut-out frame, its name, platforms and texts on torn
-   strips. The list items in the markup are the data; the script builds the title, the menu buttons and
-   the stage from them. All shapes and type are original; no game logos or menu art are copied. */
-.tv-latest[slot="reader"] { --red: #e3001b; --paper: #ffffff; --ink: #0a0a0a;
-  position: relative; overflow-x: clip; background: var(--ink); color: var(--paper); font: 400 16px/1.6 var(--body);
-  padding: 0 max(20px, calc((100% - 72rem) / 2)) 0; }
-.games { position: relative; padding-top: clamp(40px, 8vh, 72px); padding-bottom: 96px; }
-/* the room left for the pager is inside the page, so the slash and the dots run down to the bottom; the
-   credit line sits in the list's column, so the stage stays centred down to the end of the page */
+/* GAME page full screen ("Games I Love"): option A of five, "Test Card" (owner, 2026-11-23; it replaces E).
+   The GAME TV's colour bars across the top, the title on a phosphor-green card with CONTINUE? blinking under
+   it, the owner's intro, platform filters in the pager's pixel font, and every game as a card in a grid: its
+   cover under scanlines, a channel line (number and platforms), the name and the texts. Hovering a card makes
+   its cover glitch for a moment every 2 s. The list items in the markup are the data. */
+.tv-latest[slot="reader"] { --tc-ground: #101010; --tc-ink: #f2f2ee; --tc-dim: #a9a9a3; --tc-line: #3a3a3a; --tc-phos: #8dff9a; --tc-on-phos: #031208;
+  position: relative; overflow-x: clip; background: var(--tc-ground); color: var(--tc-ink); font: 400 16px/1.6 var(--body); padding: 0; }
 .tv.tv-latest[slot="reader"] { padding-bottom: 0; }
-@media (min-width: 560px) { .games { padding-bottom: 144px; } }
-.games-grid { grid-column: 1; grid-row: 1; }
-.games-stage { grid-column: 2; grid-row: 1 / span 2; }
-.games-credit { grid-column: 1; grid-row: 2; align-self: end; margin-bottom: clamp(48px, 10vh, 96px) !important; }
-.games::before { content: ""; position: absolute; inset: 0 auto 0 calc(-1 * max(20px, (100vw - 72rem) / 2)); width: 70%; pointer-events: none;
-  background: radial-gradient(circle, rgba(227, 0, 27, 0.5) 1.2px, transparent 1.6px) 0 0 / 9px 9px;
-  -webkit-mask: linear-gradient(115deg, #000 0 20%, transparent 55%); mask: linear-gradient(115deg, #000 0 20%, transparent 55%); }
-.games-slash { position: absolute; top: -80px; bottom: 0; right: calc(-1 * max(20px, (100vw - 72rem) / 2) - 14vw); width: 46vw; background: var(--red); transform: skewX(-18deg); pointer-events: none; }
-.games-slash.thin { right: calc(-1 * max(20px, (100vw - 72rem) / 2) + 34vw); width: 4vw; background: var(--paper); opacity: 0.9; }
-.games > :not(.games-slash) { position: relative; }
-.games-count { position: absolute !important; top: clamp(40px, 8vh, 72px); right: 0; margin: 0; font: 400 clamp(40px, 6vw, 64px)/1 "Anton", var(--legend); color: var(--paper); }
-.games-count small { font-size: 0.38em; }
-.games-head { display: grid; justify-items: start; gap: 14px; padding-right: 120px; }
+.games { position: relative; padding-bottom: 112px; }
+@media (min-width: 560px) { .games { padding-bottom: 160px; } }
+.games-bars { display: grid; grid-template-columns: repeat(7, 1fr); height: clamp(72px, 12vh, 120px); }
+.games-bars i:nth-child(1) { background: #c0c0c0; } .games-bars i:nth-child(2) { background: #c0c000; } .games-bars i:nth-child(3) { background: #00c0c0; }
+.games-bars i:nth-child(4) { background: #00c000; } .games-bars i:nth-child(5) { background: #c000c0; } .games-bars i:nth-child(6) { background: #c00000; }
+.games-bars i:nth-child(7) { background: #0000c0; }
+.games-head { position: relative; margin: -46px auto 0; padding: 0 16px; max-width: 60rem; display: grid; justify-items: center; gap: 8px; text-align: center; }
 .games-head .doc-crumb { display: none; }
-.tv-latest[slot="reader"] .games h1 { margin: 0; display: flex; flex-wrap: wrap; gap: 6px 14px; font: inherit; text-transform: none; letter-spacing: 0; color: inherit; }
-.ransom-word { --rs: clamp(30px, 4.4vw, 50px); display: inline-flex; gap: 3px; }
-.ransom-word span { display: inline-block; padding: 3px 7px; line-height: 1; }
-.games-intro { margin: 0; max-width: 54ch; padding: 14px 18px; background: var(--paper); color: var(--ink); font: 500 clamp(14px, 1.3vw, 16px)/1.55 var(--body); clip-path: polygon(0 5%, 100% 0, 98% 100%, 1.5% 95%); transform: rotate(-1.2deg); }
-.games-intro b { display: inline; font: 400 1.15em/1.3 "Anton", var(--legend); letter-spacing: 0.03em; text-transform: uppercase; }
-.games-filter { display: flex; flex-wrap: wrap; gap: 8px 6px; margin-top: 6px; }
-.games-filter button { font: 400 14px/1 "Anton", var(--legend); letter-spacing: 0.06em; text-transform: uppercase; padding: 7px 11px 6px; border: 2px solid var(--paper); background: var(--ink); color: var(--paper); transform: skewX(-12deg); cursor: pointer; }
-.games-filter button:hover { background: var(--red); }
-.games-filter button[aria-pressed="true"] { background: var(--paper); color: var(--ink); }
-.games-filter button:focus-visible, .game-pick:focus-visible { outline: 2px dashed var(--paper); outline-offset: 3px; }
-.games-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(20px, 4vw, 48px); margin-top: clamp(24px, 4vh, 40px); align-items: start; }
-.games-grid { list-style: none; margin: 0; padding: 0 28px 0 0; display: grid; gap: 2px; }
+.tv-latest[slot="reader"] .games h1 { margin: 0; padding: 8px 22px 6px; font: 400 clamp(30px, 6vw, 52px)/1 "DotGothic16", var(--mono); letter-spacing: 0.02em; text-transform: uppercase;
+  background: var(--tc-phos); color: var(--tc-on-phos); box-shadow: 0 0 18px rgba(141, 255, 154, 0.45); }
+.games-continue { margin: 0; font: 400 18px/1.2 "DotGothic16", var(--mono); color: var(--tc-phos); text-shadow: 0 0 8px rgba(141, 255, 154, 0.6); animation: guide-blink 1s steps(1) infinite; }
+.games-intro { margin: 14px 0 0; max-width: 58ch; color: var(--tc-dim); font: 400 15px/1.6 var(--body); text-wrap: pretty; }
+.games-intro b { color: var(--tc-ink); font-weight: 600; }
+.games-filter { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; padding: 18px 0 30px; }
+.games-filter button { font: 400 14px/1 "DotGothic16", var(--mono); color: var(--tc-ink); background: none; border: 1px solid var(--tc-line); padding: 8px 11px 7px; cursor: pointer; }
+.games-filter button:hover { border-color: var(--tc-ink); }
+.games-filter button[aria-pressed="true"] { background: var(--tc-ink); color: var(--tc-ground); border-color: var(--tc-ink); }
+.games-filter button:focus-visible { outline: 2px solid var(--tc-phos); outline-offset: 2px; }
+.games-grid { list-style: none; margin: 0 auto; padding: 0 clamp(16px, 4vw, 40px); max-width: 76rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 32px 20px; }
+@media (max-width: 520px) { .games-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px 12px; } }
+.game { display: grid; gap: 8px; align-content: start; min-width: 0; }
 .game[hidden] { display: none; }
-.game > :not(h3) { display: none; }
-.tv-latest[slot="reader"] .game h3 { margin: 0; font: inherit; text-transform: none; letter-spacing: 0; color: inherit; }
-.game:nth-child(odd) { margin-left: 10px; }
-.game-pick { all: unset; box-sizing: border-box; position: relative; display: block; max-width: 100%; cursor: pointer; padding: 7px 14px 6px;
-  font: 400 clamp(18px, 2.1vw, 24px)/1.08 "Anton", var(--legend); letter-spacing: 0.02em; text-transform: uppercase; color: var(--paper);
-  transform: skewX(-12deg); transition: transform 0.12s, color 0.12s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.game-pick:hover { color: var(--red); }
-.game-pick[aria-current="true"] { color: var(--ink); overflow: visible; transform: skewX(-12deg) rotate(-2deg) translateX(14px) scale(1.06); }
-.game-pick[aria-current="true"]::before { content: ""; position: absolute; inset: -3px -14px -3px -10px; z-index: -1; background: var(--paper); clip-path: polygon(0 18%, 100% 0, 96% 100%, 3% 86%); }
-.game-pick[aria-current="true"]::after { content: ""; position: absolute; inset: 2px -26px 0 -4px; z-index: -2; background: var(--red); clip-path: polygon(2% 0, 100% 22%, 98% 100%, 0 78%); }
-/* the stage is as tall as the window above the pager (128 px) and keeps the picked game centred in it while the list scrolls */
-.games-stage { position: sticky; top: 0; box-sizing: border-box; height: calc(100vh - 144px); height: calc(100dvh - 144px); min-height: 520px;
-  display: grid; gap: 16px; justify-items: start; align-content: center; padding: 14px 0 20px 18px; scroll-margin-top: 20px; }
-.stage-pic { position: relative; width: min(100%, 300px, 34vh); transform: rotate(4deg); }
-.stage-pic::before { content: ""; position: absolute; inset: -10px; background: var(--paper); clip-path: polygon(3% 0, 100% 4%, 97% 100%, 0 95%); }
-.stage-pic::after { content: ""; position: absolute; inset: -18px -14px -6px -22px; z-index: -1; background: var(--ink); clip-path: polygon(0 6%, 96% 0, 100% 92%, 6% 100%); }
-.stage-pic img { position: relative; display: block; width: 100%; aspect-ratio: 1; object-fit: cover; clip-path: polygon(3% 0, 100% 4%, 97% 100%, 0 95%); }
-.tv-latest[slot="reader"] .stage-name { margin: 6px 0 0; max-width: 100%; padding: 6px 12px 4px; background: var(--ink); color: var(--paper);
-  font: 400 clamp(26px, 3.4vw, 40px)/1.02 "Anton", var(--legend); letter-spacing: 0.01em; text-transform: uppercase; transform: rotate(-3deg) skewX(-8deg); }
-.stage-tags { display: flex; flex-wrap: wrap; gap: 8px; transform: rotate(-2deg); }
-.stage-tags span { padding: 6px 12px 5px; background: var(--ink); color: var(--paper); border: 2px solid var(--paper); font: 400 15px/1 "Anton", var(--legend); letter-spacing: 0.08em; transform: skewX(-12deg); }
-.stage-about { margin: 0; max-width: 46ch; padding: 14px 18px; background: var(--paper); color: var(--ink); font: 500 15px/1.55 var(--body); clip-path: polygon(0 4%, 100% 0, 98% 100%, 2% 96%); transform: rotate(-1deg); }
-.stage-why { margin: -4px 0 0 18px; max-width: 42ch; padding: 9px 14px; background: var(--red); color: var(--paper); font: 500 14px/1.5 var(--body); transform: rotate(1.5deg); }
-.stage-why.game-todo { font-style: italic; }
-.games-credit { margin: clamp(40px, 8vh, 72px) 0 0; padding: 14px 0 0; border-top: 2px solid var(--paper); font-size: 12px; line-height: 1.5; color: #bdbdbd; max-width: 60%; }
+.game-cover { position: relative; aspect-ratio: 1; overflow: hidden; background: #000; }
+.game-cover img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.game-cover::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.22) 0 1px, transparent 1px 3px); }
+/* a short burst of bad signal, started by the script every 2 s while the pointer is on the card */
+.game.glitch .game-cover img { animation: game-glitch 0.42s steps(1) both; }
+@keyframes game-glitch {
+  0% { transform: translate(-4px, 1px); filter: drop-shadow(3px 0 #f0f) drop-shadow(-3px 0 #0ff); clip-path: inset(0 0 55% 0); }
+  20% { transform: translate(3px, -1px); filter: drop-shadow(-3px 0 #f00) drop-shadow(3px 0 #0f0); clip-path: inset(30% 0 20% 0); }
+  40% { transform: translate(-2px, 0); filter: none; clip-path: inset(0); }
+  60% { transform: translate(2px, 1px); filter: drop-shadow(2px 0 #0ff) drop-shadow(-2px 0 #f0f); clip-path: inset(10% 0 40% 0); }
+  80%, 100% { transform: none; filter: none; clip-path: none; } }
+.game-ch { font: 400 12px/1.2 "DotGothic16", var(--mono); color: var(--tc-phos); letter-spacing: 0.02em; }
+.game-plat { display: none; }
+.tv-latest[slot="reader"] .game h3 { margin: 0; font: 600 17px/1.2 var(--legend); letter-spacing: 0.01em; text-transform: none; color: var(--tc-ink); }
+.game-about { margin: 0; font-size: 13px; line-height: 1.5; color: var(--tc-dim); }
+.game-why { margin: 2px 0 0; padding-left: 10px; border-left: 2px solid var(--tc-phos); font-size: 13px; line-height: 1.5; color: var(--tc-ink); }
+.games-credit { margin: 48px auto 0; padding: 14px clamp(16px, 4vw, 40px) 0; max-width: 76rem; box-sizing: border-box; border-top: 1px solid var(--tc-line); font-size: 12px; line-height: 1.5; color: #8a8a85; }
 .games-credit a { color: inherit; }
-@media (max-width: 760px) {
-  .ransom-word { --rs: 26px; } .ransom-word span { padding: 3px 6px; }
-  .games-slash { width: 60vw; right: -50vw; } .games-slash.thin { display: none; }
-  /* phones: no stage and no counter; every game is shown open in the list, one after another (owner, 2026-11-17) */
-  .games-count, .games-stage { display: none; }
-  .games-grid, .games-credit { grid-column: 1; grid-row: auto; }
-  .games-body { grid-template-columns: 1fr; }
-  .games-grid { padding: 0 4px; gap: 44px; }
-  .game:nth-child(n) { margin-left: 0; }
-  .game:not([hidden]) { display: grid; gap: 14px; justify-items: start; }
-  .game > .game-cover, .game > .game-about, .game > .game-why { display: block; }
-  .game > .game-plat { display: flex; }
-  .game > .game-cover { order: 1; } .game > h3 { order: 2; } .game > .game-plat { order: 3; } .game > .game-about { order: 4; } .game > .game-why { order: 5; }
-  .game-cover { position: relative; width: min(72%, 280px); margin: 12px 0 4px 14px; transform: rotate(4deg); }
-  .game:nth-child(even) .game-cover { transform: rotate(-3deg); margin-left: 22%; }
-  .game-cover::before { content: ""; position: absolute; inset: -10px; background: var(--paper); clip-path: polygon(3% 0, 100% 4%, 97% 100%, 0 95%); }
-  .game-cover::after { content: ""; position: absolute; inset: -18px -14px -6px -22px; z-index: -1; background: var(--ink); clip-path: polygon(0 6%, 96% 0, 100% 92%, 6% 100%); }
-  .game-cover img { position: relative; display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; clip-path: polygon(3% 0, 100% 4%, 97% 100%, 0 95%); }
-  .game-pick, .game-pick[aria-current="true"] { cursor: default; white-space: normal; overflow: visible; padding: 6px 12px 4px; background: var(--ink); color: var(--paper);
-    font-size: 26px; line-height: 1.02; transform: rotate(-3deg) skewX(-8deg); }
-  .game-pick::before, .game-pick::after { display: none; }
-  .game-pick:hover { color: var(--paper); }
-  .game-plat { gap: 8px; transform: rotate(-2deg); margin: 0; }
-  .game-plat span { padding: 6px 12px 5px; background: var(--ink); color: var(--paper); border: 2px solid var(--paper); font: 400 15px/1 "Anton", var(--legend); letter-spacing: 0.08em; transform: skewX(-12deg); }
-  .game-about { margin: 0; padding: 14px 18px; background: var(--paper); color: var(--ink); font: 500 15px/1.55 var(--body); clip-path: polygon(0 4%, 100% 0, 98% 100%, 2% 96%); transform: rotate(-1deg); }
-  .game-why { margin: -4px 0 0 18px; padding: 9px 14px; background: var(--red); color: var(--paper); font: 500 14px/1.5 var(--body); transform: rotate(1.5deg); }
-  .games-credit { max-width: none; }
-}
-@media (prefers-reduced-motion: reduce) { .game-pick { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .games-continue, .game.glitch .game-cover img { animation: none; } }
 
 /* ---- the dock: a 3D pager at the bottom, always on screen ----
    It replaces the scene's own hint and Back / Read buttons. */
