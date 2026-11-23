@@ -197,7 +197,10 @@ retro-shelf { height: 100vh; height: 100dvh; }
 .tv-osd button { all: unset; flex: none; padding: 8px 12px; border: 2px solid #8dff9a; cursor: pointer; }
 .tv-osd button:hover, .tv-osd button:focus-visible { background: #8dff9a; color: #031208; text-shadow: none; }
 .osd-now { flex: 1; min-width: 0; margin: 0; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.tv-howto { position: relative; padding-bottom: 84px; }   /* room for the on-screen strip at the bottom */
+/* room for the on-screen strip at the bottom of channels 1 and 2; the guide's key lines would sit under it */
+.tv-guide { padding-bottom: 84px; }
+.tv-guide:not(.tv-howto) .guide-keys, .tv-guide:not(.tv-howto) .guide-blink { display: none; }
+.still-tvs .tv-guide { padding-bottom: 18px; }
 /* an empty channel: static, like the set's own no-signal picture, under the strip */
 .tv-nosignal { position: relative; overflow: hidden; }
 .nosig-static { position: absolute; inset: -160px; background-size: 160px 160px; image-rendering: pixelated; animation: tv-static 0.24s steps(4) infinite; }

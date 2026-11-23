@@ -1190,10 +1190,20 @@
         }
         fetch(mediaUrl(file))
           .then((r) => (r.ok ? r.blob() : Promise.reject()))
-          .then((b) => { a.src = URL.createObjectURL(new Blob([b], { type })); tvSpeaker(a); if (onAir()) a.play().catch(() => {}); })
+          .then((b) => {
+            // the download can finish after the visitor has moved on: attach the song only once its channel is on
+            // air again, or it would start on its own (autoplay) on a channel nobody is watching
+            const url = URL.createObjectURL(new Blob([b], { type }));
+            const attach = () => { if (!onAir()) { setTimeout(attach, 150); return; } a.src = url; tvSpeaker(a); a.play().catch(() => {}); };
+            attach();
+          })
           .catch(() => { fetching = false; setTimeout(wait, 5000); });
       };
       wait();
+      // and whatever started it, a song never plays while its channel is off air
+      a.addEventListener('playing', () => { if (!onAir()) a.pause(); });
+      const guard = () => { if (!a.paused && !onAir()) a.pause(); };
+      setInterval(guard, 500);
       // a browser that refused to start it with sound gets another go at the visitor's next click or key press
       const retry = () => { if (a.src && a.paused && onAir()) a.play().catch(() => {}); };
       addEventListener('pointerdown', retry, true);
@@ -1756,7 +1766,7 @@
     // the bar shows while the set is full screen (phones)
     const sync = () => { bar.hidden = !shelf._full; update(); osd(); };
     // on a laptop the camera frames the set's screen and its keys are out of view, so each channel carries its own
-    // on-screen display, like a real TV's: a strip along the bottom of the picture (previous / next channel), always on
+    // on-screen display, like a real TV's: a strip along the bottom of the picture (previous / next channel), always on, on every channel
     // an empty channel gets a page showing static (like the set's own), so it can carry the strip too; made only
     // once the channel list is in, so it never takes the place of a real channel
     let snow = '';
@@ -1776,10 +1786,10 @@
         page.append(st); shelf.append(page);
       }
     };
-    shelf.addEventListener('channels-ready', () => { emptyPages(); osd(); });
+    shelf.addEventListener('channels-ready', () => { emptyPages(); update(); osd(); });
     const osd = () => {
       emptyPages();
-      for (const page of shelf.querySelectorAll('[slot^="kv-5200:"]')) {
+      for (const page of shelf.querySelectorAll('[slot="kv-5200"], [slot^="kv-5200:"]')) {
         if (page.querySelector(':scope > .tv-osd')) continue;
         const o = document.createElement('div'); o.className = 'tv-osd';
         o.innerHTML = '<button type="button" class="osd-prev" aria-label="Previous channel">&#9664; CH</button><p class="osd-now"></p>'
@@ -1788,7 +1798,7 @@
         o.querySelector('.osd-next').addEventListener('click', () => step(1));
         page.append(o);
       }
-      const ch = current(), page = shelf.querySelector(`[slot="kv-5200:ch-${ch}"]`), o = page?.querySelector(':scope > .tv-osd');
+      const ch = current(), page = shelf.querySelector(ch === '1' ? '[slot="kv-5200"]' : `[slot="kv-5200:ch-${ch}"]`), o = page?.querySelector(':scope > .tv-osd');
       if (!o) return;
       o.querySelector('.osd-now').textContent = now.textContent;
     };
