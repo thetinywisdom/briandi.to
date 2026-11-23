@@ -532,10 +532,12 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
       });
       desk.append(W); return W;
     };
-    // on a narrow screen windows leave the icon column on the right free
+    // every window opens in the middle of the desktop, like the Mantra alert (x and y are ignored; h caps the height)
     const at = (W, x, y, h) => { const dw = desk.clientWidth, dh = desk.clientHeight, narrow = dw < 600; const w = Math.min(parseInt(W.style.width), dw - (narrow ? 84 : 16));
-      if (narrow) x = 6;
-      W.style.width = w + 'px'; W.style.left = Math.max(8, Math.min(x, dw - w - 8)) + 'px'; W.style.top = Math.max(8, Math.min(y, dh - 80)) + 'px'; if (h && dh > 120) W.style.height = Math.min(h, dh - Math.max(8, y) - 10) + 'px'; };
+      W.style.width = w + 'px'; if (h && dh > 120) W.style.height = Math.min(h, dh - 20) + 'px';
+      const was = W.hidden; W.hidden = false; const wh = W.offsetHeight; W.hidden = was;   // measure it, even before it is shown
+      const free = narrow ? dw - 78 : dw;   // on a narrow screen the icon column on the right stays free
+      W.style.left = Math.max(narrow ? 6 : 8, (free - w) / 2) + 'px'; W.style.top = Math.max(8, Math.min((dh - wh) / 2, dh - 80)) + 'px'; };
     const scroller = (W) => { const s = el('div', 'a-scroller'), body = el('div', 'a-body'), bar = el('div', 'a-bar'), knob = el('i'); bar.append(knob); s.append(body, bar); W.append(s);
       body.addEventListener('scroll', () => { const f = body.scrollTop / Math.max(1, body.scrollHeight - body.clientHeight); knob.style.top = (f * (bar.clientHeight - 22)) + 'px'; }); return body; };
     const text = (title, paras, w = 420, lead = []) => { const W = win(title, w, [`${paras.length} paragraphs`, 'SimpleText']); const b = scroller(W); paras.forEach((p, i) => b.append(el('p', lead.includes(i) ? 'lead' : null, p))); return W; };
