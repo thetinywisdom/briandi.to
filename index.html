@@ -72,7 +72,7 @@
   // The bar fills from real numbers: the bundle's download (to 85%), then the room being built (to 100%).
   (() => {
     // ?v= changes with each new bundle, so a browser never pairs this page with an old copy it kept
-    const BUNDLE = 'vendor/retro-3d.js?v=8620ed85';
+    const BUNDLE = 'vendor/retro-3d.js?v=3f6591e1';
     const SIZE = 1042000;                                   // about the bundle's size, used when the server does not say
     let target = 0.03, shown = 0, done = false;
     const el = () => document.getElementById('boot');
@@ -1685,7 +1685,8 @@
     const shelf = document.getElementById('shelf'), bar = document.querySelector('.chbar');
     if (!bar) return;
     const small = matchMedia('(max-width: 760px), (hover: none) and (pointer: coarse)');
-    if (small.matches) shelf.setAttribute('live-hint', 'Tap the screen to see more');   // the pager's words while in on this TV
+    // the pager's words while in on this TV (on a laptop the camera frames its screen, so the set's keys are out of view)
+    shelf.setAttribute('live-hint', small.matches ? 'Tap the screen to see more' : 'Click a channel on the screen');
     const ORDER = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 'u1', 'u2'];
     const now = bar.querySelector('.chbar-now');
     const current = () => (shelf.tv('kv-5200')?.input || 'ch-1').replace('ch-', '');
