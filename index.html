@@ -14,7 +14,8 @@
     history.replaceState(null, '', new URL(to, document.baseURI).href + location.hash);
   })();
 </script>
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<script>document.addEventListener('gesturestart', (e) => e.preventDefault());   /* Safari: no pinch zoom */</script>
 <!-- phones and tablets: the TV screens stand still (only the WORK TV keeps its drifting logo), so four moving
      screens at once do not make the page lag. styles.css and the standby scripts read this class. -->
 <script>if (matchMedia('(hover: none) and (pointer: coarse), (max-width: 760px)').matches) document.documentElement.classList.add('still-tvs');</script>
@@ -696,7 +697,7 @@
          own page, ttw/index.html (comics in ttw/comics/, the logo and figures in art/), shown here in a frame that
          loads when the page is first opened. Its File › Shut Down asks this page to close (see "CREATE page" below). -->
     <div class="page-body ttw-frame">
-      <iframe src="ttw/?v=c436fafd" title="The Tiny Wisdom" loading="lazy"></iframe>
+      <iframe src="ttw/?v=0628d391" title="The Tiny Wisdom" loading="lazy"></iframe>
     </div>
   </div>
 

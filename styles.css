@@ -13,6 +13,10 @@
   --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
 }
 html, body { margin: 0; height: 100%; }
+/* no zooming on phones: a double tap would zoom the page instead of using it (owner, 2026-11-23); touch-action
+   (pan only) stops double-tap and pinch zoom where the browser ignores the viewport settings, and the
+   gesturestart handler in index.html stops Safari's own pinch */
+html { touch-action: pan-x pan-y; }
 body {
   background: #030403;
   color: var(--ink);

@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<script>document.addEventListener('gesturestart', (e) => e.preventDefault());   /* Safari: no pinch zoom */</script>
 <title>The Tiny Wisdom</title>
 <link rel="icon" href="../favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="../meta/icon-32.png">
@@ -268,6 +269,7 @@ a { color: inherit; }
 @media (prefers-reduced-motion: reduce) { .a-bot.shake { animation: none; } }
 /* the site version: the desktop fills the window */
 html, body { height: 100%; }
+html { touch-action: pan-x pan-y; }   /* no double-tap or pinch zoom on phones */
 body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
 .shell { max-width: none; padding: 0; display: block; height: 100%; }
 .intro, .tabs, .notes, #o-b1, #o-b2, #o-b3, #o-b4 { display: none !important; }
