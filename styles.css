@@ -189,9 +189,16 @@ retro-shelf { height: 100vh; height: 100dvh; }
   padding: calc(8px + env(safe-area-inset-top, 0px)) max(10px, env(safe-area-inset-right, 0px)) 8px max(10px, env(safe-area-inset-left, 0px));
   background: #031208; border-bottom: 2px solid #3f8f4a; color: #8dff9a; font: 400 16px/1 "DotGothic16", var(--mono); text-shadow: 0 0 6px rgba(141, 255, 154, 0.45); }
 .chbar[hidden] { display: none; }
-/* on a laptop, over the room: a slim bar centred at the top instead of a full-width strip */
-.chbar.floating { left: 50%; right: auto; transform: translateX(-50%); top: 14px; width: min(560px, calc(100% - 32px)); box-sizing: border-box; padding: 8px 10px;
-  border: 2px solid #3f8f4a; box-shadow: 0 0 18px rgba(141, 255, 154, 0.25); }
+/* on a laptop: a hologram projected up from the pager, like Giant's help (the same green box and beam), floating
+   between the TV's screen and the dock */
+.chbar.floating { left: 50%; right: auto; top: auto; bottom: calc(128px + 34px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%);
+  width: min(560px, calc(100% - 32px)); box-sizing: border-box; padding: 8px 10px; border: 2px solid #8dff9a;
+  background: repeating-linear-gradient(to bottom, rgba(141, 255, 154, 0.05) 0 1px, transparent 1px 3px), rgba(3, 18, 8, 0.86);
+  box-shadow: 0 0 18px rgba(141, 255, 154, 0.3), inset 0 0 0 4px #031208, inset 0 0 0 5px #3f8f4a; animation: chbar-flicker 6s steps(1) infinite; }
+.chbar.floating::after { content: ""; position: absolute; left: 50%; top: calc(100% + 2px); width: 200px; height: 34px; transform: translateX(-50%); pointer-events: none;
+  background: linear-gradient(0deg, rgba(141, 255, 154, 0.3), rgba(141, 255, 154, 0)); clip-path: polygon(38% 100%, 62% 100%, 100% 0, 0 0); }
+@keyframes chbar-flicker { 0%, 100% { opacity: 1; } 47% { opacity: 0.82; } 48% { opacity: 1; } 83% { opacity: 0.9; } 84% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .chbar.floating { animation: none; } }
 .chbar button { all: unset; box-sizing: border-box; flex: none; min-width: 40px; height: 40px; padding: 0 10px; display: grid; place-items: center; border: 2px solid #8dff9a; cursor: pointer; }
 .chbar button:focus-visible { background: #8dff9a; color: #031208; text-shadow: none; }
 .chbar-now { flex: 1; min-width: 0; margin: 0; padding: 0 4px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
