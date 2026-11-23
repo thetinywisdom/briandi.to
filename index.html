@@ -1072,6 +1072,8 @@
           .catch(() => null));
       page._warm = () => load(0);
       let i = 0, url = null;
+      // swap only the picture: anything else on the page (the on-screen strip, a bad-signal layer) stays
+      const put = (el) => { for (const n of page.querySelectorAll(':scope > img, :scope > video')) if (n !== el) n.remove(); if (el.parentNode !== page) page.prepend(el); };
       const step = async () => {
         if (!page.getClientRects().length) { setTimeout(step, 150); return; }   // channel not on air: wait
         const cur = await load(i);
@@ -1082,7 +1084,7 @@
           // a clip plays once to its end, then the next picture comes on
           const v = cur.clip;
           v.currentTime = 0;
-          page.replaceChildren(v);
+          put(v);
           v.play().catch(() => {});
           let done = false;
           const next = () => { if (done) return; done = true; step(); };
@@ -1097,7 +1099,7 @@
           const img = document.createElement('img');
           img.src = url;
           img.alt = '';
-          page.replaceChildren(img);
+          put(img);
         }
         setTimeout(step, cur ? cur.ms : 1000);
       };
