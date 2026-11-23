@@ -389,6 +389,12 @@ body.giant-on retro-map { visibility: hidden; }
 .doc b { color: var(--doc-ink); font-weight: 600; }
 .doc-body a { color: var(--doc-ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 .doc-body a:hover { text-decoration-thickness: 2px; }
+/* the email in Let's talk: a click copies it; a small tooltip above says so, then confirms */
+.copy-email { position: relative; cursor: pointer; }
+.copy-email::after { content: attr(data-tip); position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translate(-50%, 4px); padding: 5px 9px; border-radius: 6px;
+  background: var(--doc-ink); color: var(--doc-bg); font: 500 12px/1.2 var(--mono); white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.15s, transform 0.15s; }
+.copy-email:hover::after, .copy-email:focus-visible::after, .copy-email.copied::after { opacity: 1; transform: translate(-50%, 0); }
+@media (prefers-reduced-motion: reduce) { .copy-email::after { transition: none; } }
 .doc-crumb { margin: 0 0 0.5rem !important; font: 500 13px/1 var(--mono); color: var(--doc-dim); }
 .tv-home[slot="reader"] .doc h1 { margin: 0 0 1.5rem; font: 600 32px/1.2 var(--body); letter-spacing: -0.01em; text-transform: none; color: var(--doc-ink); }
 .doc-head { scroll-margin-top: 6rem; padding-bottom: 2rem; margin-bottom: 1rem; border-bottom: 1px solid var(--doc-line); }

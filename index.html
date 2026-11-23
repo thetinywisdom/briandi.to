@@ -280,7 +280,7 @@
 
         <section id="work-contact">
           <h2><span>5</span>Let's talk</h2>
-          <p>Thanks for reading. If you are interested in talking more about new opportunities, please reach out through my email at <a href="mailto:briandito.p@gmail.com">briandito.p@gmail.com</a> or connect with me on <a href="https://www.linkedin.com/in/briandito/" target="_blank" rel="noopener">LinkedIn</a>.</p>
+          <p>Thanks for reading. If you are interested in talking more about new opportunities, please reach out through my email at <a href="mailto:briandito.p@gmail.com" class="copy-email" data-tip="Click to copy">briandito.p@gmail.com</a> or connect with me on <a href="https://www.linkedin.com/in/briandito/" target="_blank" rel="noopener">LinkedIn</a>.</p>
         </section>
 
       </div>
@@ -1539,6 +1539,26 @@
     more.textContent = matchMedia('(hover: none)').matches ? more.dataset.tap : more.dataset.click;
     const tick = () => { const d = new Date(); clock.textContent = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`; };
     tick(); setInterval(tick, 10000);
+  })();
+
+  // WORK page: clicking the email copies it (instead of opening a mail app); its tooltip says so, then confirms
+  (() => {
+    for (const el of document.querySelectorAll('.copy-email')) {
+      const addr = el.textContent.trim();
+      let t = 0;
+      const copied = () => { el.dataset.tip = 'Copied to clipboard'; el.classList.add('copied'); clearTimeout(t);
+        t = setTimeout(() => { el.classList.remove('copied'); el.dataset.tip = 'Click to copy'; }, 2000); };
+      const fallback = () => {                                   // older browsers: copy through a hidden text field
+        const ta = Object.assign(document.createElement('textarea'), { value: addr }); ta.setAttribute('readonly', '');
+        ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none'; document.body.append(ta); ta.select();
+        try { document.execCommand('copy'); copied(); } catch {} ta.remove();
+      };
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (navigator.clipboard?.writeText) navigator.clipboard.writeText(addr).then(copied, fallback); else fallback();
+      });
+      el.addEventListener('mouseleave', () => { if (!el.classList.contains('copied')) el.dataset.tip = 'Click to copy'; });
+    }
   })();
 
   // WORK page contents: built out from the headings to three levels (section, case, then The problem /
