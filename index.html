@@ -1611,13 +1611,23 @@
       });
       bar.append(b);
     }
-    // while the pointer rests on a card, its cover glitches for a moment, then again every 2 s
+    // while the pointer rests on a card, its cover breaks up like the GAME TV outside (colour bars, static and a
+    // rolling tear) for a moment, then again every 2 s
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const glitch = (c) => { c.classList.remove('glitch'); void c.offsetWidth; c.classList.add('glitch'); };
+    const noise = document.createElement('canvas'); noise.width = noise.height = 160;
+    const ng = noise.getContext('2d'), nd = ng.createImageData(160, 160);
+    for (let k = 0; k < nd.data.length; k += 4) { const v = Math.random() * 255; nd.data[k] = nd.data[k + 1] = nd.data[k + 2] = v; nd.data[k + 3] = 255; }
+    ng.putImageData(nd, 0, 0);
+    const snow = `url(${noise.toDataURL()})`;
     for (const c of cards) {
-      let t = 0;
-      c.addEventListener('pointerenter', (e) => { if (e.pointerType !== 'mouse') return; glitch(c); t = setInterval(() => glitch(c), 2000); });
-      c.addEventListener('pointerleave', () => { clearInterval(t); c.classList.remove('glitch'); });
+      const sig = document.createElement('div'); sig.className = 'game-signal'; sig.setAttribute('aria-hidden', 'true');
+      sig.innerHTML = '<div class="bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="tv-interference"><div class="static"></div><div class="tear"></div></div>';
+      sig.querySelector('.static').style.backgroundImage = snow;
+      c.querySelector('.game-cover').append(sig);
+      let t = 0, off = 0;
+      const glitch = () => { c.classList.add('glitch'); clearTimeout(off); off = setTimeout(() => c.classList.remove('glitch'), 650); };
+      c.addEventListener('pointerenter', (e) => { if (e.pointerType !== 'mouse') return; glitch(); t = setInterval(glitch, 2000); });
+      c.addEventListener('pointerleave', () => { clearInterval(t); clearTimeout(off); c.classList.remove('glitch'); });
     }
   })();
 
