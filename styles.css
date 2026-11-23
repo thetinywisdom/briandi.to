@@ -295,9 +295,11 @@ body.giant-on retro-map { visibility: hidden; }
 .tv-howto .howto-tvs dt { padding: 0 8px; background: var(--phosphor); color: #031208; text-shadow: none; }
 .tv-howto .howto-tvs dd { margin: 0; }
 .tv-howto .howto-pager { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.tv-howto .howto-pager button { font: inherit; font-size: 22px; line-height: 1; padding: 6px 10px; cursor: pointer;
+.tv-howto .howto-pager button, .tv-howto .howto-return { font: inherit; font-size: 22px; line-height: 1; padding: 6px 10px; cursor: pointer;
   color: var(--phosphor); background: transparent; border: 2px solid var(--phosphor); text-shadow: inherit; box-shadow: 0 0 8px rgba(141, 255, 154, 0.3); }
-.tv-howto .howto-pager button:hover, .tv-howto .howto-pager button:focus-visible { background: var(--phosphor); color: #031208; text-shadow: none; outline: none; }
+.tv-howto .howto-pager button:hover, .tv-howto .howto-pager button:focus-visible, .tv-howto .howto-return:hover, .tv-howto .howto-return:focus-visible { background: var(--phosphor); color: #031208; text-shadow: none; outline: none; }
+/* the last line ends with a way back to the Program Guide (channel 1) */
+.tv-howto .howto-return { display: block; margin-top: 24px; white-space: nowrap; }
 .tv-howto .howto-progress { font-size: 22px; letter-spacing: 0.04em; white-space: pre; }
 
 /* channel TV, the other channels: the player or picture fills the tube */

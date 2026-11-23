@@ -739,7 +739,8 @@
           <div><dt>WORK</dt><dd>Design Manager at PayPay</dd></div>
         </dl></div></li>
       <li>That's the end of tonight's programming. Thanks for watching.</li>
-      <li>Signing off, Brian.</li>
+      <li><div>Signing off, Brian.
+        <button type="button" class="howto-return" aria-label="Return to the Program Guide, channel 1">RETURN TO PROGRAM GUIDE &gt;</button></div></li>
     </ol>
     <div class="howto-pager">
       <button type="button" class="howto-prev" aria-label="Previous line">&lt; PREV</button>
@@ -1363,7 +1364,8 @@
       bar.textContent = `${String(i + 1).padStart(2, '0')} / ${String(items.length).padStart(2, '0')}  ` + items.map((_, n) => sq(n)).join('');
       clearTimeout(timer);
       // about 14 characters a second, never less than 4 s
-      timer = setTimeout(tick, Math.max(4000, items[i].textContent.length * 70));
+      // the last line stays up, so its Return button can be pressed
+      if (i < items.length - 1) timer = setTimeout(tick, Math.max(4000, items[i].textContent.length * 70));
     };
     // only move on while the channel has been on air (tuning in is handled below, from line 1)
     const tick = () => { if (wasOn && page.getClientRects().length) show(i + 1); else timer = setTimeout(tick, 600); };
@@ -1371,6 +1373,7 @@
     setInterval(() => { const on = page.getClientRects().length > 0; if (on && !wasOn) show(0); wasOn = on; }, 300);
     page.querySelector('.howto-prev').addEventListener('click', () => show(i - 1));
     page.querySelector('.howto-next').addEventListener('click', () => show(i + 1));
+    page.querySelector('.howto-return')?.addEventListener('click', () => document.getElementById('shelf').tv('kv-5200')?.press('ch-1'));
     show(0);
   })();
 
