@@ -793,6 +793,19 @@
   <button type="button" data-action="back">Back</button>
   <button type="button" data-action="info" data-word="Help" data-info="Ask Butler how this room works">Help</button>
 </retro-pager>
+<!-- Small screens: the Program Guide full screen. The GUIDE TV's own screen is too small to read and tap on a
+     phone, so this opens when the camera comes in on that TV with the guide on air, and when its screen is
+     tapped. Its rows are copied from the guide on the TV; picking one closes this and tunes the set. -->
+<div class="guide-full" role="dialog" aria-modal="true" aria-label="Program guide" hidden>
+  <div class="guide-full-top"><span>BRIANDI.TO</span><span>CH 01 &#9654;</span></div>
+  <h2 class="guide-full-title">PROGRAM GUIDE</h2>
+  <ol class="guide-full-list"></ol>
+  <dl class="guide-full-keys">
+    <div><dt>SELECT</dt><dd>: TAP A CHANNEL</dd></div>
+    <div><dt>WATCH</dt><dd>: CLOSE TO SEE THE TV</dd></div>
+  </dl>
+  <button type="button" class="guide-full-close">[ &#10005; CLOSE ]</button>
+</div>
 
 <!-- the pager's i key opens this: how the controls work, in the Program Guide's style -->
 <!-- Help: the pager's i key projects the assistant (Giant, a hologram robot) above the pager. It asks what's up
@@ -1629,6 +1642,43 @@
       c.addEventListener('pointerenter', (e) => { if (e.pointerType !== 'mouse') return; glitch(); t = setInterval(glitch, 2000); });
       c.addEventListener('pointerleave', () => { clearInterval(t); clearTimeout(off); c.classList.remove('glitch'); });
     }
+  })();
+
+  // the Program Guide full screen on small screens (see .guide-full above)
+  (() => {
+    const box = document.querySelector('.guide-full'), shelf = document.getElementById('shelf');
+    const guide = document.querySelector('.tv-guide[slot="kv-5200"]');
+    if (!box || !guide) return;
+    const small = matchMedia('(max-width: 760px), (hover: none) and (pointer: coarse)');
+    const list = box.querySelector('.guide-full-list');
+    let passing = false;   // set while a row here presses the TV's own guide row, so that click goes through
+    const guideOnAir = () => shelf._focusKey === 'kv-5200' && !shelf._reading && guide.getClientRects().length > 0;
+    const close = () => { if (box.hidden) return; box.hidden = true; document.body.classList.remove('guide-full-open'); };
+    const open = () => {
+      // the rows, copied from the guide on the TV each time (channels arrive after the page loads)
+      list.replaceChildren(...[...guide.querySelectorAll('.guide-list li')].map((li) => {
+        const row = document.createElement('li'), b = document.createElement('button');
+        row.className = li.className.replace(/\brolling\b/g, '');
+        b.type = 'button';
+        b.innerHTML = `<b>${li.querySelector('b')?.textContent || ''}</b><span></span>`;
+        b.querySelector('span').textContent = li.querySelector('span')?.textContent || '';
+        b.addEventListener('click', () => { close(); passing = true; li.querySelector('button')?.click(); passing = false; });
+        row.append(b);
+        return row;
+      }));
+      box.hidden = false; document.body.classList.add('guide-full-open');
+      (list.querySelector('li.on button') || list.querySelector('button'))?.focus({ preventScroll: true });
+    };
+    box.querySelector('.guide-full-close').addEventListener('click', close);
+    // Esc closes this first, before the room hears it
+    addEventListener('keydown', (e) => { if (e.key === 'Escape' && !box.hidden) { e.stopImmediatePropagation(); e.preventDefault(); close(); } }, true);
+    // tapping the guide on the TV's screen opens it full screen instead
+    guide.addEventListener('click', (e) => { if (!small.matches || passing) return; e.preventDefault(); e.stopPropagation(); open(); }, true);
+    // coming in on the GUIDE TV with the guide on air opens it once the camera has arrived; leaving closes it
+    shelf.addEventListener('shelf-focus', () => {
+      if (shelf._focusKey !== 'kv-5200') { close(); return; }
+      if (small.matches) setTimeout(() => { if (guideOnAir()) open(); }, 700);
+    });
   })();
 
   // screen savers rest while the camera is in on another TV (they run in the room view and on their own TV):

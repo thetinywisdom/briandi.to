@@ -178,6 +178,26 @@ retro-shelf { height: 100vh; height: 100dvh; }
 /* phones and tablets: the channel TV's blinking prompt and the GAME TV's card stand still too */
 .still-tvs .tv-guide .guide-blink, .still-tvs .game-standby .interrupt-sub { animation: none; }
 @media (prefers-reduced-motion: reduce) { .tv-guide .guide-blink { animation: none; } }
+/* small screens: the Program Guide full screen (.guide-full in index.html), in the guide's phosphor look with
+   rows big enough to tap */
+.guide-full { position: fixed; inset: 0; z-index: 40; overflow-y: auto; display: flex; flex-direction: column; gap: 14px;
+  padding: calc(20px + env(safe-area-inset-top, 0px)) max(18px, env(safe-area-inset-right, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px));
+  background: #031208; color: #8dff9a; font: 400 18px/1.2 "DotGothic16", var(--mono); text-shadow: 0 0 6px rgba(141, 255, 154, 0.45);
+  background-image: linear-gradient(90deg, rgba(63, 143, 74, 0.16) 1px, transparent 1px), linear-gradient(rgba(63, 143, 74, 0.16) 1px, transparent 1px); background-size: 32px 32px; }
+.guide-full[hidden] { display: none; }
+.guide-full-top { display: flex; justify-content: space-between; font-size: 15px; }
+.guide-full-title { margin: 0; padding-bottom: 10px; border-bottom: 2px dashed #3f8f4a; text-align: center; font: inherit; font-size: 28px; letter-spacing: 0.04em; }
+.guide-full-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.guide-full-list button { all: unset; box-sizing: border-box; display: flex; gap: 16px; align-items: center; width: 100%; min-height: 46px; padding: 8px 12px; cursor: pointer; }
+.guide-full-list b { font-weight: 400; flex: none; width: 2ch; }
+.guide-full-list span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.guide-full-list li.on button { background: #8dff9a; color: #031208; text-shadow: none; box-shadow: 0 0 10px rgba(141, 255, 154, 0.5); }
+.guide-full-list li.empty { color: #3f8f4a; text-shadow: none; }
+.guide-full-list button:focus-visible, .guide-full-close:focus-visible { outline: 2px solid #8dff9a; outline-offset: -2px; }
+.guide-full-keys { margin: 0; padding-top: 10px; border-top: 2px solid #8dff9a; font-size: 15px; display: grid; }
+.guide-full-keys div { display: flex; } .guide-full-keys dt { width: 6em; } .guide-full-keys dd { margin: 0; }
+.guide-full-close { all: unset; box-sizing: border-box; align-self: center; margin-top: auto; padding: 12px 20px; border: 2px solid #8dff9a; cursor: pointer; font-size: 20px; }
+body.guide-full-open retro-pager, body.guide-full-open retro-map { visibility: hidden; }
 
 /* channel TV, a channel with a bad signal ("interference": true): every few seconds the picture
    breaks up under static and a "broadcast interrupted" card in the guide's style comes up */
