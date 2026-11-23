@@ -1084,14 +1084,19 @@
           imgs = files.map((f) => { const im = new Image(); im.crossOrigin = 'anonymous'; im.decoding = 'async'; im.onload = im.onerror = measure; im.src = mediaUrl(f); return im; });
         }
         if (!total) return;
+        // the canvas takes the shape it is shown at (the tube, or a phone's full screen), 640 wide, so the
+        // pictures keep their proportions instead of being stretched to fit
+        const shape = c.clientWidth && c.clientHeight ? Math.round(640 * c.clientHeight / c.clientWidth) : 480;
+        if (shape > 0 && c.height !== shape) c.height = shape;
+        const H = c.height;
         const dt = last ? Math.min(0.1, (now - last) / 1000) : 0;
         last = now;
         if (!reducedMotion) pos = (pos + dt * SCROLL_SPEED) % total;
         g.fillStyle = '#000';
-        g.fillRect(0, 0, 640, 480);
+        g.fillRect(0, 0, 640, H);
         // the stack, then the stack again, so the end runs straight into the start
         let y = -pos;
-        for (let k = 0; y < 480 && k < imgs.length * 2; k++) {
+        for (let k = 0; y < H && k < imgs.length * 2; k++) {
           const i = k % imgs.length, h = heights[i];
           if (h && y + h > 0) g.drawImage(imgs[i], 0, y, 640, h);
           y += h;
