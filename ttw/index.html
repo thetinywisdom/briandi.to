@@ -726,7 +726,8 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
     // what Butler can do on this page
     const QA = [
       { q: 'How does this computer work?', a: 'Double-click an icon to open it (one tap on a phone). Drag a window by its striped bar, close it with the X. The menus at the top all work.', mood: 'neutral' },
-      { q: 'What is The Tiny Wisdom?', a: 'Over the past few years, Brian has lived in different countries and met people from many different backgrounds. All of it has led him to believe that we’re all the same: human, a little lost, and trying to find our way. The Tiny Wisdom exists to remind you that nobody really knows what they’re doing in life, including you, me and Brian, my friend.', mood: 'happy', act: ['The story so far', () => openAbout()] },
+      { q: 'What is The Tiny Wisdom?', a: 'Over the past few years, Brian has lived in different countries and met people from many different backgrounds. All of it has led him to believe that we’re all the same: human, a little lost, and trying to find our way. The Tiny Wisdom exists to remind you that nobody really knows what they’re doing in life, including you and me, my friend.', mood: 'happy', act: ['The story so far', () => openAbout()],
+        next: ['You? Human?', { a: 'Well… no. I’m pixels on a screen. No heart, just a little TV where one should be. Some days I wish I had one, so I could be a little lost too. *sigh* Never mind me.', mood: 'sad' }] },
       { q: 'What is the mantra?', a: MANTRA + ' It’s the sentence The Tiny Wisdom started with.', mood: 'wink', act: ['Show it', () => act('Mantra')] },
       { q: 'Where can I follow The Tiny Wisdom?', a: 'On Instagram at instagram.com/thetinywisdom, and at www.thetinywisdom.com. Both are in the Links folder.', mood: 'happy', act: ['Open Links', () => { show(links); at(links, desk.clientWidth - 440, 40); }] },
     ];
@@ -750,7 +751,8 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
       setMood(it.mood); say.replaceChildren(el('p', null, it.a));
       const bs = el('div', 'a-btns');
       if (it.act) { const x = el('button', 'a-btn', it.act[0]); x.type = 'button'; x.onclick = () => { it.act[1](); menuOfQuestions(); }; bs.append(x); }
-      const x = el('button', 'a-btn default', ok); x.type = 'button'; x.onclick = () => { if (chained) step = (step + 1) % CHAIN.length; menuOfQuestions(); }; bs.append(x);
+      // an answer can lead to Butler's own follow-up instead of Got it
+      const x = el('button', 'a-btn default', it.next ? it.next[0] : ok); x.type = 'button'; x.onclick = () => { if (it.next) return answer(it.next[1]); if (chained) step = (step + 1) % CHAIN.length; menuOfQuestions(); }; bs.append(x);
       say.append(bs); placeBalloon();
     };
     // clicking Butler while his balloon is open tickles him; poke him three times quickly and he gets cross
