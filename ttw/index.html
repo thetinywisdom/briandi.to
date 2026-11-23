@@ -49,7 +49,7 @@ a { color: inherit; }
 .a-menu > button:hover, .a-menu > button[aria-expanded="true"] { background: var(--b); color: var(--w); }
 .a-menu > button:hover svg, .a-menu > button[aria-expanded="true"] svg { filter: invert(1); }
 .a-menu .logo { display: grid; place-items: center; padding: 3px 7px; }
-.a-menu .logo svg { width: 14px; height: 14px; }
+.a-menu .logo svg { width: 16px; height: 16px; }   /* whole pixels: the 16 x 16 mark is drawn 1:1 */
 .a-menu .clock { margin-left: auto; font-weight: 400; }
 .a-drop { position: absolute; top: 22px; z-index: 950; min-width: 230px; background: var(--w); border: 1px solid var(--b); box-shadow: 2px 2px 0 var(--b); padding: 2px 0; }
 .a-drop[hidden] { display: none; }
@@ -492,7 +492,7 @@ body { margin: 0; padding: 0 !important; background: #000; overflow: hidden; }
     bot: ['   #      #     ', '    #    #      ', '  ############  ', '  #oooooooooo#  ', '  #o########o#  ', '  #o#o####o#o#  ', '  #o########o#  ', '  #o##oooo##o#  ', '  #oooooooooo#  ', '  ############  ', '     ######     ', '   ##oooooo##   ', '  # #oooooo# #  ', '    ########    ', '    ##    ##    ', '                '],
     trashFull: ['     ######     ', '  ############  ', '  #oooooooooo#  ', '  ##o#o##o#o#  ', ' # #o#o#o#o## # ', '   #o#o#o#o#    ', '   #o#o#o#o#   ', '   #o#o#o#o#   ', '   #o#o#o#o#   ', '   #o#o#o#o#   ', '   #o#o#o#o#   ', '   ##########   ', '                ', '                ', '                ', '                '],
     x: ['##        ##', '###      ###', ' ###    ### ', '  ###  ###  ', '   ######   ', '    ####    ', '    ####    ', '   ######   ', '  ###  ###  ', ' ###    ### ', '###      ###', '##        ##'],
-    ttw: ['                ', '     ######     ', '   ##########   ', '  ###o####o###  ', '  ####o##o####  ', ' #####oo#####  ', ' #oooooooooo#  ', ' #####oo#####  ', ' #####oo#####  ', '  ####oo####   ', '   ##########   ', '     ######     ', '                ', '                ', '                ', '                '],
+    ttw: ['      ####      ', '    ########    ', '   ####oo####   ', '  ##o##oo##o##  ', ' ###oo#oo#oo### ', ' ####oooooo#### ', '######oooo######', '#######oo#######', '###oooooooooo###', '###oooooooooo###', ' ######oo###### ', ' ######oo###### ', '  #####oo#####  ', '   ####oo####   ', '    ########    ', '      ####      '],
     mail: ['                ', '                ', '################', '##oooooooooooo##', '#o##oooooooo##o#', '#ooo##oooo##ooo#', '#ooooo####ooooo#', '#oooooooooooooo#', '#oooooooooooooo#', '#oooooooooooooo#', '#oooooooooooooo#', '################', '                ', '                ', '                ', '                '],
     mac: ['   ##########   ', '  #oooooooooo#  ', '  #o########o#  ', '  #o#oooooo#o#  ', '  #o#oooooo#o#  ', '  #o#oooooo#o#  ', '  #o#oooooo#o#  ', '  #o########o#  ', '  #oooooooooo#  ', '  #oo####oooo#  ', '  #oooooooooo#  ', '  ############  ', '   #oooooooo#   ', '  ############  ', '                ', '                '],
     warn: ['       ##       ', '      #oo#      ', '      #oo#      ', '     #oooo#     ', '     #o##o#     ', '    #oo##oo#    ', '    #oo##oo#    ', '   #ooo##ooo#   ', '   #ooo##ooo#   ', '  #oooooooooo#  ', '  #oooo##oooo#  ', ' #ooooo##ooooo# ', ' ############## ', '                ', '                ', '                '],
