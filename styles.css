@@ -189,6 +189,9 @@ retro-shelf { height: 100vh; height: 100dvh; }
   padding: calc(8px + env(safe-area-inset-top, 0px)) max(10px, env(safe-area-inset-right, 0px)) 8px max(10px, env(safe-area-inset-left, 0px));
   background: #031208; border-bottom: 2px solid #3f8f4a; color: #8dff9a; font: 400 16px/1 "DotGothic16", var(--mono); text-shadow: 0 0 6px rgba(141, 255, 154, 0.45); }
 .chbar[hidden] { display: none; }
+/* on a laptop, over the room: a slim bar centred at the top instead of a full-width strip */
+.chbar.floating { left: 50%; right: auto; transform: translateX(-50%); top: 14px; width: min(560px, calc(100% - 32px)); box-sizing: border-box; padding: 8px 10px;
+  border: 2px solid #3f8f4a; box-shadow: 0 0 18px rgba(141, 255, 154, 0.25); }
 .chbar button { all: unset; box-sizing: border-box; flex: none; min-width: 40px; height: 40px; padding: 0 10px; display: grid; place-items: center; border: 2px solid #8dff9a; cursor: pointer; }
 .chbar button:focus-visible { background: #8dff9a; color: #031208; text-shadow: none; }
 .chbar-now { flex: 1; min-width: 0; margin: 0; padding: 0 4px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

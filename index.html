@@ -1702,7 +1702,17 @@
     bar.querySelector('.chbar-guide').addEventListener('click', () => tune('1'));
     bar.querySelector('.chbar-exit').addEventListener('click', () => shelf.unfocus());
     shelf.addEventListener('pvm-input', update);
-    shelf.addEventListener('shelf-full', (e) => { bar.hidden = !e.detail.open; document.body.classList.toggle('tv-full', e.detail.open); update(); });
+    // the bar shows while the set is full screen, and on a laptop whenever the camera is in on it (the camera frames
+    // its screen there, so the set's own keys are out of view)
+    const sync = () => {
+      const full = !!shelf._full;
+      bar.hidden = !(full || (!small.matches && shelf._focusKey === 'kv-5200' && !shelf._reading));
+      bar.classList.toggle('floating', !full);
+      update();
+    };
+    shelf.addEventListener('shelf-full', (e) => { document.body.classList.toggle('tv-full', e.detail.open); sync(); });
+    shelf.addEventListener('shelf-focus', sync);
+    shelf.addEventListener('shelf-read', sync);
     // small screens: like the other TVs, tap the set to come in, then tap its screen to open it full screen.
     // The tube shows a still card (.guide-still); leaving full screen tunes back to it.
     const guide = document.querySelector('.tv-guide[slot="kv-5200"]');
