@@ -1756,8 +1756,7 @@
     // the bar shows while the set is full screen (phones)
     const sync = () => { bar.hidden = !shelf._full; update(); osd(); };
     // on a laptop the camera frames the set's screen and its keys are out of view, so each channel carries its own
-    // on-screen display, like a real TV's: a strip along the bottom of the picture (previous / next channel and
-    // the guide), always on
+    // on-screen display, like a real TV's: a strip along the bottom of the picture (previous / next channel), always on
     // an empty channel gets a page showing static (like the set's own), so it can carry the strip too; made only
     // once the channel list is in, so it never takes the place of a real channel
     let snow = '';
@@ -1784,10 +1783,9 @@
         if (page.querySelector(':scope > .tv-osd')) continue;
         const o = document.createElement('div'); o.className = 'tv-osd';
         o.innerHTML = '<button type="button" class="osd-prev" aria-label="Previous channel">&#9664; CH</button><p class="osd-now"></p>'
-          + '<button type="button" class="osd-next" aria-label="Next channel">CH &#9654;</button><button type="button" class="osd-guide">GUIDE</button>';
+          + '<button type="button" class="osd-next" aria-label="Next channel">CH &#9654;</button>';
         o.querySelector('.osd-prev').addEventListener('click', () => step(-1));
         o.querySelector('.osd-next').addEventListener('click', () => step(1));
-        o.querySelector('.osd-guide').addEventListener('click', () => tune('1'));
         page.append(o);
       }
       const ch = current(), page = shelf.querySelector(`[slot="kv-5200:ch-${ch}"]`), o = page?.querySelector(':scope > .tv-osd');
