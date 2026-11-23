@@ -189,14 +189,12 @@ retro-shelf { height: 100vh; height: 100dvh; }
   padding: calc(8px + env(safe-area-inset-top, 0px)) max(10px, env(safe-area-inset-right, 0px)) 8px max(10px, env(safe-area-inset-left, 0px));
   background: #031208; border-bottom: 2px solid #3f8f4a; color: #8dff9a; font: 400 16px/1 "DotGothic16", var(--mono); text-shadow: 0 0 6px rgba(141, 255, 154, 0.45); }
 .chbar[hidden] { display: none; }
-/* on a laptop: a hologram projected up from the pager, like Giant's help (the same green box and beam), floating
-   between the TV's screen and the dock */
-.chbar.floating { left: 50%; right: auto; top: auto; bottom: calc(128px + 34px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%);
+/* on a laptop: a hologram over the pager, like Giant's help (the same green box), sitting right on top of the dock
+   so it covers the set's SONY lettering below the screen */
+.chbar.floating { left: 50%; right: auto; top: auto; bottom: calc(122px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%);
   width: min(560px, calc(100% - 32px)); box-sizing: border-box; padding: 8px 10px; border: 2px solid #8dff9a;
-  background: repeating-linear-gradient(to bottom, rgba(141, 255, 154, 0.05) 0 1px, transparent 1px 3px), rgba(3, 18, 8, 0.86);
-  box-shadow: 0 0 18px rgba(141, 255, 154, 0.3), inset 0 0 0 4px #031208, inset 0 0 0 5px #3f8f4a; animation: chbar-flicker 6s steps(1) infinite; }
-.chbar.floating::after { content: ""; position: absolute; left: 50%; top: calc(100% + 2px); width: 200px; height: 34px; transform: translateX(-50%); pointer-events: none;
-  background: linear-gradient(0deg, rgba(141, 255, 154, 0.3), rgba(141, 255, 154, 0)); clip-path: polygon(38% 100%, 62% 100%, 100% 0, 0 0); }
+  background: repeating-linear-gradient(to bottom, rgba(141, 255, 154, 0.05) 0 1px, transparent 1px 3px), #031208;
+  box-shadow: 0 0 18px rgba(141, 255, 154, 0.3), 0 10px 8px 2px rgba(10, 11, 10, 0.97), inset 0 0 0 4px #031208, inset 0 0 0 5px #3f8f4a; animation: chbar-flicker 6s steps(1) infinite; }
 @keyframes chbar-flicker { 0%, 100% { opacity: 1; } 47% { opacity: 0.82; } 48% { opacity: 1; } 83% { opacity: 0.9; } 84% { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .chbar.floating { animation: none; } }
 .chbar button { all: unset; box-sizing: border-box; flex: none; min-width: 40px; height: 40px; padding: 0 10px; display: grid; place-items: center; border: 2px solid #8dff9a; cursor: pointer; }
@@ -226,13 +224,13 @@ retro-shelf[full-screen] .tv-howto .howto-pager button, retro-shelf[full-screen]
 retro-shelf[full-screen] .tv-howto .howto-pager button { padding: 8px; white-space: nowrap; }
 retro-shelf[full-screen] .tv-howto .howto-return { font-size: 17px; white-space: normal; }
 retro-shelf[full-screen] .tv-channel { padding: var(--full-top) 0 var(--full-bottom); }
-retro-shelf[full-screen] .tv-channel img { object-fit: contain; }
+retro-shelf[full-screen] .tv-channel img, retro-shelf[full-screen] .tv-channel video { object-fit: contain; }
 
 /* channel TV, a channel with a bad signal ("interference": true): every few seconds the picture
    breaks up under static and a "broadcast interrupted" card in the guide's style comes up */
 .tv-channel.has-interference { position: relative; }
 .tv-channel .tv-interference, .tv-channel .tv-interrupt { display: none; }
-.tv-channel.interrupted .tv-scroll, .tv-channel.interrupted > img { animation: tv-shake 0.42s steps(1) infinite;
+.tv-channel.interrupted .tv-scroll, .tv-channel.interrupted > img, .tv-channel.interrupted > video { animation: tv-shake 0.42s steps(1) infinite;
   filter: contrast(1.7) saturate(1.9) brightness(1.1) drop-shadow(6px 0 0 rgba(255, 0, 60, 0.7)) drop-shadow(-6px 0 0 rgba(0, 255, 230, 0.7)); }
 @keyframes tv-shake {
   0% { transform: translate(0, 0) skewX(0); }
@@ -268,7 +266,7 @@ retro-shelf[full-screen] .tv-channel img { object-fit: contain; }
 .tv-interrupt .interrupt-title { padding: 2px 10px; background: var(--phosphor); color: #031208; text-shadow: none; box-shadow: 0 0 10px rgba(141, 255, 154, 0.5); }
 .tv-interrupt .interrupt-sub { font-size: 22px; animation: guide-blink 0.8s steps(1) infinite; }
 @media (prefers-reduced-motion: reduce) {
-  .tv-channel.interrupted .tv-scroll, .tv-channel.interrupted > img { animation: none; }
+  .tv-channel.interrupted .tv-scroll, .tv-channel.interrupted > img, .tv-channel.interrupted > video { animation: none; }
   .tv-interference .static, .tv-interference .tear, .tv-interrupt .interrupt-sub { animation: none; }
 }
 
@@ -360,9 +358,9 @@ body.giant-on retro-map { visibility: hidden; }
 
 /* channel TV, the other channels: the player or picture fills the tube */
 .tv-channel { height: 100%; padding: 0; background: #000; }
-.tv-channel iframe, .tv-channel img { display: block; width: 100%; height: 100%; border: 0; }
+.tv-channel iframe, .tv-channel img, .tv-channel video { display: block; width: 100%; height: 100%; border: 0; }
 /* pictures fill the tube at their own shape: never stretched, the edges that do not fit are cut off */
-.tv-channel img { object-fit: cover; }
+.tv-channel img, .tv-channel video { object-fit: cover; }
 /* a scrolling stack of tall pictures: each the width of the tube, moving slowly up the screen */
 .tv-channel .tv-scroll { display: block; width: 100%; height: 100%; }
 

@@ -43,6 +43,10 @@
 <meta name="twitter:image" content="https://briandi.to/meta/share.png">
 <meta name="theme-color" content="#030403">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<!-- the channel TV: its files (jsDelivr) and its YouTube players, so tuning in starts sooner -->
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://www.youtube-nocookie.com">
+<link rel="dns-prefetch" href="https://i.ytimg.com">
 <link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:ital,wght@0,500;0,600;0,700;1,700;1,800&family=DotGothic16&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="styles.css">
 <!-- Loading screen. Its styles are here, not in styles.css, so it is the first thing a visitor sees.
@@ -1014,8 +1018,11 @@
         return parts.length >= 2 ? `https://open.spotify.com/embed/${parts[0]}/${parts[1]}` : null;
       } catch { return null; }
     };
-    // a media path inside the channels repository, with each folder name encoded
-    const mediaUrl = (file) => CHANNELS + 'media/' + String(file).split('/').map(encodeURIComponent).join('/');
+    // a media path inside the channels repository, with each folder name encoded. Files come from jsDelivr (a CDN
+    // for public GitHub repositories: fast, labelled with the right type, so songs stream) pinned to the latest
+    // commit, so a change shows up as soon as it is pushed; from raw GitHub if that cannot be looked up.
+    let MEDIA = CHANNELS + 'media/', CDN = false;
+    const mediaUrl = (file) => MEDIA + String(file).split('/').map(encodeURIComponent).join('/');
     const baseName = (file) => String(file).split('/').pop();
     // how long one run of an animated GIF or WebP lasts, read from its frame timings
     const animLength = (buf) => {
@@ -1045,19 +1052,44 @@
       }
       return ms || 5000;
     };
-    // several pictures on one channel: each plays through once, then the next, round and round.
-    // Only the picture on screen and the next one are downloaded, and only while the channel is on.
+    // several pictures on one channel: each plays through once, then the next, round and round. A picture can be
+    // an animated GIF or WebP, or a short silent MP4 clip (far smaller, and it starts while still downloading).
+    // Only the picture on screen and the next one are loaded, and only once the channel has been on.
+    const isClip = (f) => /\.mp4$/i.test(f);
     const playlist = (page, files) => {
-      const blobs = {};
-      const load = (k) => (blobs[k] ||= fetch(mediaUrl(files[k]))
-        .then((r) => (r.ok ? r.arrayBuffer() : Promise.reject()))
-        .then((buf) => ({ blob: new Blob([buf], { type: /\.webp$/i.test(files[k]) ? 'image/webp' : 'image/gif' }), ms: animLength(buf) }))
-        .catch(() => null));
+      const got = {};
+      const load = (k) => (got[k] ||= isClip(files[k])
+        ? Promise.resolve((() => {
+          const v = document.createElement('video');
+          v.muted = true; v.playsInline = true; v.autoplay = true; v.preload = 'auto'; v.crossOrigin = 'anonymous';
+          v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+          v.src = mediaUrl(files[k]);
+          return { clip: v };
+        })())
+        : fetch(mediaUrl(files[k]))
+          .then((r) => (r.ok ? r.arrayBuffer() : Promise.reject()))
+          .then((buf) => ({ blob: new Blob([buf], { type: /\.webp$/i.test(files[k]) ? 'image/webp' : 'image/gif' }), ms: animLength(buf) }))
+          .catch(() => null));
+      page._warm = () => load(0);
       let i = 0, url = null;
       const step = async () => {
-        if (!page.getClientRects().length) { setTimeout(step, 800); return; }   // channel not on air: wait
+        if (!page.getClientRects().length) { setTimeout(step, 150); return; }   // channel not on air: wait
         const cur = await load(i);
         load((i + 1) % files.length);
+        page.dataset.nowPlaying = baseName(files[i]);
+        i = (i + 1) % files.length;
+        if (cur?.clip) {
+          // a clip plays once to its end, then the next picture comes on
+          const v = cur.clip;
+          v.currentTime = 0;
+          page.replaceChildren(v);
+          v.play().catch(() => {});
+          let done = false;
+          const next = () => { if (done) return; done = true; step(); };
+          v.onended = next;
+          v.onerror = () => setTimeout(next, 1000);
+          return;
+        }
         if (cur) {
           // a fresh address each time, so the animation starts from its first frame
           if (url) URL.revokeObjectURL(url);
@@ -1066,11 +1098,8 @@
           img.src = url;
           img.alt = '';
           page.replaceChildren(img);
-          page.dataset.nowPlaying = baseName(files[i]);
         }
-        const ms = cur ? cur.ms : 1000;
-        i = (i + 1) % files.length;
-        setTimeout(step, ms);
+        setTimeout(step, cur ? cur.ms : 1000);
       };
       step();
     };
@@ -1091,12 +1120,11 @@
         heights = imgs.map((im) => (im.naturalWidth ? 640 * im.naturalHeight / im.naturalWidth : 0));
         total = heights.reduce((a, b) => a + b, 0);
       };
+      c._warm = () => { if (!imgs) imgs = files.map((f) => { const im = new Image(); im.crossOrigin = 'anonymous'; im.decoding = 'async'; im.onload = im.onerror = measure; im.src = mediaUrl(f); return im; }); };
       const frame = (now) => {
         requestAnimationFrame(frame);
         if (!c.getClientRects().length) { last = 0; return; }       // off air: keep the place, draw nothing
-        if (!imgs) {                                                   // first time on air: load the pictures
-          imgs = files.map((f) => { const im = new Image(); im.crossOrigin = 'anonymous'; im.decoding = 'async'; im.onload = im.onerror = measure; im.src = mediaUrl(f); return im; });
-        }
+        if (!imgs) c._warm();                                          // first time on air: load the pictures
         if (!total) return;
         // the canvas takes the shape it is shown at (the tube, or a phone's full screen), 640 wide, so the
         // pictures keep their proportions instead of being stretched to fit
@@ -1154,8 +1182,14 @@
       let fetching = false;
       const onAir = () => page.getClientRects().length > 0;
       const wait = () => {
-        if (!onAir()) { setTimeout(wait, 800); return; }
+        if (!onAir()) { setTimeout(wait, 150); return; }
         fetching = true;
+        if (CDN) {                                   // the CDN labels it as audio: stream it, it starts within a second
+          a.crossOrigin = 'anonymous';              // (and lets the bad-signal effect route it through Web Audio)
+          a.preload = 'auto';
+          a.src = mediaUrl(file); tvSpeaker(a); if (onAir()) a.play().catch(() => {});
+          return;
+        }
         fetch(mediaUrl(file))
           .then((r) => (r.ok ? r.blob() : Promise.reject()))
           .then((b) => { a.src = URL.createObjectURL(new Blob([b], { type })); tvSpeaker(a); if (onAir()) a.play().catch(() => {}); })
@@ -1262,6 +1296,13 @@
       }, 300);
     };
     let entries = [];
+    if (CHANNELS.startsWith('https://raw.githubusercontent.com/thetinywisdom/briandi.to-channels/')) {
+      try {
+        const r = await fetch('https://api.github.com/repos/thetinywisdom/briandi.to-channels/commits/main', { headers: { Accept: 'application/vnd.github.sha' }, cache: 'no-cache' });
+        const sha = r.ok ? (await r.text()).trim() : '';
+        if (/^[0-9a-f]{40}$/.test(sha)) { MEDIA = `https://cdn.jsdelivr.net/gh/thetinywisdom/briandi.to-channels@${sha}/media/`; CDN = true; }
+      } catch {}
+    }
     try {
       const res = await fetch(CHANNELS + 'channels.json', { cache: 'no-cache' });
       if (res.ok) entries = (await res.json()).channels || [];
@@ -1293,7 +1334,7 @@
         media.alt = c.title || '';
         kind = 'PICTURE';
       } else if (Array.isArray(c.images)) {
-        const files = c.images.filter((f) => /\.(gif|webp)$/i.test(f));
+        const files = c.images.filter((f) => /\.(gif|webp|mp4)$/i.test(f));
         if (files.length) { media = files; kind = 'PICTURE'; }
       } else if (Array.isArray(c.scroll)) {
         const files = c.scroll.filter((f) => /\.(jpe?g|png|webp|gif)$/i.test(f));
@@ -1313,8 +1354,10 @@
       page.slot = `kv-5200:ch-${ch}`;
       if (Array.isArray(media)) playlist(page, media); else page.append(media);
       if (media.tagName === 'IMG' && media.dataset.src) {
-        const wait = setInterval(() => { if (page.getClientRects().length) { media.src = media.dataset.src; clearInterval(wait); } }, 600);
+        const wait = setInterval(() => { if (page.getClientRects().length) { media.src = media.dataset.src; clearInterval(wait); } }, 150);
+        page._warm = () => { new Image().src = media.dataset.src; };
       }
+      if (media._warm) page._warm = media._warm;
       const audioEl = song ? soundtrack(page, song) : null;
       if (c.interference) interference(page, ch, audioEl);
       // what the pager shows as "now playing" on this channel: the file name for a picture,
@@ -1330,6 +1373,11 @@
       shelf.append(page);
       onAir[ch] = String(c.title || kind).toUpperCase();
     }
+    // coming in on the channel TV: fetch each channel's first picture in the background, so tuning in is quick
+    let warmed = false;
+    const warm = () => { if (warmed || shelf._focusKey !== 'kv-5200') return; warmed = true; for (const pg of shelf.querySelectorAll('.tv-channel')) pg._warm?.(); };
+    shelf.addEventListener('shelf-focus', warm);
+    warm();
     // YouTube players report their video's title once they are running
     addEventListener('message', (e) => {
       if (!/^https:\/\/www\.youtube(-nocookie)?\.com$/.test(e.origin)) return;
